@@ -1,12 +1,12 @@
 /**
- * Girlfriends 模组根软件包
+ * 绑定领域模型相关包喵~
  *
  * @author liudongyu
  */
 @FieldsAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-package com.hexagram2021.girlfriends;
+package com.hexagram2021.girlfriends.common.binding;
 
 import com.mojang.logging.annotations.FieldsAreNonnullByDefault;
 import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;

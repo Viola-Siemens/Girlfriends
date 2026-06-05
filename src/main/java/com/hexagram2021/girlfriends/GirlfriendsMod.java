@@ -1,24 +1,52 @@
 package com.hexagram2021.girlfriends;
 
+import com.hexagram2021.girlfriends.common.blessing.BlessingParameterManager;
+import com.hexagram2021.girlfriends.common.blessing.BlessingTypes;
+import com.hexagram2021.girlfriends.common.character.GirlfriendTypes;
+import com.hexagram2021.girlfriends.common.character.GirlfriendsRegistries;
+import com.hexagram2021.girlfriends.common.gift.GiftPreferenceManager;
+import com.hexagram2021.girlfriends.common.network.GirlfriendsNetwork;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
+import net.neoforged.neoforge.registries.NewRegistryEvent;
 
 /**
- * 模组主类
+ * 模组主类喵~
  *
  * @author liudongyu
  */
 @Mod(GirlfriendsMod.MODID)
 public class GirlfriendsMod {
-    public static final String MODID = "examplemod";
+	public static final String MODID = "girlfriends";
 
-    /**
-     * 模组主类构造函数
-     * @param modEventBus 模组事件总线
-     * @param modContainer 模组容器
-     */
-    public GirlfriendsMod(IEventBus modEventBus, ModContainer modContainer) {
+	private static final Identifier BLESSING_PARAMETER_MANAGER_ID = Identifier.fromNamespaceAndPath(MODID, "blessing_parameters");
+	private static final Identifier GIFT_PREFERENCE_MANAGER_ID = Identifier.fromNamespaceAndPath(MODID, "gift_preferences");
 
-    }
+	/**
+	 * 模组主类构造函数喵~
+	 *
+	 * @param modEventBus 模组事件总线喵~
+	 * @param modContainer 模组容器喵~
+	 */
+	public GirlfriendsMod(IEventBus modEventBus, ModContainer modContainer) {
+		modEventBus.addListener(this::registerRegistries);
+		modEventBus.addListener(GirlfriendsNetwork::register);
+		NeoForge.EVENT_BUS.addListener(this::registerServerReloadListeners);
+		BlessingTypes.REGISTER.register(modEventBus);
+		GirlfriendTypes.REGISTER.register(modEventBus);
+	}
+
+	private void registerServerReloadListeners(AddServerReloadListenersEvent event) {
+		event.addListener(BLESSING_PARAMETER_MANAGER_ID, BlessingParameterManager.INSTANCE);
+		event.addListener(GIFT_PREFERENCE_MANAGER_ID, GiftPreferenceManager.INSTANCE);
+	}
+
+	private void registerRegistries(NewRegistryEvent event) {
+		event.register(GirlfriendsRegistries.GIRLFRIEND_TYPE_REGISTRY);
+		event.register(GirlfriendsRegistries.BLESSING_TYPE_REGISTRY);
+	}
 }

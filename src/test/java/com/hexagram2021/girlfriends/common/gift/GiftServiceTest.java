@@ -1,0 +1,99 @@
+package com.hexagram2021.girlfriends.common.gift;
+
+import com.hexagram2021.girlfriends.GirlfriendsMod;
+import com.hexagram2021.girlfriends.common.persist.GirlfriendsWorldData;
+import com.hexagram2021.girlfriends.common.relationship.RelationshipService;
+import net.minecraft.resources.Identifier;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.UUID;
+
+/**
+ * GiftService 行为测试喵~
+ *
+ * @author liudongyu
+ */
+class GiftServiceTest {
+	private static final Identifier MOMO_ID = Identifier.fromNamespaceAndPath(GirlfriendsMod.MODID, "momo");
+
+	/**
+	 * 验证最喜欢礼物会应用递减公式并累计每日收益喵~
+	 */
+	@Test
+	void favoriteGiftUsesDiminishingReturnsAndDailyCapAccounting() {
+		GirlfriendsWorldData data = new GirlfriendsWorldData();
+		RelationshipService relationshipService = new RelationshipService(data);
+		GiftService giftService = new GiftService(relationshipService);
+		UUID playerUuid = UUID.fromString("00000000-0000-0000-0000-000000000005");
+
+		GiftResult firstResult = giftService.applyGift(playerUuid, MOMO_ID, GiftPreferenceLevel.FAVORITE);
+		GiftResult secondResult = giftService.applyGift(playerUuid, MOMO_ID, GiftPreferenceLevel.FAVORITE);
+
+		Assertions.assertFalse(firstResult.rejected());
+		Assertions.assertEquals(5, firstResult.affectionDelta());
+		Assertions.assertFalse(secondResult.rejected());
+		Assertions.assertEquals(4, secondResult.affectionDelta());
+		Assertions.assertEquals(9, data.getOrCreateRelation(playerUuid, MOMO_ID).getAffection());
+		Assertions.assertEquals(9, data.getOrCreateRelation(playerUuid, MOMO_ID).getDailyGiftGain());
+	}
+
+	/**
+	 * 验证到达每日上限后正向礼物会被拒收喵~
+	 */
+	@Test
+	void positiveGiftRejectedAfterDailyCap() {
+		GirlfriendsWorldData data = new GirlfriendsWorldData();
+		RelationshipService relationshipService = new RelationshipService(data);
+		GiftService giftService = new GiftService(relationshipService);
+		UUID playerUuid = UUID.fromString("00000000-0000-0000-0000-000000000006");
+		data.getOrCreateRelation(playerUuid, MOMO_ID).setDailyGiftGain(15);
+
+		GiftResult result = giftService.applyGift(playerUuid, MOMO_ID, GiftPreferenceLevel.LIKED);
+
+		Assertions.assertTrue(result.rejected());
+		Assertions.assertEquals(0, result.affectionDelta());
+		Assertions.assertEquals(15, data.getOrCreateRelation(playerUuid, MOMO_ID).getDailyGiftGain());
+		Assertions.assertEquals(0, data.getOrCreateRelation(playerUuid, MOMO_ID).getAffection());
+	}
+
+	/**
+	 * 验证不喜欢的礼物在上限时仍会降低好感喵~
+	 */
+	@Test
+	void dislikedGiftStillReducesAffectionAtDailyCap() {
+		GirlfriendsWorldData data = new GirlfriendsWorldData();
+		RelationshipService relationshipService = new RelationshipService(data);
+		GiftService giftService = new GiftService(relationshipService);
+		UUID playerUuid = UUID.fromString("00000000-0000-0000-0000-000000000007");
+		data.getOrCreateRelation(playerUuid, MOMO_ID).setAffection(100);
+		data.getOrCreateRelation(playerUuid, MOMO_ID).setDailyGiftGain(15);
+
+		GiftResult result = giftService.applyGift(playerUuid, MOMO_ID, GiftPreferenceLevel.DISLIKED);
+
+		Assertions.assertFalse(result.rejected());
+		Assertions.assertEquals(-1, result.affectionDelta());
+		Assertions.assertEquals(99, data.getOrCreateRelation(playerUuid, MOMO_ID).getAffection());
+		Assertions.assertEquals(15, data.getOrCreateRelation(playerUuid, MOMO_ID).getDailyGiftGain());
+	}
+
+	/**
+	 * 验证无赠礼权限时会拒绝且不修改好感喵~
+	 */
+	@Test
+	void permissionPredicateFalseRejectsWithoutAffectionChange() {
+		GirlfriendsWorldData data = new GirlfriendsWorldData();
+		RelationshipService relationshipService = new RelationshipService(data);
+		GiftService giftService = new GiftService(relationshipService, null, (playerUuid, girlfriendTypeId) -> false);
+		UUID playerUuid = UUID.fromString("00000000-0000-0000-0000-000000000008");
+		data.getOrCreateRelation(playerUuid, MOMO_ID).setAffection(20);
+		data.getOrCreateRelation(playerUuid, MOMO_ID).setDailyGiftGain(3);
+
+		GiftResult result = giftService.applyGift(playerUuid, MOMO_ID, GiftPreferenceLevel.FAVORITE);
+
+		Assertions.assertTrue(result.rejected());
+		Assertions.assertEquals(0, result.affectionDelta());
+		Assertions.assertEquals(20, data.getOrCreateRelation(playerUuid, MOMO_ID).getAffection());
+		Assertions.assertEquals(3, data.getOrCreateRelation(playerUuid, MOMO_ID).getDailyGiftGain());
+	}
+}
