@@ -1,14 +1,6 @@
 /**
- * Girlfriends 模组实体包
+ * 角色实体与 AI 系统包喵~
  *
  * @author liudongyu
  */
-@FieldsAreNonnullByDefault
-@MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
 package com.hexagram2021.girlfriends.common.entity;
-
-import com.mojang.logging.annotations.FieldsAreNonnullByDefault;
-import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
-
-import javax.annotation.ParametersAreNonnullByDefault;
