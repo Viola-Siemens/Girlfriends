@@ -8,8 +8,6 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.resources.Identifier;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 /**
  * 角色实体渲染器喵~
@@ -19,7 +17,6 @@ import net.neoforged.api.distmarker.OnlyIn;
  *
  * @author liudongyu
  */
-@OnlyIn(Dist.CLIENT)
 public class GirlfriendRenderer extends HumanoidMobRenderer<GirlfriendEntity, HumanoidRenderState, HumanoidModel<HumanoidRenderState>> {
 	private final Identifier textureLocation;
 

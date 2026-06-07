@@ -3,6 +3,7 @@ package com.hexagram2021.girlfriends.common.entity;
 import com.hexagram2021.girlfriends.GirlfriendsMod;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -26,7 +27,7 @@ public final class GirlfriendsEntities {
 					.sized(0.6f, 1.8f)
 					.clientTrackingRange(48)
 					.updateInterval(3)
-					.build(net.minecraft.resources.ResourceKey.create(BuiltInRegistries.ENTITY_TYPE.key(), Identifier.fromNamespaceAndPath(GirlfriendsMod.MODID, "momo"))));
+					.build(ResourceKey.create(BuiltInRegistries.ENTITY_TYPE.key(), Identifier.fromNamespaceAndPath(GirlfriendsMod.MODID, "momo"))));
 
 	private GirlfriendsEntities() {
 	}

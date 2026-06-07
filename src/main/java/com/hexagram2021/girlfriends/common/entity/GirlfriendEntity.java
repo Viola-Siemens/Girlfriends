@@ -1,9 +1,9 @@
 package com.hexagram2021.girlfriends.common.entity;
 
-import com.google.common.collect.ImmutableList;
 import com.hexagram2021.girlfriends.common.blessing.FollowMode;
 import com.hexagram2021.girlfriends.common.character.GirlfriendType;
 import com.hexagram2021.girlfriends.common.character.GirlfriendsRegistries;
+import net.minecraft.core.Holder;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -11,7 +11,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.Brain;
-import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -65,7 +64,7 @@ public abstract class GirlfriendEntity extends PathfinderMob {
 		return this.registryAccess()
 				.lookupOrThrow(GirlfriendsRegistries.GIRLFRIEND_TYPE)
 				.get(this.getGirlfriendTypeId())
-				.map(net.minecraft.core.Holder.Reference::value);
+				.map(Holder.Reference::value);
 	}
 
 	/**

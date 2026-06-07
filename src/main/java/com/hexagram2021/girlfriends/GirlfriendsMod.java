@@ -5,6 +5,7 @@ import com.hexagram2021.girlfriends.common.blessing.BlessingTypes;
 import com.hexagram2021.girlfriends.common.character.GirlfriendTypes;
 import com.hexagram2021.girlfriends.common.character.GirlfriendsRegistries;
 import com.hexagram2021.girlfriends.common.entity.GirlfriendsEntities;
+import com.hexagram2021.girlfriends.common.entity.MomoEntity;
 import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsMemoryTypes;
 import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsSensorTypes;
 import com.hexagram2021.girlfriends.common.gift.GiftPreferenceManager;
@@ -15,6 +16,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 
 /**
@@ -38,6 +40,7 @@ public class GirlfriendsMod {
 	public GirlfriendsMod(IEventBus modEventBus, ModContainer modContainer) {
 		modEventBus.addListener(this::registerRegistries);
 		modEventBus.addListener(GirlfriendsNetwork::register);
+		modEventBus.addListener(this::registerEntityAttributes);
 		NeoForge.EVENT_BUS.addListener(this::registerServerReloadListeners);
 		BlessingTypes.REGISTER.register(modEventBus);
 		GirlfriendTypes.REGISTER.register(modEventBus);
@@ -54,5 +57,9 @@ public class GirlfriendsMod {
 	private void registerRegistries(NewRegistryEvent event) {
 		event.register(GirlfriendsRegistries.GIRLFRIEND_TYPE_REGISTRY);
 		event.register(GirlfriendsRegistries.BLESSING_TYPE_REGISTRY);
+	}
+
+	private void registerEntityAttributes(EntityAttributeCreationEvent event) {
+		event.put(GirlfriendsEntities.MOMO.get(), MomoEntity.createAttributes().build());
 	}
 }

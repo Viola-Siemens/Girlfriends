@@ -40,3 +40,5 @@ repo/
 !**/src/**/repo/
 logs/
 .claude/
+# Temp cache files
+~/
