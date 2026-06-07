@@ -13,6 +13,7 @@ import net.minecraft.world.entity.ai.behavior.Swim;
  * 角色 AI 行为包工具类喵~
  * <p>
  * 为 Brain.addActivity() 提供 Pair 编排的基础行为喵~
+ * 注意：26.1.2 中 SetEntityLookTarget 和 RandomStroll 为工具类，需通过静态工厂方法获取实例喵~
  *
  * @author liudongyu
  */
@@ -28,7 +29,7 @@ public final class GirlfriendAiPackages {
 	 */
 	public static ImmutableList<Pair<Integer, BehaviorControl<GirlfriendEntity>>> coreActivities() {
 		return ImmutableList.of(
-				Pair.of(0, (BehaviorControl) new Swim(0.8f))
+				Pair.of(0, new Swim(0.8f))
 		);
 	}
 
@@ -39,8 +40,8 @@ public final class GirlfriendAiPackages {
 	 */
 	public static ImmutableList<Pair<Integer, BehaviorControl<GirlfriendEntity>>> idleActivities() {
 		return ImmutableList.of(
-				Pair.of(0, (BehaviorControl) RandomStroll.stroll(0.5f)),
-				Pair.of(1, (BehaviorControl) new SetEntityLookTarget()),
+				Pair.of(0, (BehaviorControl) RandomStroll.stroll(0.5F)),
+				Pair.of(1, (BehaviorControl) SetEntityLookTarget.create(8.0F)),
 				Pair.of(2, (BehaviorControl) new DoNothing(30, 60))
 		);
 	}
