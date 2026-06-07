@@ -22,12 +22,12 @@ class ServerboundPermissionTest {
 		GirlfriendsWorldData data = new GirlfriendsWorldData();
 		UUID playerUuid = UUID.randomUUID();
 		RelationshipService relationshipService = new RelationshipService(data);
-		data.getOrCreateRelation(playerUuid, MOMO_ID).setAffection(120);
+		data.getOrCreateRelation(playerUuid, MOMO_ID).setAffection(120.0F);
 		GiftService giftService = new GiftService(relationshipService, (uuid, girlfriendTypeId) -> false);
 
 		GiftResult result = giftService.applyGift(playerUuid, MOMO_ID, GiftPreferenceLevel.FAVORITE);
 
 		assertTrue(result.rejected());
-		assertEquals(120, data.getOrCreateRelation(playerUuid, MOMO_ID).getAffection());
+		assertEquals(120.0F, data.getOrCreateRelation(playerUuid, MOMO_ID).getAffection());
 	}
 }

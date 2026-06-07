@@ -26,7 +26,7 @@ class GirlfriendsWorldDataTest {
 		Identifier momoId = Identifier.fromNamespaceAndPath(GirlfriendsMod.MODID, "momo");
 		GirlfriendsWorldData data = new GirlfriendsWorldData();
 		data.updateRelation(playerUuid, momoId, relation -> {
-			relation.setAffection(321);
+			relation.setAffection(321.0F);
 			relation.setConfirmedIntimacy(true);
 		});
 
@@ -35,7 +35,7 @@ class GirlfriendsWorldDataTest {
 		PlayerCharacterRelation restoredRelation = restored.getRelations().get(new RelationKey(playerUuid, momoId));
 
 		Assertions.assertNotNull(restoredRelation);
-		Assertions.assertEquals(321, restoredRelation.getAffection());
+		Assertions.assertEquals(321.0F, restoredRelation.getAffection());
 		Assertions.assertTrue(restoredRelation.isConfirmedIntimacy());
 	}
 
@@ -53,10 +53,10 @@ class GirlfriendsWorldDataTest {
 		GirlfriendsWorldData restored = GirlfriendsWorldData.load(tag);
 		Assertions.assertFalse(restored.isDirty());
 
-		restored.updateRelation(playerUuid, momoId, relation -> relation.setAffection(200));
+		restored.updateRelation(playerUuid, momoId, relation -> relation.setAffection(200.0F));
 
 		Assertions.assertTrue(restored.isDirty());
-		Assertions.assertEquals(200, restored.getRelations().get(new RelationKey(playerUuid, momoId)).getAffection());
+		Assertions.assertEquals(200.0F, restored.getRelations().get(new RelationKey(playerUuid, momoId)).getAffection());
 	}
 
 	/**

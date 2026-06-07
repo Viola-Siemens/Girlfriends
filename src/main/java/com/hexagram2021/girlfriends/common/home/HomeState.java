@@ -140,7 +140,7 @@ public class HomeState {
 		}
 		if(this.homeAnchor != null) {
 			CompoundTag homeAnchorTag = new CompoundTag();
-			homeAnchorTag.putString("dimension_id", this.homeAnchor.dimensionId());
+			homeAnchorTag.putString("dimension_id", this.homeAnchor.dimension().toString());
 			homeAnchorTag.putInt("x", this.homeAnchor.x());
 			homeAnchorTag.putInt("y", this.homeAnchor.y());
 			homeAnchorTag.putInt("z", this.homeAnchor.z());
@@ -168,7 +168,7 @@ public class HomeState {
 		String dimensionId = homeAnchorTag.getString("dimension_id").orElse("");
 		if(!dimensionId.isEmpty()) {
 			state.homeAnchor = new HomeAnchor(
-					dimensionId,
+					Identifier.parse(dimensionId),
 					homeAnchorTag.getInt("x").orElse(0),
 					homeAnchorTag.getInt("y").orElse(0),
 					homeAnchorTag.getInt("z").orElse(0)

@@ -35,14 +35,14 @@ public class CharacterRespawnService {
 	 * 处理角色死亡喵~
 	 *
 	 * @param girlfriendTypeId 角色类型 ID 喵~
-	 * @param dimensionId 维度 ID 喵~
+	 * @param dimension 维度 ID 喵~
 	 * @param x 死亡位置 X 坐标喵~
 	 * @param y 死亡位置 Y 坐标喵~
 	 * @param z 死亡位置 Z 坐标喵~
 	 * @return 重生处理结果喵~
 	 */
-	public RespawnResult handleCharacterDeath(Identifier girlfriendTypeId, String dimensionId, int x, int y, int z) {
-		Optional<ShelterRecord> nearestShelter = this.findNearestShelter(girlfriendTypeId, dimensionId, x, y, z);
+	public RespawnResult handleCharacterDeath(Identifier girlfriendTypeId, Identifier dimension, int x, int y, int z) {
+		Optional<ShelterRecord> nearestShelter = this.findNearestShelter(girlfriendTypeId, dimension, x, y, z);
 		this.relationshipService.resetCharacterRelations(girlfriendTypeId);
 		this.releaseHomeStates(girlfriendTypeId);
 		this.worldData.updateCharacter(girlfriendTypeId, state -> {
@@ -50,7 +50,7 @@ public class CharacterRespawnService {
 			state.setBinding(new CharacterBindingState());
 			state.setAlive(nearestShelter.isPresent());
 			state.setPendingRespawn(nearestShelter.isEmpty());
-			state.setDeathDimensionId(dimensionId);
+			state.setDeathDimensionId(dimension);
 			state.setDeathX(x);
 			state.setDeathY(y);
 			state.setDeathZ(z);
@@ -64,17 +64,17 @@ public class CharacterRespawnService {
 	 * 注册角色庇护所喵~
 	 *
 	 * @param girlfriendTypeId 角色类型 ID 喵~
-	 * @param dimensionId 维度 ID 喵~
+	 * @param dimension 维度 ID 喵~
 	 * @param x 庇护所 X 坐标喵~
 	 * @param y 庇护所 Y 坐标喵~
 	 * @param z 庇护所 Z 坐标喵~
 	 * @param currentDay 当前游戏日喵~
 	 * @return 庇护所记录喵~
 	 */
-	public ShelterRecord registerShelter(Identifier girlfriendTypeId, String dimensionId, int x, int y, int z, long currentDay) {
+	public ShelterRecord registerShelter(Identifier girlfriendTypeId, Identifier dimension, int x, int y, int z, long currentDay) {
 		ShelterRecord shelterRecord = new ShelterRecord();
 		shelterRecord.setStructureId(girlfriendTypeId);
-		shelterRecord.setDimensionId(dimensionId);
+		shelterRecord.setDimension(dimension);
 		shelterRecord.setX(x);
 		shelterRecord.setY(y);
 		shelterRecord.setZ(z);
@@ -89,13 +89,13 @@ public class CharacterRespawnService {
 	 * 查找最近庇护所喵~
 	 *
 	 * @param girlfriendTypeId 角色类型 ID 喵~
-	 * @param dimensionId 维度 ID 喵~
+	 * @param dimension 维度 ID 喵~
 	 * @param x 当前位置 X 坐标喵~
 	 * @param y 当前位置 Y 坐标喵~
 	 * @param z 当前位置 Z 坐标喵~
 	 * @return 最近庇护所喵~
 	 */
-	public Optional<ShelterRecord> findNearestShelter(Identifier girlfriendTypeId, String dimensionId, int x, int y, int z) {
+	public Optional<ShelterRecord> findNearestShelter(Identifier girlfriendTypeId, Identifier dimension, int x, int y, int z) {
 		CharacterWorldState state = this.worldData.getExistingCharacterState(girlfriendTypeId);
 		if(state == null) {
 			return Optional.empty();
@@ -103,7 +103,7 @@ public class CharacterRespawnService {
 		ShelterRecord nearest = null;
 		long nearestDistance = Long.MAX_VALUE;
 		for(ShelterRecord shelterRecord : state.getDiscoveredShelters()) {
-			if(!shelterRecord.isDiscovered() || !dimensionId.equals(shelterRecord.getDimensionId())) {
+			if(!shelterRecord.isDiscovered() || !dimension.equals(shelterRecord.getDimension())) {
 				continue;
 			}
 			long distance = squaredDistance(shelterRecord, x, y, z);

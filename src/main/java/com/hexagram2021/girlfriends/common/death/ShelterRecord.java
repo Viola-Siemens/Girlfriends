@@ -6,6 +6,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.Identifier;
 
+import javax.annotation.Nullable;
+
 /**
  * 庇护所记录喵~
  *
@@ -14,9 +16,12 @@ import net.minecraft.resources.Identifier;
 public class ShelterRecord {
 	public static final int DATA_VERSION = 1;
 
+	@Nullable
 	private Identifier structureId;
+	@Nullable
 	private GlobalPos shelterPos;
-	private String dimensionId;
+	@Nullable
+	private Identifier dimension;
 	private int x;
 	private int y;
 	private int z;
@@ -29,6 +34,7 @@ public class ShelterRecord {
 	 *
 	 * @return 结构 ID 喵~
 	 */
+	@Nullable
 	public Identifier getStructureId() {
 		return this.structureId;
 	}
@@ -38,7 +44,7 @@ public class ShelterRecord {
 	 *
 	 * @param structureId 结构 ID 喵~
 	 */
-	public void setStructureId(Identifier structureId) {
+	public void setStructureId(@Nullable Identifier structureId) {
 		this.structureId = structureId;
 	}
 
@@ -47,6 +53,7 @@ public class ShelterRecord {
 	 *
 	 * @return 庇护所位置喵~
 	 */
+	@Nullable
 	public GlobalPos getShelterPos() {
 		return this.shelterPos;
 	}
@@ -56,7 +63,7 @@ public class ShelterRecord {
 	 *
 	 * @param shelterPos 庇护所位置喵~
 	 */
-	public void setShelterPos(GlobalPos shelterPos) {
+	public void setShelterPos(@Nullable GlobalPos shelterPos) {
 		this.shelterPos = shelterPos;
 	}
 
@@ -65,17 +72,18 @@ public class ShelterRecord {
 	 *
 	 * @return 维度 ID 喵~
 	 */
-	public String getDimensionId() {
-		return this.dimensionId;
+	@Nullable
+	public Identifier getDimension() {
+		return this.dimension;
 	}
 
 	/**
 	 * 设置维度 ID 喵~
 	 *
-	 * @param dimensionId 维度 ID 喵~
+	 * @param dimension 维度 ID 喵~
 	 */
-	public void setDimensionId(String dimensionId) {
-		this.dimensionId = dimensionId;
+	public void setDimension(@Nullable Identifier dimension) {
+		this.dimension = dimension;
 	}
 
 	/**
@@ -200,8 +208,8 @@ public class ShelterRecord {
 		if(this.shelterPos != null) {
 			GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, this.shelterPos).result().ifPresent(value -> tag.put("shelter_pos", value));
 		}
-		if(this.dimensionId != null) {
-			tag.putString("dimension_id", this.dimensionId);
+		if(this.dimension != null) {
+			tag.putString("dimension_id", this.dimension.toString());
 		}
 		tag.putInt("x", this.x);
 		tag.putInt("y", this.y);
@@ -219,25 +227,26 @@ public class ShelterRecord {
 	 * @return 庇护所记录喵~
 	 */
 	public static ShelterRecord deserializeNBT(CompoundTag tag) {
-		ShelterRecord record = new ShelterRecord();
-		tag.getString("structure_id").ifPresent(value -> record.structureId = parseIdentifierOrNull(value));
+		ShelterRecord shelterRecord = new ShelterRecord();
+		tag.getString("structure_id").ifPresent(value -> shelterRecord.structureId = parseIdentifierOrNull(value));
 		if(tag.get("shelter_pos") != null) {
-			GlobalPos.CODEC.parse(NbtOps.INSTANCE, tag.get("shelter_pos")).result().ifPresent(pos -> record.shelterPos = pos);
+			GlobalPos.CODEC.parse(NbtOps.INSTANCE, tag.get("shelter_pos")).result().ifPresent(pos -> shelterRecord.shelterPos = pos);
 		}
-		record.dimensionId = tag.getString("dimension_id").orElse(null);
-		record.x = tag.getInt("x").orElse(0);
-		record.y = tag.getInt("y").orElse(0);
-		record.z = tag.getInt("z").orElse(0);
-		record.registeredDay = tag.getLong("registered_day").orElse(0L);
-		record.generated = tag.getBoolean("generated").orElse(false);
-		record.discovered = tag.getBoolean("discovered").orElse(false);
-		return record;
+		shelterRecord.dimension = tag.getString("dimension_id").map(Identifier::parse).orElse(null);
+		shelterRecord.x = tag.getInt("x").orElse(0);
+		shelterRecord.y = tag.getInt("y").orElse(0);
+		shelterRecord.z = tag.getInt("z").orElse(0);
+		shelterRecord.registeredDay = tag.getLong("registered_day").orElse(0L);
+		shelterRecord.generated = tag.getBoolean("generated").orElse(false);
+		shelterRecord.discovered = tag.getBoolean("discovered").orElse(false);
+		return shelterRecord;
 	}
 
+	@Nullable
 	private static Identifier parseIdentifierOrNull(String value) {
 		try {
 			return Identifier.parse(value);
-		} catch(IdentifierException ignored) {
+		} catch(IdentifierException _) {
 			return null;
 		}
 	}

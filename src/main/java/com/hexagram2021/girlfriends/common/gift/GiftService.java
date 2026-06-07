@@ -6,8 +6,10 @@ import com.hexagram2021.girlfriends.common.relationship.RelationshipService;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.function.BiPredicate;
@@ -18,13 +20,14 @@ import java.util.function.BiPredicate;
  * @author liudongyu
  */
 public class GiftService {
-	private static final int DAILY_GIFT_GAIN_CAP = 15;
+	private static final float DAILY_GIFT_GAIN_CAP = 15.0F;
 	private static final String MESSAGE_KEY_ACCEPTED = "girlfriends.gift.accepted";
 	private static final String MESSAGE_KEY_REJECTED = "girlfriends.gift.rejected";
 	private static final String MESSAGE_KEY_CAP_REACHED = "girlfriends.gift.daily_cap_reached";
 	private static final String MESSAGE_KEY_PERMISSION_DENIED = "girlfriends.gift.permission_denied";
 
 	private final RelationshipService relationshipService;
+	@Nullable
 	private final GiftPreferenceManager giftPreferenceManager;
 	private final BiPredicate<UUID, Identifier> canReceiveGift;
 
@@ -53,7 +56,7 @@ public class GiftService {
 	 * @param relationshipService 关系服务喵~
 	 * @param giftPreferenceManager 礼物偏好管理器喵~
 	 */
-	public GiftService(RelationshipService relationshipService, GiftPreferenceManager giftPreferenceManager) {
+	public GiftService(RelationshipService relationshipService, @Nullable GiftPreferenceManager giftPreferenceManager) {
 		this(relationshipService, giftPreferenceManager, (playerUuid, girlfriendTypeId) -> true);
 	}
 
@@ -66,7 +69,7 @@ public class GiftService {
 	 */
 	public GiftService(
 			RelationshipService relationshipService,
-			GiftPreferenceManager giftPreferenceManager,
+			@Nullable GiftPreferenceManager giftPreferenceManager,
 			BiPredicate<UUID, Identifier> canReceiveGift
 	) {
 		this.relationshipService = Objects.requireNonNull(relationshipService);
@@ -93,7 +96,7 @@ public class GiftService {
 		if(level.isPositive() && relation.getDailyGiftGain() >= DAILY_GIFT_GAIN_CAP) {
 			return GiftResult.rejected(level, MESSAGE_KEY_CAP_REACHED);
 		}
-		int affectionDelta = computeAffectionDelta(level, relation.getDailyGiftGain());
+		float affectionDelta = computeAffectionDelta(level, relation.getDailyGiftGain());
 		this.relationshipService.changeAffection(playerUuid, girlfriendTypeId, AffectionChangeSource.GIFT, affectionDelta);
 		if(affectionDelta > 0) {
 			relation.setDailyGiftGain(Math.min(DAILY_GIFT_GAIN_CAP, relation.getDailyGiftGain() + affectionDelta));
@@ -149,14 +152,14 @@ public class GiftService {
 		return false;
 	}
 
-	private static int computeAffectionDelta(GiftPreferenceLevel level, int dailyGiftGain) {
-		double factor = Math.sqrt((16 - Math.min(dailyGiftGain, DAILY_GIFT_GAIN_CAP)) / 16.0D);
-		double rawDelta = level.getBaseDelta() * factor;
+	private static float computeAffectionDelta(GiftPreferenceLevel level, float dailyGiftGain) {
+		float factor = Mth.sqrt((16.0F - Math.min(dailyGiftGain, DAILY_GIFT_GAIN_CAP)) / 16.0F);
+		float rawDelta = level.getBaseDelta() * factor;
 		if(level.isPositive()) {
-			return Math.max(1, (int)Math.floor(rawDelta));
+			return Math.max(1, rawDelta);
 		}
 		if(level.isNegative()) {
-			return Math.min(-1, (int)rawDelta);
+			return Math.min(-1, rawDelta);
 		}
 		return 0;
 	}

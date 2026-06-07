@@ -8,6 +8,7 @@ import com.hexagram2021.girlfriends.common.quest.QuestInstance;
 import com.hexagram2021.girlfriends.common.relationship.PlayerCharacterRelation;
 import com.hexagram2021.girlfriends.common.relationship.RelationshipService;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.Level;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -37,18 +38,18 @@ class CharacterRespawnServiceTest {
 		relation.setConfirmedIntimacy(true);
 		relation.setClaimedFinalReward(true);
 		relation.getCompletedFixedQuests().add(10);
-		homeService.inviteHome(playerUuid, MEISHU_ID, "minecraft:overworld", 10, 64, 10);
+		homeService.inviteHome(playerUuid, MEISHU_ID, Level.OVERWORLD.identifier(), 10, 64, 10);
 		CharacterWorldState state = data.getCharacterState(MEISHU_ID);
 		state.setCurrentQuest(new QuestInstance());
 		state.getBinding().setBoundPlayerUuid(playerUuid);
 		state.getBinding().setLockedByIntimacy(true);
 
-		RespawnResult result = service.handleCharacterDeath(MEISHU_ID, "minecraft:overworld", 10, 64, 10);
+		RespawnResult result = service.handleCharacterDeath(MEISHU_ID, Level.OVERWORLD.identifier(), 10, 64, 10);
 
 		PlayerCharacterRelation restored = data.getOrCreateRelation(playerUuid, MEISHU_ID);
 		Assertions.assertFalse(result.respawned());
 		Assertions.assertTrue(result.pendingRespawn());
-		Assertions.assertEquals(0, restored.getAffection());
+		Assertions.assertEquals(0.0F, restored.getAffection());
 		Assertions.assertFalse(restored.isConfirmedIntimacy());
 		Assertions.assertTrue(restored.isClaimedFinalReward());
 		Assertions.assertTrue(restored.getCompletedFixedQuests().isEmpty());
@@ -59,7 +60,7 @@ class CharacterRespawnServiceTest {
 		Assertions.assertFalse(state.getBinding().isLockedByIntimacy());
 		Assertions.assertFalse(state.isAlive());
 		Assertions.assertTrue(state.isPendingRespawn());
-		Assertions.assertEquals("minecraft:overworld", state.getDeathDimensionId());
+		Assertions.assertEquals(Level.OVERWORLD.identifier(), state.getDeathDimensionId());
 		Assertions.assertEquals(10, state.getDeathX());
 		Assertions.assertEquals(64, state.getDeathY());
 		Assertions.assertEquals(10, state.getDeathZ());
@@ -73,10 +74,10 @@ class CharacterRespawnServiceTest {
 		GirlfriendsWorldData data = new GirlfriendsWorldData();
 		RelationshipService relationshipService = new RelationshipService(data);
 		CharacterRespawnService service = new CharacterRespawnService(data, relationshipService);
-		service.registerShelter(MOMO_ID, "minecraft:overworld", 0, 64, 0, 1L);
-		service.registerShelter(MOMO_ID, "minecraft:overworld", 100, 64, 100, 1L);
+		service.registerShelter(MOMO_ID, Level.OVERWORLD.identifier(), 0, 64, 0, 1L);
+		service.registerShelter(MOMO_ID, Level.OVERWORLD.identifier(), 100, 64, 100, 1L);
 
-		RespawnResult result = service.handleCharacterDeath(MOMO_ID, "minecraft:overworld", 10, 64, 10);
+		RespawnResult result = service.handleCharacterDeath(MOMO_ID, Level.OVERWORLD.identifier(), 10, 64, 10);
 
 		Assertions.assertTrue(result.respawned());
 		Assertions.assertFalse(result.pendingRespawn());
@@ -95,7 +96,7 @@ class CharacterRespawnServiceTest {
 		RelationshipService relationshipService = new RelationshipService(data);
 		CharacterRespawnService service = new CharacterRespawnService(data, relationshipService);
 
-		RespawnResult result = service.handleCharacterDeath(MOMO_ID, "minecraft:overworld", 10, 64, 10);
+		RespawnResult result = service.handleCharacterDeath(MOMO_ID, Level.OVERWORLD.identifier(), 10, 64, 10);
 
 		CharacterWorldState state = data.getCharacterState(MOMO_ID);
 		Assertions.assertFalse(result.respawned());
@@ -113,9 +114,9 @@ class CharacterRespawnServiceTest {
 		GirlfriendsWorldData data = new GirlfriendsWorldData();
 		RelationshipService relationshipService = new RelationshipService(data);
 		CharacterRespawnService service = new CharacterRespawnService(data, relationshipService);
-		service.handleCharacterDeath(MOMO_ID, "minecraft:overworld", 10, 64, 10);
+		service.handleCharacterDeath(MOMO_ID, Level.OVERWORLD.identifier(), 10, 64, 10);
 
-		service.registerShelter(MOMO_ID, "minecraft:overworld", 0, 64, 0, 1L);
+		service.registerShelter(MOMO_ID, Level.OVERWORLD.identifier(), 0, 64, 0, 1L);
 		service.tryRespawnPendingCharacter(MOMO_ID);
 
 		CharacterWorldState state = data.getCharacterState(MOMO_ID);

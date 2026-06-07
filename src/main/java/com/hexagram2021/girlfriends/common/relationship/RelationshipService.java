@@ -1,9 +1,9 @@
 package com.hexagram2021.girlfriends.common.relationship;
 
+import com.google.common.collect.Lists;
 import com.hexagram2021.girlfriends.common.persist.GirlfriendsWorldData;
 import net.minecraft.resources.Identifier;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -14,10 +14,10 @@ import java.util.UUID;
  * @author liudongyu
  */
 public class RelationshipService {
-	private static final int MIN_AFFECTION = 0;
-	private static final int MAX_AFFECTION = 1000;
-	private static final int AFFECTION_THRESHOLD = 700;
-	private static final int HOME_PARTNER_THRESHOLD = 900;
+	private static final float MIN_AFFECTION = 0;
+	private static final float MAX_AFFECTION = 1000;
+	private static final float AFFECTION_THRESHOLD = 700;
+	private static final float HOME_PARTNER_THRESHOLD = 900;
 
 	private final GirlfriendsWorldData worldData;
 
@@ -61,9 +61,9 @@ public class RelationshipService {
 	 * @param rawDelta 原始变更值喵~
 	 * @return 最新好感度喵~
 	 */
-	public int changeAffection(UUID playerUuid, Identifier girlfriendTypeId, AffectionChangeSource source, int rawDelta) {
+	public float changeAffection(UUID playerUuid, Identifier girlfriendTypeId, AffectionChangeSource source, float rawDelta) {
 		PlayerCharacterRelation relation = this.worldData.updateRelation(playerUuid, girlfriendTypeId, current -> {
-			int nextAffection = clampAffection(current.getAffection() + rawDelta);
+			float nextAffection = clampAffection(current.getAffection() + rawDelta);
 			current.setAffection(nextAffection);
 		});
 		return relation.getAffection();
@@ -75,8 +75,8 @@ public class RelationshipService {
 	 * @param affection 好感度喵~
 	 * @return 基础阶段喵~
 	 */
-	public AffectionStage getNumericStage(int affection) {
-		int clampedAffection = clampAffection(affection);
+	public AffectionStage getNumericStage(float affection) {
+		float clampedAffection = clampAffection(affection);
 		if(clampedAffection >= HOME_PARTNER_THRESHOLD) {
 			return AffectionStage.HOME_PARTNER;
 		}
@@ -118,7 +118,7 @@ public class RelationshipService {
 	 * @param currentDay 当前游戏日喵~
 	 */
 	public void resetDailyCounters(long currentDay) {
-		List<Map.Entry<RelationKey, PlayerCharacterRelation>> entries = new ArrayList<>(this.worldData.getRelations().entrySet());
+		List<Map.Entry<RelationKey, PlayerCharacterRelation>> entries = Lists.newArrayList(this.worldData.getRelations().entrySet());
 		for(Map.Entry<RelationKey, PlayerCharacterRelation> entry : entries) {
 			PlayerCharacterRelation relation = entry.getValue();
 			if(relation.getLastDailyResetDay() == currentDay) {
@@ -142,7 +142,7 @@ public class RelationshipService {
 	 * @param girlfriendTypeId 角色类型 ID 喵~
 	 */
 	public void resetCharacterRelations(Identifier girlfriendTypeId) {
-		List<Map.Entry<RelationKey, PlayerCharacterRelation>> entries = new ArrayList<>(this.worldData.getRelations().entrySet());
+		List<Map.Entry<RelationKey, PlayerCharacterRelation>> entries = Lists.newArrayList(this.worldData.getRelations().entrySet());
 		for(Map.Entry<RelationKey, PlayerCharacterRelation> entry : entries) {
 			if(!entry.getKey().girlfriendTypeId().equals(girlfriendTypeId)) {
 				continue;
@@ -152,7 +152,7 @@ public class RelationshipService {
 		}
 	}
 
-	private static int clampAffection(int affection) {
+	private static float clampAffection(float affection) {
 		return Math.clamp(affection, MIN_AFFECTION, MAX_AFFECTION);
 	}
 }

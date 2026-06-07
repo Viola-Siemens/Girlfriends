@@ -2,6 +2,7 @@ package com.hexagram2021.girlfriends.common.binding;
 
 import net.minecraft.nbt.CompoundTag;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 /**
@@ -12,8 +13,10 @@ import java.util.UUID;
 public class CharacterBindingState {
 	public static final int DATA_VERSION = 1;
 
+	@Nullable
 	private UUID boundPlayerUuid;
 	private boolean lockedByIntimacy;
+	@Nullable
 	private UUID challengerPlayerUuid;
 	private long waveringStartDay;
 	private boolean warnedBoundPlayer;
@@ -23,6 +26,7 @@ public class CharacterBindingState {
 	 *
 	 * @return 绑定玩家 UUID 喵~
 	 */
+	@Nullable
 	public UUID getBoundPlayerUuid() {
 		return this.boundPlayerUuid;
 	}
@@ -32,7 +36,7 @@ public class CharacterBindingState {
 	 *
 	 * @param boundPlayerUuid 绑定玩家 UUID 喵~
 	 */
-	public void setBoundPlayerUuid(UUID boundPlayerUuid) {
+	public void setBoundPlayerUuid(@Nullable UUID boundPlayerUuid) {
 		this.boundPlayerUuid = boundPlayerUuid;
 	}
 
@@ -59,6 +63,7 @@ public class CharacterBindingState {
 	 *
 	 * @return 挑战者玩家 UUID 喵~
 	 */
+	@Nullable
 	public UUID getChallengerPlayerUuid() {
 		return this.challengerPlayerUuid;
 	}
@@ -68,7 +73,7 @@ public class CharacterBindingState {
 	 *
 	 * @param challengerPlayerUuid 挑战者玩家 UUID 喵~
 	 */
-	public void setChallengerPlayerUuid(UUID challengerPlayerUuid) {
+	public void setChallengerPlayerUuid(@Nullable UUID challengerPlayerUuid) {
 		this.challengerPlayerUuid = challengerPlayerUuid;
 	}
 

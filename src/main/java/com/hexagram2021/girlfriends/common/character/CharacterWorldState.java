@@ -1,5 +1,6 @@
 package com.hexagram2021.girlfriends.common.character;
 
+import com.google.common.collect.Lists;
 import com.hexagram2021.girlfriends.common.binding.CharacterBindingState;
 import com.hexagram2021.girlfriends.common.blessing.FollowMode;
 import com.hexagram2021.girlfriends.common.death.ShelterRecord;
@@ -9,9 +10,10 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.Identifier;
 
-import java.util.ArrayList;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,26 +25,33 @@ import java.util.UUID;
 public class CharacterWorldState {
 	public static final int DATA_VERSION = 1;
 
+	@Nullable
 	private Identifier characterId;
+	@Nullable
 	private UUID entityUuid;
 	private boolean alive = true;
 	private boolean pendingRespawn;
+	@Nullable
 	private GlobalPos deathPos;
-	private String deathDimensionId;
+	@Nullable
+	private Identifier deathDimension;
 	private int deathX;
 	private int deathY;
 	private int deathZ;
+	@Nullable
 	private QuestInstance currentQuest;
 	private CharacterBindingState binding = new CharacterBindingState();
+	@Nullable
 	private UUID followTargetUuid;
 	private FollowMode followMode = FollowMode.STAY;
-	private final List<ShelterRecord> discoveredShelters = new ArrayList<>();
+	private final List<ShelterRecord> discoveredShelters = Lists.newArrayList();
 
 	/**
 	 * 获取角色 ID 喵~
 	 *
 	 * @return 角色 ID 喵~
 	 */
+	@Nullable
 	public Identifier getCharacterId() {
 		return this.characterId;
 	}
@@ -52,7 +61,7 @@ public class CharacterWorldState {
 	 *
 	 * @param characterId 角色 ID 喵~
 	 */
-	public void setCharacterId(Identifier characterId) {
+	public void setCharacterId(@Nullable Identifier characterId) {
 		this.characterId = characterId;
 	}
 
@@ -61,6 +70,7 @@ public class CharacterWorldState {
 	 *
 	 * @return 实体 UUID 喵~
 	 */
+	@Nullable
 	public UUID getEntityUuid() {
 		return this.entityUuid;
 	}
@@ -70,7 +80,7 @@ public class CharacterWorldState {
 	 *
 	 * @param entityUuid 实体 UUID 喵~
 	 */
-	public void setEntityUuid(UUID entityUuid) {
+	public void setEntityUuid(@Nullable UUID entityUuid) {
 		this.entityUuid = entityUuid;
 	}
 
@@ -115,6 +125,7 @@ public class CharacterWorldState {
 	 *
 	 * @return 死亡位置喵~
 	 */
+	@Nullable
 	public GlobalPos getDeathPos() {
 		return this.deathPos;
 	}
@@ -124,7 +135,7 @@ public class CharacterWorldState {
 	 *
 	 * @param deathPos 死亡位置喵~
 	 */
-	public void setDeathPos(GlobalPos deathPos) {
+	public void setDeathPos(@Nullable GlobalPos deathPos) {
 		this.deathPos = deathPos;
 	}
 
@@ -133,17 +144,18 @@ public class CharacterWorldState {
 	 *
 	 * @return 死亡维度 ID 喵~
 	 */
-	public String getDeathDimensionId() {
-		return this.deathDimensionId;
+	@Nullable
+	public Identifier getDeathDimensionId() {
+		return this.deathDimension;
 	}
 
 	/**
 	 * 设置死亡维度 ID 喵~
 	 *
-	 * @param deathDimensionId 死亡维度 ID 喵~
+	 * @param deathDimension 死亡维度 ID 喵~
 	 */
-	public void setDeathDimensionId(String deathDimensionId) {
-		this.deathDimensionId = deathDimensionId;
+	public void setDeathDimensionId(@Nullable Identifier deathDimension) {
+		this.deathDimension = deathDimension;
 	}
 
 	/**
@@ -205,6 +217,7 @@ public class CharacterWorldState {
 	 *
 	 * @return 当前委托喵~
 	 */
+	@Nullable
 	public QuestInstance getCurrentQuest() {
 		return this.currentQuest;
 	}
@@ -214,7 +227,7 @@ public class CharacterWorldState {
 	 *
 	 * @param currentQuest 当前委托喵~
 	 */
-	public void setCurrentQuest(QuestInstance currentQuest) {
+	public void setCurrentQuest(@Nullable QuestInstance currentQuest) {
 		this.currentQuest = currentQuest;
 	}
 
@@ -241,6 +254,7 @@ public class CharacterWorldState {
 	 *
 	 * @return 跟随目标玩家 UUID 喵~
 	 */
+	@Nullable
 	public UUID getFollowTargetUuid() {
 		return this.followTargetUuid;
 	}
@@ -250,7 +264,7 @@ public class CharacterWorldState {
 	 *
 	 * @param followTargetUuid 跟随目标玩家 UUID 喵~
 	 */
-	public void setFollowTargetUuid(UUID followTargetUuid) {
+	public void setFollowTargetUuid(@Nullable UUID followTargetUuid) {
 		this.followTargetUuid = followTargetUuid;
 	}
 
@@ -300,8 +314,8 @@ public class CharacterWorldState {
 		if(this.deathPos != null) {
 			GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, this.deathPos).result().ifPresent(value -> tag.put("death_pos", value));
 		}
-		if(this.deathDimensionId != null) {
-			tag.putString("death_dimension_id", this.deathDimensionId);
+		if(this.deathDimension != null) {
+			tag.putString("death_dimension_id", this.deathDimension.toString());
 		}
 		tag.putInt("death_x", this.deathX);
 		tag.putInt("death_y", this.deathY);
@@ -337,7 +351,7 @@ public class CharacterWorldState {
 		if(tag.get("death_pos") != null) {
 			GlobalPos.CODEC.parse(NbtOps.INSTANCE, tag.get("death_pos")).result().ifPresent(pos -> state.deathPos = pos);
 		}
-		state.deathDimensionId = tag.getString("death_dimension_id").orElse(null);
+		state.deathDimension = tag.getString("death_dimension_id").map(Identifier::parse).orElse(null);
 		state.deathX = tag.getInt("death_x").orElse(0);
 		state.deathY = tag.getInt("death_y").orElse(0);
 		state.deathZ = tag.getInt("death_z").orElse(0);
@@ -348,26 +362,28 @@ public class CharacterWorldState {
 		tag.getString("follow_target_uuid").ifPresent(value -> state.followTargetUuid = parseUuidOrNull(value));
 		state.followMode = tag.getString("follow_mode").map(CharacterWorldState::parseFollowModeOrStay).orElse(FollowMode.STAY);
 		ListTag shelters = tag.getListOrEmpty("discovered_shelters");
-		for(int i = 0; i < shelters.size(); i++) {
-			if(shelters.get(i) instanceof CompoundTag shelterTag) {
+		for (Tag shelter : shelters) {
+			if (shelter instanceof CompoundTag shelterTag) {
 				state.discoveredShelters.add(ShelterRecord.deserializeNBT(shelterTag));
 			}
 		}
 		return state;
 	}
 
+	@Nullable
 	private static Identifier parseIdentifierOrNull(String value) {
 		try {
 			return Identifier.parse(value);
-		} catch(IdentifierException ignored) {
+		} catch(IdentifierException _) {
 			return null;
 		}
 	}
 
+	@Nullable
 	private static UUID parseUuidOrNull(String value) {
 		try {
 			return UUID.fromString(value);
-		} catch(IllegalArgumentException ignored) {
+		} catch(IllegalArgumentException _) {
 			return null;
 		}
 	}
@@ -375,7 +391,7 @@ public class CharacterWorldState {
 	private static FollowMode parseFollowModeOrStay(String value) {
 		try {
 			return FollowMode.valueOf(value);
-		} catch(IllegalArgumentException ignored) {
+		} catch(IllegalArgumentException _) {
 			return FollowMode.STAY;
 		}
 	}

@@ -1,5 +1,6 @@
 package com.hexagram2021.girlfriends.common.persist;
 
+import com.google.common.collect.Maps;
 import com.mojang.serialization.Codec;
 import com.hexagram2021.girlfriends.GirlfriendsMod;
 import net.minecraft.IdentifierException;
@@ -9,12 +10,14 @@ import com.hexagram2021.girlfriends.common.relationship.PlayerCharacterRelation;
 import com.hexagram2021.girlfriends.common.relationship.RelationKey;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
 
-import java.util.HashMap;
+import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -33,9 +36,9 @@ public class GirlfriendsWorldData extends SavedData {
 			CODEC
 	);
 
-	private final Map<Identifier, CharacterWorldState> characters = new HashMap<>();
-	private final Map<RelationKey, PlayerCharacterRelation> relations = new HashMap<>();
-	private final Map<UUID, HomeState> homes = new HashMap<>();
+	private final Map<Identifier, CharacterWorldState> characters = Maps.newHashMap();
+	private final Map<RelationKey, PlayerCharacterRelation> relations = Maps.newHashMap();
+	private final Map<UUID, HomeState> homes = Maps.newHashMap();
 
 	/**
 	 * 获取或创建玩家与角色关系喵~
@@ -85,6 +88,7 @@ public class GirlfriendsWorldData extends SavedData {
 	 * @param girlfriendTypeId 角色类型 ID 喵~
 	 * @return 已存在的角色世界状态喵~
 	 */
+	@Nullable
 	public CharacterWorldState getExistingCharacterState(Identifier girlfriendTypeId) {
 		return this.characters.get(girlfriendTypeId);
 	}
@@ -181,10 +185,10 @@ public class GirlfriendsWorldData extends SavedData {
 			}
 		}
 		ListTag relationsTag = tag.getListOrEmpty("player_relations");
-		for(int i = 0; i < relationsTag.size(); i++) {
-			if(relationsTag.get(i) instanceof CompoundTag relationTag) {
+		for (Tag value : relationsTag) {
+			if (value instanceof CompoundTag relationTag) {
 				PlayerCharacterRelation relation = PlayerCharacterRelation.deserializeNBT(relationTag);
-				if(relation.getPlayerUuid() != null && relation.getCharacterId() != null) {
+				if (relation.getPlayerUuid() != null && relation.getCharacterId() != null) {
 					data.relations.put(new RelationKey(relation.getPlayerUuid(), relation.getCharacterId()), relation);
 				}
 			}
@@ -209,23 +213,25 @@ public class GirlfriendsWorldData extends SavedData {
 	public CompoundTag save(CompoundTag tag) {
 		CompoundTag saved = this.saveToTag();
 		for(String key : saved.keySet()) {
-			tag.put(key, saved.get(key));
+			tag.put(key, Objects.requireNonNull(saved.get(key)));
 		}
 		return tag;
 	}
 
+	@Nullable
 	private static Identifier parseIdentifierOrNull(String value) {
 		try {
 			return Identifier.parse(value);
-		} catch(IdentifierException ignored) {
+		} catch(IdentifierException _) {
 			return null;
 		}
 	}
 
+	@Nullable
 	private static UUID parseUuidOrNull(String value) {
 		try {
 			return UUID.fromString(value);
-		} catch(IllegalArgumentException ignored) {
+		} catch(IllegalArgumentException _) {
 			return null;
 		}
 	}

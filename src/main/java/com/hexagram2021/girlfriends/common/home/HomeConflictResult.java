@@ -8,5 +8,5 @@ package com.hexagram2021.girlfriends.common.home;
  * @param visitorDelta 访客好感变化喵~
  * @author liudongyu
  */
-public record HomeConflictResult(boolean triggered, int homePartnerDelta, int visitorDelta) {
+public record HomeConflictResult(boolean triggered, float homePartnerDelta, float visitorDelta) {
 }

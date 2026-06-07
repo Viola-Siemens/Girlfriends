@@ -7,10 +7,7 @@ import com.hexagram2021.girlfriends.common.relationship.RelationKey;
 import com.hexagram2021.girlfriends.common.relationship.RelationshipService;
 import net.minecraft.resources.Identifier;
 
-import java.util.Comparator;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 绑定关系服务喵~
@@ -138,7 +135,7 @@ public class BindingService {
 				return;
 			}
 			UUID challengerPlayerUuid = topChallenger.get().getPlayerUuid();
-			if(!challengerPlayerUuid.equals(binding.getChallengerPlayerUuid())) {
+			if(!Objects.equals(challengerPlayerUuid, binding.getChallengerPlayerUuid())) {
 				binding.setChallengerPlayerUuid(challengerPlayerUuid);
 				binding.setWaveringStartDay(currentDay);
 				binding.setWarnedBoundPlayer(false);
@@ -203,15 +200,15 @@ public class BindingService {
 		return boundPlayerUuid == null || boundPlayerUuid.equals(playerUuid);
 	}
 
-	private Optional<PlayerCharacterRelation> findTopChallenger(Identifier girlfriendTypeId, UUID boundPlayerUuid, int boundAffection) {
+	private Optional<PlayerCharacterRelation> findTopChallenger(Identifier girlfriendTypeId, UUID boundPlayerUuid, float boundAffection) {
 		return this.worldData.getRelations().entrySet().stream()
 				.filter(entry -> this.isChallengerRelation(entry, girlfriendTypeId, boundPlayerUuid, boundAffection))
 				.map(Map.Entry::getValue)
-				.max(Comparator.comparingInt(PlayerCharacterRelation::getAffection));
+				.max(Comparator.comparing(PlayerCharacterRelation::getAffection));
 	}
 
 	private boolean isChallengerRelation(
-			Map.Entry<RelationKey, PlayerCharacterRelation> entry, Identifier girlfriendTypeId, UUID boundPlayerUuid, int boundAffection
+			Map.Entry<RelationKey, PlayerCharacterRelation> entry, Identifier girlfriendTypeId, UUID boundPlayerUuid, float boundAffection
 	) {
 		RelationKey key = entry.getKey();
 		return key.girlfriendTypeId().equals(girlfriendTypeId) && !key.playerUuid().equals(boundPlayerUuid) && entry.getValue().getAffection() > boundAffection;

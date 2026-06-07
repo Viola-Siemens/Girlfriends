@@ -1,5 +1,6 @@
 package com.hexagram2021.girlfriends.common.network;
 
+import com.google.common.collect.Lists;
 import com.hexagram2021.girlfriends.GirlfriendsMod;
 import com.hexagram2021.girlfriends.common.character.CharacterWorldState;
 import com.hexagram2021.girlfriends.common.gift.GiftPreferenceLevel;
@@ -13,10 +14,11 @@ import com.hexagram2021.girlfriends.common.relationship.PlayerCharacterRelation;
 import com.hexagram2021.girlfriends.common.relationship.RelationshipService;
 import net.minecraft.IdentifierException;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.Mth;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -79,14 +81,14 @@ public class InteractionSummaryService {
 		return new QuestIconSummary(girlfriendTypeId, quest.questId(), quest.questType(), quest.questState(), quest.titleKey(), quest.objectiveSummaryKeys());
 	}
 
-	private static double computeStageProgress(int affection, AffectionStage stage) {
-		int min = stage.getMinAffection();
-		int max = stage.getMaxAffection();
+	private static float computeStageProgress(float affection, AffectionStage stage) {
+		float min = stage.getMinAffection();
+		float max = stage.getMaxAffection();
 		if(max <= min) {
-			return 1.0D;
+			return 1.0F;
 		}
-		double progress = (double)(affection - min) / (double)(max - min);
-		return Math.max(0.0D, Math.min(1.0D, progress));
+		float progress = (affection - min) / (max - min);
+		return Mth.clamp(progress, 0.0F, 1.0F);
 	}
 
 	private static boolean canFollow(PlayerCharacterRelation relation, CharacterWorldState state) {
@@ -112,7 +114,7 @@ public class InteractionSummaryService {
 	private static List<KnownGiftPreferenceSummary> buildKnownGiftPreferences(PlayerCharacterRelation relation) {
 		return relation.getKnownGiftPreferences().stream()
 				.map(InteractionSummaryService::parseKnownGiftPreference)
-				.filter(summary -> summary != null)
+				.filter(Objects::nonNull)
 				.sorted(Comparator.comparing(summary -> summary.itemOrTagId().toString()))
 				.toList();
 	}
@@ -123,7 +125,7 @@ public class InteractionSummaryService {
 				return new KnownGiftPreferenceSummary(Identifier.parse(value.substring(1)), GiftPreferenceLevel.ACCEPTED, true);
 			}
 			return new KnownGiftPreferenceSummary(Identifier.parse(value), GiftPreferenceLevel.ACCEPTED, false);
-		} catch(IdentifierException ignored) {
+		} catch(IdentifierException _) {
 			return null;
 		}
 	}
@@ -137,7 +139,7 @@ public class InteractionSummaryService {
 		if(questId == null) {
 			return null;
 		}
-		List<String> objectiveSummaryKeys = new ArrayList<>();
+		List<String> objectiveSummaryKeys = Lists.newArrayList();
 		for(String key : quest.getProgress().keySet()) {
 			if(key.startsWith("objective_")) {
 				objectiveSummaryKeys.add(QUEST_KEY_PREFIX + questId.getPath() + "." + key);
@@ -157,7 +159,7 @@ public class InteractionSummaryService {
 	private static Identifier parseQuestIdentifierOrNull(String questId) {
 		try {
 			return Identifier.parse(questId);
-		} catch(IdentifierException ignored) {
+		} catch(IdentifierException _) {
 			return null;
 		}
 	}

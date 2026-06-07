@@ -7,5 +7,5 @@ package com.hexagram2021.girlfriends.common.home;
  * @param affectionDelta 好感变化喵~
  * @author liudongyu
  */
-public record HomeTickResult(boolean healed, int affectionDelta) {
+public record HomeTickResult(boolean healed, float affectionDelta) {
 }

@@ -1,5 +1,6 @@
 package com.hexagram2021.girlfriends.common.network;
 
+import com.google.common.collect.Lists;
 import com.hexagram2021.girlfriends.common.gift.GiftPreferenceLevel;
 import com.hexagram2021.girlfriends.common.network.InteractionSummary.KnownGiftPreferenceSummary;
 import com.hexagram2021.girlfriends.common.network.InteractionSummary.QuestContentSummary;
@@ -7,9 +8,7 @@ import com.hexagram2021.girlfriends.common.quest.QuestState;
 import com.hexagram2021.girlfriends.common.quest.QuestType;
 import com.hexagram2021.girlfriends.common.relationship.AffectionStage;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.Identifier;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -102,7 +101,7 @@ public final class NetworkCodecs {
 
 	private static List<KnownGiftPreferenceSummary> readKnownGiftPreferences(RegistryFriendlyByteBuf buffer) {
 		int size = buffer.readVarInt();
-		List<KnownGiftPreferenceSummary> summaries = new ArrayList<>(size);
+		List<KnownGiftPreferenceSummary> summaries = Lists.newArrayListWithCapacity(size);
 		for(int i = 0; i < size; i++) {
 			summaries.add(new KnownGiftPreferenceSummary(buffer.readIdentifier(), buffer.readEnum(GiftPreferenceLevel.class), buffer.readBoolean()));
 		}
@@ -145,7 +144,7 @@ public final class NetworkCodecs {
 
 	private static List<String> readStrings(RegistryFriendlyByteBuf buffer) {
 		int size = buffer.readVarInt();
-		List<String> values = new ArrayList<>(size);
+		List<String> values = Lists.newArrayListWithCapacity(size);
 		for(int i = 0; i < size; i++) {
 			values.add(buffer.readUtf());
 		}

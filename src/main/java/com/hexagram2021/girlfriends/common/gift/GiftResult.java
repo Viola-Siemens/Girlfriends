@@ -10,7 +10,7 @@ package com.hexagram2021.girlfriends.common.gift;
  *
  * @author liudongyu
  */
-public record GiftResult(boolean rejected, int affectionDelta, GiftPreferenceLevel level, String messageKey) {
+public record GiftResult(boolean rejected, float affectionDelta, GiftPreferenceLevel level, String messageKey) {
 	/**
 	 * 创建拒收结果喵~
 	 *
@@ -30,7 +30,7 @@ public record GiftResult(boolean rejected, int affectionDelta, GiftPreferenceLev
 	 * @param messageKey 结果消息键喵~
 	 * @return 已处理结果喵~
 	 */
-	public static GiftResult accepted(GiftPreferenceLevel level, int affectionDelta, String messageKey) {
+	public static GiftResult accepted(GiftPreferenceLevel level, float affectionDelta, String messageKey) {
 		return new GiftResult(false, affectionDelta, level, messageKey);
 	}
 }

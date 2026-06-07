@@ -16,7 +16,7 @@ import java.util.function.IntSupplier;
  * @author liudongyu
  */
 public class HomeService {
-	private static final int HOME_AFFECTION_DELTA = 2;
+	private static final float HOME_AFFECTION_DELTA = 2.0F;
 	private static final int REQUIRED_FIXED_QUEST_INDEX = 10;
 
 	private final GirlfriendsWorldData worldData;
@@ -41,18 +41,18 @@ public class HomeService {
 	 *
 	 * @param playerUuid 玩家 UUID 喵~
 	 * @param girlfriendTypeId 角色类型 ID 喵~
-	 * @param dimensionId 维度 ID 喵~
+	 * @param dimension 维度 ID 喵~
 	 * @param x 床位 X 坐标喵~
 	 * @param y 床位 Y 坐标喵~
 	 * @param z 床位 Z 坐标喵~
 	 * @return 是否邀请成功喵~
 	 */
-	public boolean inviteHome(UUID playerUuid, Identifier girlfriendTypeId, String dimensionId, int x, int y, int z) {
+	public boolean inviteHome(UUID playerUuid, Identifier girlfriendTypeId, Identifier dimension, int x, int y, int z) {
 		HomeState homeState = this.worldData.getOrCreateHomeState(playerUuid);
 		if(homeState.isActive()) {
 			return false;
 		}
-		HomeAnchor homeAnchor = new HomeAnchor(dimensionId, x, y, z);
+		HomeAnchor homeAnchor = new HomeAnchor(dimension, x, y, z);
 		if(!this.bedValidator.isValid(homeAnchor)) {
 			return false;
 		}
@@ -105,11 +105,11 @@ public class HomeService {
 	public HomeTickResult applyHomeBenefit(UUID playerUuid, boolean playerNearBed, boolean partnerNearBed) {
 		HomeState homeState = this.worldData.getOrCreateHomeState(playerUuid);
 		if(!homeState.isActive() || homeState.getCharacterId() == null || !playerNearBed || !partnerNearBed) {
-			return new HomeTickResult(false, 0);
+			return new HomeTickResult(false, 0.0F);
 		}
 		PlayerCharacterRelation relation = this.relationshipService.getRelation(playerUuid, homeState.getCharacterId());
 		if(relation.isDailyHomeGainClaimed()) {
-			return new HomeTickResult(false, 0);
+			return new HomeTickResult(false, 0.0F);
 		}
 		this.relationshipService.changeAffection(playerUuid, homeState.getCharacterId(), AffectionChangeSource.HOME_DAILY, HOME_AFFECTION_DELTA);
 		this.worldData.updateRelation(playerUuid, homeState.getCharacterId(), updatedRelation -> updatedRelation.setDailyHomeGainClaimed(true));
@@ -128,14 +128,14 @@ public class HomeService {
 		HomeState homeState = this.worldData.getOrCreateHomeState(playerUuid);
 		Identifier homePartnerTypeId = homeState.getCharacterId();
 		if(!homeState.isActive() || homePartnerTypeId == null || homePartnerTypeId.equals(visitorTypeId)) {
-			return new HomeConflictResult(false, 0, 0);
+			return new HomeConflictResult(false, 0.0F, 0.0F);
 		}
 		PlayerCharacterRelation homePartnerRelation = this.relationshipService.getRelation(playerUuid, homePartnerTypeId);
 		PlayerCharacterRelation visitorRelation = this.relationshipService.getRelation(playerUuid, visitorTypeId);
 		if(!visitorRelation.isConfirmedIntimacy() || homePartnerRelation.isDailyConflictTriggered()) {
-			return new HomeConflictResult(false, 0, 0);
+			return new HomeConflictResult(false, 0.0F, 0.0F);
 		}
-		int penalty = Math.max(3, Math.min(5, penaltySupplier.getAsInt()));
+		int penalty = Math.clamp(penaltySupplier.getAsInt(), 3, 5);
 		int delta = -penalty;
 		this.relationshipService.changeAffection(playerUuid, homePartnerTypeId, AffectionChangeSource.HOME_CONFLICT, delta);
 		this.relationshipService.changeAffection(playerUuid, visitorTypeId, AffectionChangeSource.HOME_CONFLICT, delta);

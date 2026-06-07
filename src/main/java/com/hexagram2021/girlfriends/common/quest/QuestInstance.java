@@ -4,6 +4,7 @@ import com.hexagram2021.girlfriends.common.relationship.AffectionStage;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 /**
@@ -14,15 +15,20 @@ import java.util.UUID;
 public class QuestInstance {
 	public static final int DATA_VERSION = 1;
 
+	@Nullable
 	private UUID questInstanceId;
+	@Nullable
 	private Identifier characterId;
 	private QuestType questType = QuestType.FIXED;
 	private String questId = "";
+	@Nullable
 	private Integer fixedIndex;
 	private AffectionStage requiredStage = AffectionStage.STRANGER;
+	@Nullable
 	private UUID ownerPlayerUuid;
 	private QuestState state = QuestState.AVAILABLE;
 	private long createdDay;
+	@Nullable
 	private Long expireDay;
 	private CompoundTag progress = new CompoundTag();
 
@@ -31,6 +37,7 @@ public class QuestInstance {
 	 *
 	 * @return 委托实例 ID 喵~
 	 */
+	@Nullable
 	public UUID getQuestInstanceId() {
 		return this.questInstanceId;
 	}
@@ -40,7 +47,7 @@ public class QuestInstance {
 	 *
 	 * @param questInstanceId 委托实例 ID 喵~
 	 */
-	public void setQuestInstanceId(UUID questInstanceId) {
+	public void setQuestInstanceId(@Nullable UUID questInstanceId) {
 		this.questInstanceId = questInstanceId;
 	}
 
@@ -49,6 +56,7 @@ public class QuestInstance {
 	 *
 	 * @return 角色 ID 喵~
 	 */
+	@Nullable
 	public Identifier getCharacterId() {
 		return this.characterId;
 	}
@@ -58,7 +66,7 @@ public class QuestInstance {
 	 *
 	 * @param characterId 角色 ID 喵~
 	 */
-	public void setCharacterId(Identifier characterId) {
+	public void setCharacterId(@Nullable Identifier characterId) {
 		this.characterId = characterId;
 	}
 
@@ -103,6 +111,7 @@ public class QuestInstance {
 	 *
 	 * @return 固定委托序号喵~
 	 */
+	@Nullable
 	public Integer getFixedIndex() {
 		return this.fixedIndex;
 	}
@@ -112,7 +121,7 @@ public class QuestInstance {
 	 *
 	 * @param fixedIndex 固定委托序号喵~
 	 */
-	public void setFixedIndex(Integer fixedIndex) {
+	public void setFixedIndex(@Nullable Integer fixedIndex) {
 		this.fixedIndex = fixedIndex;
 	}
 
@@ -139,6 +148,7 @@ public class QuestInstance {
 	 *
 	 * @return 接取者 UUID 喵~
 	 */
+	@Nullable
 	public UUID getOwnerPlayerUuid() {
 		return this.ownerPlayerUuid;
 	}
@@ -148,7 +158,7 @@ public class QuestInstance {
 	 *
 	 * @param ownerPlayerUuid 接取者 UUID 喵~
 	 */
-	public void setOwnerPlayerUuid(UUID ownerPlayerUuid) {
+	public void setOwnerPlayerUuid(@Nullable UUID ownerPlayerUuid) {
 		this.ownerPlayerUuid = ownerPlayerUuid;
 	}
 
@@ -193,6 +203,7 @@ public class QuestInstance {
 	 *
 	 * @return 过期游戏日喵~
 	 */
+	@Nullable
 	public Long getExpireDay() {
 		return this.expireDay;
 	}
@@ -202,7 +213,7 @@ public class QuestInstance {
 	 *
 	 * @param expireDay 过期游戏日喵~
 	 */
-	public void setExpireDay(Long expireDay) {
+	public void setExpireDay(@Nullable Long expireDay) {
 		this.expireDay = expireDay;
 	}
 

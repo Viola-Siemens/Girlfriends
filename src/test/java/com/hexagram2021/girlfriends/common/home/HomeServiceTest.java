@@ -5,6 +5,7 @@ import com.hexagram2021.girlfriends.common.persist.GirlfriendsWorldData;
 import com.hexagram2021.girlfriends.common.relationship.PlayerCharacterRelation;
 import com.hexagram2021.girlfriends.common.relationship.RelationshipService;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.Level;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -26,20 +27,20 @@ class HomeServiceTest {
 	void inviteHomeRequiresAffectionAndNoExistingPartner() {
 		GirlfriendsWorldData data = new GirlfriendsWorldData();
 		RelationshipService relationshipService = new RelationshipService(data);
-		HomeService homeService = new HomeService(data, relationshipService, bedPos -> true);
+		HomeService homeService = new HomeService(data, relationshipService, _ -> true);
 		UUID playerUuid = UUID.fromString("00000000-0000-0000-0000-000000000012");
 		PlayerCharacterRelation relation = data.getOrCreateRelation(playerUuid, MOMO_ID);
 		relation.setAffection(900);
 		relation.setConfirmedIntimacy(true);
 		relation.getCompletedFixedQuests().add(10);
 
-		boolean invited = homeService.inviteHome(playerUuid, MOMO_ID, "minecraft:overworld", 1, 64, 1);
+		boolean invited = homeService.inviteHome(playerUuid, MOMO_ID, Level.OVERWORLD.identifier(), 1, 64, 1);
 
 		Assertions.assertTrue(invited);
 		Assertions.assertEquals(MOMO_ID, data.getOrCreateHomeState(playerUuid).getCharacterId());
 		Assertions.assertTrue(data.getOrCreateHomeState(playerUuid).isActive());
 		Assertions.assertTrue(relation.isHomePartner());
-		Assertions.assertFalse(homeService.inviteHome(playerUuid, YUXI_ID, "minecraft:overworld", 1, 64, 1));
+		Assertions.assertFalse(homeService.inviteHome(playerUuid, YUXI_ID, Level.OVERWORLD.identifier(), 1, 64, 1));
 	}
 
 	/**
@@ -55,16 +56,16 @@ class HomeServiceTest {
 		relation.setAffection(900);
 		relation.setConfirmedIntimacy(true);
 		relation.getCompletedFixedQuests().add(10);
-		homeService.inviteHome(playerUuid, YUXI_ID, "minecraft:overworld", 0, 64, 0);
+		homeService.inviteHome(playerUuid, YUXI_ID, Level.OVERWORLD.identifier(), 0, 64, 0);
 
 		HomeTickResult first = homeService.applyHomeBenefit(playerUuid, true, true);
 		HomeTickResult second = homeService.applyHomeBenefit(playerUuid, true, true);
 
 		Assertions.assertTrue(first.healed());
-		Assertions.assertEquals(2, first.affectionDelta());
+		Assertions.assertEquals(2.0F, first.affectionDelta());
 		Assertions.assertFalse(second.healed());
-		Assertions.assertEquals(0, second.affectionDelta());
-		Assertions.assertEquals(902, relation.getAffection());
+		Assertions.assertEquals(0.0F, second.affectionDelta());
+		Assertions.assertEquals(902.0F, relation.getAffection());
 	}
 
 	/**
@@ -83,16 +84,16 @@ class HomeServiceTest {
 		PlayerCharacterRelation visitor = data.getOrCreateRelation(playerUuid, YUXI_ID);
 		visitor.setAffection(700);
 		visitor.setConfirmedIntimacy(true);
-		homeService.inviteHome(playerUuid, MOMO_ID, "minecraft:overworld", 0, 64, 0);
+		homeService.inviteHome(playerUuid, MOMO_ID, Level.OVERWORLD.identifier(), 0, 64, 0);
 
 		HomeConflictResult first = homeService.triggerConflict(playerUuid, YUXI_ID, () -> 4);
 		HomeConflictResult second = homeService.triggerConflict(playerUuid, YUXI_ID, () -> 4);
 
 		Assertions.assertTrue(first.triggered());
-		Assertions.assertEquals(-4, first.homePartnerDelta());
-		Assertions.assertEquals(-4, first.visitorDelta());
+		Assertions.assertEquals(-4.0F, first.homePartnerDelta());
+		Assertions.assertEquals(-4.0F, first.visitorDelta());
 		Assertions.assertFalse(second.triggered());
-		Assertions.assertEquals(896, homePartner.getAffection());
-		Assertions.assertEquals(696, visitor.getAffection());
+		Assertions.assertEquals(896.0F, homePartner.getAffection());
+		Assertions.assertEquals(696.0F, visitor.getAffection());
 	}
 }

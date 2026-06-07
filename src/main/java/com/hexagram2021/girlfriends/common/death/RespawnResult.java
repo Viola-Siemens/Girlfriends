@@ -1,5 +1,7 @@
 package com.hexagram2021.girlfriends.common.death;
 
+import javax.annotation.Nullable;
+
 /**
  * 角色重生处理结果喵~
  *
@@ -8,5 +10,5 @@ package com.hexagram2021.girlfriends.common.death;
  * @param shelterRecord 使用的庇护所记录喵~
  * @author liudongyu
  */
-public record RespawnResult(boolean respawned, boolean pendingRespawn, ShelterRecord shelterRecord) {
+public record RespawnResult(boolean respawned, boolean pendingRespawn, @Nullable ShelterRecord shelterRecord) {
 }

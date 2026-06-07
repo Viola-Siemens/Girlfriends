@@ -10,6 +10,7 @@ import com.hexagram2021.girlfriends.common.relationship.PlayerCharacterRelation;
 import com.hexagram2021.girlfriends.common.relationship.RelationshipService;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.Level;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -59,7 +60,7 @@ class BlessingServiceTest {
 		RelationshipService relationshipService = new RelationshipService(data);
 		BlessingService service = new BlessingService(data, relationshipService, girlfriendTypeId -> Optional.of(new GirlfriendType(
 				"girlfriends.girlfriend_type.wanying",
-				new DimensionPolicy(Set.of(Identifier.withDefaultNamespace("overworld"))),
+				new DimensionPolicy(Set.of(Level.OVERWORLD.identifier())),
 				Identifier.withDefaultNamespace("iron_sword"),
 				MELEE_AND_DEFENSE_ID,
 				Identifier.fromNamespaceAndPath(GirlfriendsMod.MODID, "wanying_shelter")
@@ -210,7 +211,7 @@ class BlessingServiceTest {
 		}
 		return Optional.of(new GirlfriendType(
 				"girlfriends.girlfriend_type.wanying",
-				new DimensionPolicy(Set.of(Identifier.withDefaultNamespace("overworld"))),
+				new DimensionPolicy(Set.of(Level.OVERWORLD.identifier())),
 				Identifier.withDefaultNamespace("iron_sword"),
 				MELEE_AND_DEFENSE_ID,
 				Identifier.fromNamespaceAndPath(GirlfriendsMod.MODID, "wanying_shelter")

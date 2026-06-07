@@ -1,5 +1,6 @@
 package com.hexagram2021.girlfriends.common.quest;
 
+import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -15,9 +16,9 @@ import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import org.slf4j.Logger;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -96,11 +97,11 @@ public class FixedQuestDefinitionManager extends SimplePreparableReloadListener<
 		return new QuestDefinition(questId, questType, girlfriendTypeId, fixedIndex, requiredStage, objectives);
 	}
 
-	static QuestObjectiveGroup parseObjectives(JsonArray objectivesArray) {
+	static QuestObjectiveGroup parseObjectives(@Nullable JsonArray objectivesArray) {
 		if(objectivesArray == null) {
 			return QuestObjectiveGroup.empty();
 		}
-		List<QuestObjectiveHandler> objectives = new ArrayList<>();
+		List<QuestObjectiveHandler> objectives = Lists.newArrayList();
 		for(JsonElement element : objectivesArray) {
 			if(!element.isJsonObject()) {
 				throw new JsonParseException("Objective entry must be a JSON object");
@@ -120,6 +121,7 @@ public class FixedQuestDefinitionManager extends SimplePreparableReloadListener<
 						getInt(objectiveObject, "required_ticks").orElse(20)
 				));
 				case "noop" -> {
+					// no-op
 				}
 				default -> throw new JsonParseException("Unsupported objective type: " + type);
 			}

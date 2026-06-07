@@ -31,11 +31,11 @@ class GiftServiceTest {
 		GiftResult secondResult = giftService.applyGift(playerUuid, MOMO_ID, GiftPreferenceLevel.FAVORITE);
 
 		Assertions.assertFalse(firstResult.rejected());
-		Assertions.assertEquals(5, firstResult.affectionDelta());
+		Assertions.assertEquals(5.0F, firstResult.affectionDelta(), 0.0001F);
 		Assertions.assertFalse(secondResult.rejected());
-		Assertions.assertEquals(4, secondResult.affectionDelta());
-		Assertions.assertEquals(9, data.getOrCreateRelation(playerUuid, MOMO_ID).getAffection());
-		Assertions.assertEquals(9, data.getOrCreateRelation(playerUuid, MOMO_ID).getDailyGiftGain());
+		Assertions.assertEquals(4.14578F, secondResult.affectionDelta(), 0.0001F);
+		Assertions.assertEquals(9.14578F, data.getOrCreateRelation(playerUuid, MOMO_ID).getAffection(), 0.0001F);
+		Assertions.assertEquals(9.14578F, data.getOrCreateRelation(playerUuid, MOMO_ID).getDailyGiftGain(), 0.0001F);
 	}
 
 	/**
@@ -52,9 +52,9 @@ class GiftServiceTest {
 		GiftResult result = giftService.applyGift(playerUuid, MOMO_ID, GiftPreferenceLevel.LIKED);
 
 		Assertions.assertTrue(result.rejected());
-		Assertions.assertEquals(0, result.affectionDelta());
-		Assertions.assertEquals(15, data.getOrCreateRelation(playerUuid, MOMO_ID).getDailyGiftGain());
-		Assertions.assertEquals(0, data.getOrCreateRelation(playerUuid, MOMO_ID).getAffection());
+		Assertions.assertEquals(0.0F, result.affectionDelta());
+		Assertions.assertEquals(15.0F, data.getOrCreateRelation(playerUuid, MOMO_ID).getDailyGiftGain());
+		Assertions.assertEquals(0.0F, data.getOrCreateRelation(playerUuid, MOMO_ID).getAffection());
 	}
 
 	/**
@@ -72,9 +72,9 @@ class GiftServiceTest {
 		GiftResult result = giftService.applyGift(playerUuid, MOMO_ID, GiftPreferenceLevel.DISLIKED);
 
 		Assertions.assertFalse(result.rejected());
-		Assertions.assertEquals(-1, result.affectionDelta());
-		Assertions.assertEquals(99, data.getOrCreateRelation(playerUuid, MOMO_ID).getAffection());
-		Assertions.assertEquals(15, data.getOrCreateRelation(playerUuid, MOMO_ID).getDailyGiftGain());
+		Assertions.assertEquals(-1.0F, result.affectionDelta());
+		Assertions.assertEquals(99.0F, data.getOrCreateRelation(playerUuid, MOMO_ID).getAffection());
+		Assertions.assertEquals(15.0F, data.getOrCreateRelation(playerUuid, MOMO_ID).getDailyGiftGain());
 	}
 
 	/**
@@ -84,7 +84,7 @@ class GiftServiceTest {
 	void permissionPredicateFalseRejectsWithoutAffectionChange() {
 		GirlfriendsWorldData data = new GirlfriendsWorldData();
 		RelationshipService relationshipService = new RelationshipService(data);
-		GiftService giftService = new GiftService(relationshipService, null, (playerUuid, girlfriendTypeId) -> false);
+		GiftService giftService = new GiftService(relationshipService, null, (_, _) -> false);
 		UUID playerUuid = UUID.fromString("00000000-0000-0000-0000-000000000008");
 		data.getOrCreateRelation(playerUuid, MOMO_ID).setAffection(20);
 		data.getOrCreateRelation(playerUuid, MOMO_ID).setDailyGiftGain(3);
@@ -92,8 +92,8 @@ class GiftServiceTest {
 		GiftResult result = giftService.applyGift(playerUuid, MOMO_ID, GiftPreferenceLevel.FAVORITE);
 
 		Assertions.assertTrue(result.rejected());
-		Assertions.assertEquals(0, result.affectionDelta());
-		Assertions.assertEquals(20, data.getOrCreateRelation(playerUuid, MOMO_ID).getAffection());
-		Assertions.assertEquals(3, data.getOrCreateRelation(playerUuid, MOMO_ID).getDailyGiftGain());
+		Assertions.assertEquals(0.0F, result.affectionDelta());
+		Assertions.assertEquals(20.0F, data.getOrCreateRelation(playerUuid, MOMO_ID).getAffection());
+		Assertions.assertEquals(3.0F, data.getOrCreateRelation(playerUuid, MOMO_ID).getDailyGiftGain());
 	}
 }

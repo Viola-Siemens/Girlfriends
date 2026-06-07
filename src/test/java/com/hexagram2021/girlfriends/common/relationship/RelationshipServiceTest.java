@@ -26,11 +26,11 @@ class RelationshipServiceTest {
 		RelationshipService service = new RelationshipService(data);
 		UUID playerUuid = UUID.fromString("00000000-0000-0000-0000-000000000002");
 
-		service.changeAffection(playerUuid, MOMO_ID, AffectionChangeSource.GIFT, 1200);
-		Assertions.assertEquals(1000, data.getOrCreateRelation(playerUuid, MOMO_ID).getAffection());
+		service.changeAffection(playerUuid, MOMO_ID, AffectionChangeSource.GIFT, 1200.0F);
+		Assertions.assertEquals(1000.0F, data.getOrCreateRelation(playerUuid, MOMO_ID).getAffection());
 
-		service.changeAffection(playerUuid, MOMO_ID, AffectionChangeSource.PLAYER_ATTACK, -2000);
-		Assertions.assertEquals(0, data.getOrCreateRelation(playerUuid, MOMO_ID).getAffection());
+		service.changeAffection(playerUuid, MOMO_ID, AffectionChangeSource.PLAYER_ATTACK, -2000.0F);
+		Assertions.assertEquals(0.0F, data.getOrCreateRelation(playerUuid, MOMO_ID).getAffection());
 	}
 
 	/**

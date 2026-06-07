@@ -6,6 +6,7 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.Identifier;
 
+import javax.annotation.Nullable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -18,14 +19,16 @@ import java.util.UUID;
 public class PlayerCharacterRelation {
 	public static final int DATA_VERSION = 1;
 
+	@Nullable
 	private UUID playerUuid;
+	@Nullable
 	private Identifier characterId;
-	private int affection;
+	private float affection;
 	private boolean confirmedIntimacy;
 	private final Set<Integer> completedFixedQuests = new LinkedHashSet<>();
 	private boolean claimedFinalReward;
 	private boolean homePartner;
-	private int dailyGiftGain;
+	private float dailyGiftGain;
 	private boolean dailyHomeGainClaimed;
 	private boolean dailyConflictTriggered;
 	private final Set<String> knownGiftPreferences = new LinkedHashSet<>();
@@ -53,6 +56,7 @@ public class PlayerCharacterRelation {
 	 *
 	 * @return 玩家 UUID 喵~
 	 */
+	@Nullable
 	public UUID getPlayerUuid() {
 		return this.playerUuid;
 	}
@@ -62,7 +66,7 @@ public class PlayerCharacterRelation {
 	 *
 	 * @param playerUuid 玩家 UUID 喵~
 	 */
-	public void setPlayerUuid(UUID playerUuid) {
+	public void setPlayerUuid(@Nullable UUID playerUuid) {
 		this.playerUuid = playerUuid;
 	}
 
@@ -71,6 +75,7 @@ public class PlayerCharacterRelation {
 	 *
 	 * @return 角色 ID 喵~
 	 */
+	@Nullable
 	public Identifier getCharacterId() {
 		return this.characterId;
 	}
@@ -80,7 +85,7 @@ public class PlayerCharacterRelation {
 	 *
 	 * @param characterId 角色 ID 喵~
 	 */
-	public void setCharacterId(Identifier characterId) {
+	public void setCharacterId(@Nullable Identifier characterId) {
 		this.characterId = characterId;
 	}
 
@@ -89,7 +94,7 @@ public class PlayerCharacterRelation {
 	 *
 	 * @return 好感度喵~
 	 */
-	public int getAffection() {
+	public float getAffection() {
 		return this.affection;
 	}
 
@@ -98,7 +103,7 @@ public class PlayerCharacterRelation {
 	 *
 	 * @param affection 好感度喵~
 	 */
-	public void setAffection(int affection) {
+	public void setAffection(float affection) {
 		this.affection = affection;
 	}
 
@@ -170,7 +175,7 @@ public class PlayerCharacterRelation {
 	 *
 	 * @return 当日礼物收益喵~
 	 */
-	public int getDailyGiftGain() {
+	public float getDailyGiftGain() {
 		return this.dailyGiftGain;
 	}
 
@@ -179,7 +184,7 @@ public class PlayerCharacterRelation {
 	 *
 	 * @param dailyGiftGain 当日礼物收益喵~
 	 */
-	public void setDailyGiftGain(int dailyGiftGain) {
+	public void setDailyGiftGain(float dailyGiftGain) {
 		this.dailyGiftGain = dailyGiftGain;
 	}
 
@@ -278,7 +283,7 @@ public class PlayerCharacterRelation {
 		if(this.characterId != null) {
 			tag.putString("character_id", this.characterId.toString());
 		}
-		tag.putInt("affection", this.affection);
+		tag.putFloat("affection", this.affection);
 		tag.putBoolean("confirmed_intimacy", this.confirmedIntimacy);
 		ListTag completedFixedQuestsTag = new ListTag();
 		for(Integer fixedQuest : this.completedFixedQuests) {
@@ -289,7 +294,7 @@ public class PlayerCharacterRelation {
 		tag.put("completed_fixed_quests", completedFixedQuestsTag);
 		tag.putBoolean("claimed_final_reward", this.claimedFinalReward);
 		tag.putBoolean("home_partner", this.homePartner);
-		tag.putInt("daily_gift_gain", this.dailyGiftGain);
+		tag.putFloat("daily_gift_gain", this.dailyGiftGain);
 		tag.putBoolean("daily_home_gain_claimed", this.dailyHomeGainClaimed);
 		tag.putBoolean("daily_conflict_triggered", this.dailyConflictTriggered);
 		ListTag knownGiftPreferencesTag = new ListTag();
@@ -314,8 +319,8 @@ public class PlayerCharacterRelation {
 		relation.affection = tag.getInt("affection").orElse(0);
 		relation.confirmedIntimacy = tag.getBoolean("confirmed_intimacy").orElse(false);
 		ListTag completedFixedQuestsTag = tag.getListOrEmpty("completed_fixed_quests");
-		for(int i = 0; i < completedFixedQuestsTag.size(); i++) {
-			if(completedFixedQuestsTag.get(i) instanceof CompoundTag entry) {
+		for (Tag value : completedFixedQuestsTag) {
+			if (value instanceof CompoundTag entry) {
 				relation.completedFixedQuests.add(entry.getInt("value").orElse(0));
 			}
 		}
