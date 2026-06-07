@@ -1,0 +1,21 @@
+{
+	"quest_id": "girlfriends:fq_momo_09",
+	"character_id": "girlfriends:momo",
+	"fixed_index": 9,
+	"required_stage": "",
+	"required_affection": ,
+	"prerequisite_fixed_indices": [8],
+	"objectives": [
+		{
+			"type": "item_delivery",
+			"item": {"item": "minecraft:oak_log"},
+			"count": 8,
+			"description_key": "quest.girlfriends.fq_momo_09.objective_0"
+		}
+	],
+	"rewards": {
+		"affection": 
+	},
+	"title_key": "quest.girlfriends.fq_momo_09.title",
+	"description_key": "quest.girlfriends.fq_momo_09.description"
+}

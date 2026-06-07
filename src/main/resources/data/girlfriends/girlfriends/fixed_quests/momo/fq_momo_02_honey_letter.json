@@ -1,0 +1,28 @@
+{
+	"quest_id": "girlfriends:fq_momo_02",
+	"character_id": "girlfriends:momo",
+	"fixed_index": 2,
+	"required_stage": "trust",
+	"required_affection": 200,
+	"prerequisite_fixed_indices": [1],
+	"objectives": [
+		{
+			"type": "item_delivery",
+			"item": {"item": "minecraft:honeycomb"},
+			"count": 6,
+			"description_key": "quest.girlfriends.fq_momo_02.objective_0"
+		},
+		{
+			"type": "item_delivery",
+			"item": {"item": "minecraft:beehive"},
+			"count": 2,
+			"description_key": "quest.girlfriends.fq_momo_02.objective_1"
+		}
+	],
+	"rewards": {
+		"affection": 50,
+		"unlock_random_templates": []
+	},
+	"title_key": "quest.girlfriends.fq_momo_02.title",
+	"description_key": "quest.girlfriends.fq_momo_02.description"
+}

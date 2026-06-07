@@ -1,0 +1,28 @@
+{
+	"quest_id": "girlfriends:fq_momo_01",
+	"character_id": "girlfriends:momo",
+	"fixed_index": 1,
+	"required_stage": "familiar",
+	"required_affection": 100,
+	"prerequisite_fixed_indices": [],
+	"objectives": [
+		{
+			"type": "item_delivery",
+			"item": {"tag": "minecraft:small_flowers"},
+			"count": 3,
+			"description_key": "quest.girlfriends.fq_momo_01.objective_0"
+		},
+		{
+			"type": "item_delivery",
+			"item": {"tag": "minecraft:saplings"},
+			"count": 3,
+			"description_key": "quest.girlfriends.fq_momo_01.objective_1"
+		}
+	],
+	"rewards": {
+		"affection": 50,
+		"unlock_random_templates": ["girlfriends:rt_momo_01", "girlfriends:rt_momo_02"]
+	},
+	"title_key": "quest.girlfriends.fq_momo_01.title",
+	"description_key": "quest.girlfriends.fq_momo_01.description"
+}
