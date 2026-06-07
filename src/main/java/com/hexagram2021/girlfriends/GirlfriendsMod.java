@@ -4,6 +4,9 @@ import com.hexagram2021.girlfriends.common.blessing.BlessingParameterManager;
 import com.hexagram2021.girlfriends.common.blessing.BlessingTypes;
 import com.hexagram2021.girlfriends.common.character.GirlfriendTypes;
 import com.hexagram2021.girlfriends.common.character.GirlfriendsRegistries;
+import com.hexagram2021.girlfriends.common.entity.GirlfriendsEntities;
+import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsMemoryTypes;
+import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsSensorTypes;
 import com.hexagram2021.girlfriends.common.gift.GiftPreferenceManager;
 import com.hexagram2021.girlfriends.common.network.GirlfriendsNetwork;
 import net.minecraft.resources.Identifier;
@@ -38,6 +41,9 @@ public class GirlfriendsMod {
 		NeoForge.EVENT_BUS.addListener(this::registerServerReloadListeners);
 		BlessingTypes.REGISTER.register(modEventBus);
 		GirlfriendTypes.REGISTER.register(modEventBus);
+		GirlfriendsEntities.REGISTER.register(modEventBus);
+		GirlfriendsMemoryTypes.REGISTER.register(modEventBus);
+		GirlfriendsSensorTypes.REGISTER.register(modEventBus);
 	}
 
 	private void registerServerReloadListeners(AddServerReloadListenersEvent event) {
