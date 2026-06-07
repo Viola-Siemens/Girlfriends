@@ -20,6 +20,16 @@ sourceSets.main.resources {
 }
 
 repositories {
+    exclusiveContent {
+        forRepository {
+            maven {
+                url "https://viola-siemens.github.io/pages/maven/"
+            }
+        }
+        filter {
+            includeGroup "com.hexagram2021"
+        }
+    }
 }
 
 base {
@@ -83,6 +93,8 @@ test {
 }
 
 dependencies {
+    implementation group: 'com.hexagram2021', name: 'tetrachordlib', version: '26.1+1.0.3'
+
     testImplementation 'org.junit.jupiter:junit-jupiter:5.13.4'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.13.4'
 }
