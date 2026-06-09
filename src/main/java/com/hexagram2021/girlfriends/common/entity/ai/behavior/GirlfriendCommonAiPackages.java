@@ -18,17 +18,14 @@ import net.minecraft.world.entity.ai.behavior.Swim;
  * @author liudongyu
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public final class GirlfriendAiPackages {
-	private GirlfriendAiPackages() {
-	}
-
+public final class GirlfriendCommonAiPackages {
 	/**
 	 * 核心行为包 — 始终生效的游泳行为喵~
 	 *
-	 * @return 核心行为对列表喵~
+	 * @param builder 行为列表
 	 */
-	public static ImmutableList<Pair<Integer, BehaviorControl<GirlfriendEntity>>> coreActivities() {
-		return ImmutableList.of(
+	public static void addCoreActivities(ImmutableList.Builder<Pair<Integer, BehaviorControl<GirlfriendEntity>>> builder) {
+		builder.add(
 				Pair.of(0, new Swim(0.8f))
 		);
 	}
@@ -36,13 +33,16 @@ public final class GirlfriendAiPackages {
 	/**
 	 * 默认闲置行为包 — 闲逛、注视、休息喵~
 	 *
-	 * @return 闲置行为对列表喵~
+	 * @param builder 行为列表
 	 */
-	public static ImmutableList<Pair<Integer, BehaviorControl<GirlfriendEntity>>> idleActivities() {
-		return ImmutableList.of(
+	public static void addIdleActivities(ImmutableList.Builder<Pair<Integer, BehaviorControl<GirlfriendEntity>>> builder) {
+		builder.add(
 				Pair.of(0, (BehaviorControl) RandomStroll.stroll(0.5F)),
 				Pair.of(1, (BehaviorControl) SetEntityLookTarget.create(8.0F)),
 				Pair.of(2, (BehaviorControl) new DoNothing(30, 60))
 		);
+	}
+
+	private GirlfriendCommonAiPackages() {
 	}
 }

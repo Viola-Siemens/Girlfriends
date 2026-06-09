@@ -1,6 +1,8 @@
 package com.hexagram2021.girlfriends.client;
 
 import com.hexagram2021.girlfriends.GirlfriendsMod;
+import com.hexagram2021.girlfriends.client.model.GirlfriendModel;
+import com.hexagram2021.girlfriends.client.model.GirlfriendsModelLayers;
 import com.hexagram2021.girlfriends.client.renderer.GirlfriendRenderer;
 import com.hexagram2021.girlfriends.common.entity.GirlfriendsEntities;
 import net.neoforged.api.distmarker.Dist;
@@ -48,13 +50,28 @@ public class GirlfriendsModClient {
     }
 
     /**
+     * 注册模型层
+     * @param event 注册模型层事件
+     */
+    @SubscribeEvent
+    public static void onRegisterModels(EntityRenderersEvent.RegisterLayerDefinitions event) {
+    	event.registerLayerDefinition(GirlfriendsModelLayers.MOMO, GirlfriendModel::createBodyLayer);
+        event.registerLayerDefinition(GirlfriendsModelLayers.YUXI, GirlfriendModel::createBodyLayer);
+        event.registerLayerDefinition(GirlfriendsModelLayers.MEISHU, GirlfriendModel::createBodyLayer);
+        event.registerLayerDefinition(GirlfriendsModelLayers.WANYING, GirlfriendModel::createBodyLayer);
+        event.registerLayerDefinition(GirlfriendsModelLayers.YOURUO, GirlfriendModel::createBodyLayer);
+    }
+
+    /**
      * 注册实体渲染器喵~
      *
      * @param event 实体渲染器注册事件喵~
      */
     @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerEntityRenderer(GirlfriendsEntities.MOMO.get(),
-                ctx -> new GirlfriendRenderer(ctx, "momo"));
+        event.registerEntityRenderer(
+                GirlfriendsEntities.MOMO.get(),
+                ctx -> new GirlfriendRenderer(ctx, GirlfriendsModelLayers.MOMO, "momo")
+        );
     }
 }
