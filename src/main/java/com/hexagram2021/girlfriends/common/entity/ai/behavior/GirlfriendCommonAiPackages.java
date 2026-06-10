@@ -3,11 +3,7 @@ package com.hexagram2021.girlfriends.common.entity.ai.behavior;
 import com.google.common.collect.ImmutableList;
 import com.hexagram2021.girlfriends.common.entity.GirlfriendEntity;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.world.entity.ai.behavior.BehaviorControl;
-import net.minecraft.world.entity.ai.behavior.DoNothing;
-import net.minecraft.world.entity.ai.behavior.RandomStroll;
-import net.minecraft.world.entity.ai.behavior.SetEntityLookTarget;
-import net.minecraft.world.entity.ai.behavior.Swim;
+import net.minecraft.world.entity.ai.behavior.*;
 
 /**
  * 角色 AI 行为包工具类喵~
@@ -23,10 +19,15 @@ public final class GirlfriendCommonAiPackages {
 	 * 核心行为包 — 始终生效的游泳行为喵~
 	 *
 	 * @param builder 行为列表
+	 * @param minDist 停止跟随的距离
+	 * @param maxDist 放弃跟随的距离
 	 */
-	public static void addCoreActivities(ImmutableList.Builder<Pair<Integer, BehaviorControl<GirlfriendEntity>>> builder) {
+	public static void addCoreActivities(ImmutableList.Builder<Pair<Integer, BehaviorControl<GirlfriendEntity>>> builder,
+										 int minDist, int maxDist) {
 		builder.add(
-				Pair.of(0, new Swim(0.8f))
+				Pair.of(0, new Swim(0.8F)),
+				Pair.of(1, StayCloseToIntimatePlayer.create(minDist, maxDist, 1.0F)),
+				Pair.of(3, (BehaviorControl) SetEntityLookTarget.create(4.0F))
 		);
 	}
 

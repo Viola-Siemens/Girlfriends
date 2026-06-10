@@ -15,6 +15,7 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -115,6 +116,19 @@ public abstract class GirlfriendEntity extends PathfinderMob {
 	 */
 	public void setFollowTargetUuid(@Nullable UUID uuid) {
 		this.followTargetUuid = uuid;
+	}
+
+	/**
+	 * 获取跟随玩家
+	 *
+	 * @return 跟随玩家，非跟随状态、非玩家、不同维度时返回 null
+	 */
+	@Nullable
+	public Player getFollowedPlayer() {
+		if(this.followTargetUuid != null && this.level().getEntity(this.followTargetUuid) instanceof Player player) {
+			return player;
+		}
+		return null;
 	}
 
 	/**

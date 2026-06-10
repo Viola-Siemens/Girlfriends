@@ -11,29 +11,20 @@ import java.util.UUID;
 /**
  * 玩家与角色关系服务喵~
  *
+ * @param worldData 世界数据喵~
+ *
  * @author liudongyu
  */
-public class RelationshipService {
+public record RelationshipService(GirlfriendsWorldData worldData) {
 	private static final float MIN_AFFECTION = 0;
 	private static final float MAX_AFFECTION = 1000;
 	private static final float AFFECTION_THRESHOLD = 700;
 	private static final float HOME_PARTNER_THRESHOLD = 900;
 
-	private final GirlfriendsWorldData worldData;
-
-	/**
-	 * 创建关系服务喵~
-	 *
-	 * @param worldData 世界数据喵~
-	 */
-	public RelationshipService(GirlfriendsWorldData worldData) {
-		this.worldData = worldData;
-	}
-
 	/**
 	 * 获取玩家与角色关系喵~
 	 *
-	 * @param playerUuid 玩家 UUID 喵~
+	 * @param playerUuid       玩家 UUID 喵~
 	 * @param girlfriendTypeId 角色类型 ID 喵~
 	 * @return 关系状态喵~
 	 */
@@ -44,7 +35,7 @@ public class RelationshipService {
 	/**
 	 * 查询已存在的玩家与角色关系喵~
 	 *
-	 * @param playerUuid 玩家 UUID 喵~
+	 * @param playerUuid       玩家 UUID 喵~
 	 * @param girlfriendTypeId 角色类型 ID 喵~
 	 * @return 已存在的关系状态喵~
 	 */
@@ -55,10 +46,10 @@ public class RelationshipService {
 	/**
 	 * 变更好感度并返回最新值喵~
 	 *
-	 * @param playerUuid 玩家 UUID 喵~
+	 * @param playerUuid       玩家 UUID 喵~
 	 * @param girlfriendTypeId 角色类型 ID 喵~
-	 * @param source 变更来源喵~
-	 * @param rawDelta 原始变更值喵~
+	 * @param source           变更来源喵~
+	 * @param rawDelta         原始变更值喵~
 	 * @return 最新好感度喵~
 	 */
 	public float changeAffection(UUID playerUuid, Identifier girlfriendTypeId, AffectionChangeSource source, float rawDelta) {
@@ -77,19 +68,19 @@ public class RelationshipService {
 	 */
 	public AffectionStage getNumericStage(float affection) {
 		float clampedAffection = clampAffection(affection);
-		if(clampedAffection >= HOME_PARTNER_THRESHOLD) {
+		if (clampedAffection >= HOME_PARTNER_THRESHOLD) {
 			return AffectionStage.HOME_PARTNER;
 		}
-		if(clampedAffection >= AFFECTION_THRESHOLD) {
+		if (clampedAffection >= AFFECTION_THRESHOLD) {
 			return AffectionStage.INTIMATE;
 		}
-		if(clampedAffection >= AffectionStage.AFFECTION.getMinAffection()) {
+		if (clampedAffection >= AffectionStage.AFFECTION.getMinAffection()) {
 			return AffectionStage.AFFECTION;
 		}
-		if(clampedAffection >= AffectionStage.TRUST.getMinAffection()) {
+		if (clampedAffection >= AffectionStage.TRUST.getMinAffection()) {
 			return AffectionStage.TRUST;
 		}
-		if(clampedAffection >= AffectionStage.FAMILIAR.getMinAffection()) {
+		if (clampedAffection >= AffectionStage.FAMILIAR.getMinAffection()) {
 			return AffectionStage.FAMILIAR;
 		}
 		return AffectionStage.STRANGER;
@@ -103,10 +94,10 @@ public class RelationshipService {
 	 */
 	public AffectionStage getEffectiveStage(PlayerCharacterRelation relation) {
 		AffectionStage numericStage = this.getNumericStage(relation.getAffection());
-		if(numericStage == AffectionStage.HOME_PARTNER) {
+		if (numericStage == AffectionStage.HOME_PARTNER) {
 			return relation.isHomePartner() ? AffectionStage.HOME_PARTNER : AffectionStage.INTIMATE;
 		}
-		if(numericStage == AffectionStage.INTIMATE && !relation.isConfirmedIntimacy()) {
+		if (numericStage == AffectionStage.INTIMATE && !relation.isConfirmedIntimacy()) {
 			return AffectionStage.AFFECTION;
 		}
 		return numericStage;
@@ -119,13 +110,13 @@ public class RelationshipService {
 	 */
 	public void resetDailyCounters(long currentDay) {
 		List<Map.Entry<RelationKey, PlayerCharacterRelation>> entries = Lists.newArrayList(this.worldData.getRelations().entrySet());
-		for(Map.Entry<RelationKey, PlayerCharacterRelation> entry : entries) {
+		for (Map.Entry<RelationKey, PlayerCharacterRelation> entry : entries) {
 			PlayerCharacterRelation relation = entry.getValue();
-			if(relation.getLastDailyResetDay() == currentDay) {
+			if (relation.getLastDailyResetDay() == currentDay) {
 				continue;
 			}
 			this.worldData.updateRelation(entry.getKey().playerUuid(), entry.getKey().girlfriendTypeId(), current -> {
-				if(current.getLastDailyResetDay() == currentDay) {
+				if (current.getLastDailyResetDay() == currentDay) {
 					return;
 				}
 				current.setDailyGiftGain(0);
@@ -143,8 +134,8 @@ public class RelationshipService {
 	 */
 	public void resetCharacterRelations(Identifier girlfriendTypeId) {
 		List<Map.Entry<RelationKey, PlayerCharacterRelation>> entries = Lists.newArrayList(this.worldData.getRelations().entrySet());
-		for(Map.Entry<RelationKey, PlayerCharacterRelation> entry : entries) {
-			if(!entry.getKey().girlfriendTypeId().equals(girlfriendTypeId)) {
+		for (Map.Entry<RelationKey, PlayerCharacterRelation> entry : entries) {
+			if (!entry.getKey().girlfriendTypeId().equals(girlfriendTypeId)) {
 				continue;
 			}
 			boolean claimedFinalReward = entry.getValue().isClaimedFinalReward();
