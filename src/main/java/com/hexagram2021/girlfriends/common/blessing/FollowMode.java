@@ -1,14 +1,21 @@
 package com.hexagram2021.girlfriends.common.blessing;
 
+import com.mojang.serialization.Codec;
+import net.minecraft.util.StringRepresentable;
+
+import java.util.Locale;
+
 /**
  * 角色跟随模式喵~
  *
  * @author liudongyu
  */
-public enum FollowMode {
+public enum FollowMode implements StringRepresentable {
 	STAY,
 	FOLLOW,
 	HOME;
+
+	public static final Codec<FollowMode> CODEC = StringRepresentable.fromEnum(FollowMode::values);
 
 	/**
 	 * 根据序号获取跟随模式喵~
@@ -22,5 +29,10 @@ public enum FollowMode {
 			return STAY;
 		}
 		return values[id];
+	}
+
+	@Override
+	public String getSerializedName() {
+		return this.name().toLowerCase(Locale.ROOT);
 	}
 }

@@ -4,11 +4,14 @@ import com.hexagram2021.girlfriends.common.blessing.FollowMode;
 import com.hexagram2021.girlfriends.common.character.GirlfriendType;
 import com.hexagram2021.girlfriends.common.character.GirlfriendsRegistries;
 import net.minecraft.core.Holder;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.profiling.Profiler;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
@@ -37,15 +40,15 @@ public abstract class GirlfriendEntity extends PathfinderMob {
 	private static final EntityDataAccessor<Integer> DATA_FOLLOW_MODE =
 			SynchedEntityData.defineId(GirlfriendEntity.class, EntityDataSerializers.INT);
 
-	private static final String TAG_GIRLFRIEND_ID = "girlfriend_id";
 	private static final String TAG_FOLLOW_MODE = "follow_mode";
 	private static final String TAG_FOLLOW_TARGET = "follow_target";
+	private static final String TAG_LIKED_PLAYER = "liked_player";
+
+	@Nullable
+	private UUID likedPlayerUuid;
 
 	@Nullable
 	private UUID followTargetUuid;
-
-	/** Brain Provider，由子类在构造时设置喵~ */
-	protected Brain.Provider<GirlfriendEntity> brainProvider;
 
 	protected GirlfriendEntity(EntityType<? extends PathfinderMob> entityType, Level level) {
 		super(entityType, level);
@@ -132,6 +135,20 @@ public abstract class GirlfriendEntity extends PathfinderMob {
 	}
 
 	/**
+	 * 判断是否对指定玩家感兴趣<br/>
+	 * 仅当与该玩家确认关系，或未与任何玩家确认关系时，返回 true
+	 *
+	 * @param player 玩家
+	 * @return 是否对指定玩家感兴趣
+	 */
+	public boolean isInterestedIn(Player player) {
+		if(this.likedPlayerUuid == null) {
+			return true;
+		}
+		return this.likedPlayerUuid.equals(player.getUUID());
+	}
+
+	/**
 	 * 创建女友通用属性喵~
 	 *
 	 * @return 属性构建器喵~
@@ -143,6 +160,15 @@ public abstract class GirlfriendEntity extends PathfinderMob {
 				.add(Attributes.MAX_HEALTH, 40.0D)
 				.add(Attributes.ATTACK_DAMAGE, 2.0D)
 				.add(Attributes.ARMOR, 0.0D);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void customServerAiStep(ServerLevel level) {
+		ProfilerFiller profiler = Profiler.get();
+		profiler.push("villagerBrain");
+		((Brain<GirlfriendEntity>) this.getBrain()).tick(level, this);
+		profiler.pop();
 	}
 
 	/**
@@ -178,33 +204,22 @@ public abstract class GirlfriendEntity extends PathfinderMob {
 	@Override
 	protected void addAdditionalSaveData(ValueOutput output) {
 		super.addAdditionalSaveData(output);
-		output.putString(TAG_GIRLFRIEND_ID, this.getGirlfriendTypeId().toString());
-		output.putString(TAG_FOLLOW_MODE, this.getFollowMode().name());
+		output.store(TAG_FOLLOW_MODE, FollowMode.CODEC, this.getFollowMode());
 		if (this.followTargetUuid != null) {
-			output.putString(TAG_FOLLOW_TARGET, this.followTargetUuid.toString());
+			output.store(TAG_FOLLOW_TARGET, UUIDUtil.CODEC, this.followTargetUuid);
+		}
+		if (this.likedPlayerUuid != null) {
+			output.store(TAG_LIKED_PLAYER, UUIDUtil.CODEC, this.likedPlayerUuid);
 		}
 	}
 
 	@Override
 	protected void readAdditionalSaveData(ValueInput input) {
 		super.readAdditionalSaveData(input);
-		input.getString(TAG_FOLLOW_MODE).ifPresent(mode -> {
-			try {
-				this.setFollowMode(FollowMode.valueOf(mode));
-			} catch (IllegalArgumentException _) {
-				// 忽略无效的跟随模式值喵~
-			}
-		});
-		input.getString(TAG_FOLLOW_TARGET).ifPresent(uuidStr -> {
-			try {
-				this.followTargetUuid = UUID.fromString(uuidStr);
-			} catch (IllegalArgumentException _) {
-				// 忽略无效的 UUID 字符串喵~
-			}
-		});
-		if (this.brainProvider != null) {
-			input.read("Brain", Brain.Packed.CODEC).ifPresent(packed -> this.brain = this.makeBrain(packed));
-		}
+		input.read(TAG_FOLLOW_MODE, FollowMode.CODEC).ifPresent(this::setFollowMode);
+		input.read(TAG_FOLLOW_TARGET, UUIDUtil.CODEC).ifPresent(uuid -> this.followTargetUuid = uuid);
+		input.read(TAG_LIKED_PLAYER, UUIDUtil.CODEC).ifPresent(uuid -> this.likedPlayerUuid = uuid);
+		input.read("Brain", Brain.Packed.CODEC).ifPresent(packed -> this.brain = this.makeBrain(packed));
 	}
 
 	@Override

@@ -19,7 +19,12 @@ public class GirlfriendsEnvironmentAttributes {
 
 	/** 沫沫日程喵~ */
 	public static final DeferredHolder<EnvironmentAttribute<?>, EnvironmentAttribute<Activity>> MOMO_ACTIVITY =
-			REGISTER.register("gameplay/momo_activity", () -> EnvironmentAttribute.builder(AttributeTypes.ACTIVITY).defaultValue(Activity.IDLE).build());
+			REGISTER.register(
+					"gameplay/momo_activity",
+					() -> EnvironmentAttribute.builder(AttributeTypes.ACTIVITY)
+							.defaultValue(GirlfriendsActivities.MORNING.get())
+							.build()
+			);
 
 	private GirlfriendsEnvironmentAttributes() {
 	}

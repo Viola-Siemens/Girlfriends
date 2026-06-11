@@ -8,7 +8,6 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -25,8 +24,8 @@ public final class GirlfriendsMemoryTypes {
 			REGISTER.register("shelter_point", () -> new MemoryModuleType<>(Optional.of(GlobalPos.CODEC)));
 
 	/** 附近花朵位置列表 (List<BlockPos>) — 沫沫专属 喵~ */
-	public static final DeferredHolder<MemoryModuleType<?>, MemoryModuleType<List<BlockPos>>> NEARBY_FLOWERS =
-			REGISTER.register("nearby_flowers", () -> new MemoryModuleType<>(Optional.of(BlockPos.CODEC.listOf())));
+	public static final DeferredHolder<MemoryModuleType<?>, MemoryModuleType<BlockPos>> NEARBY_FLOWERS =
+			REGISTER.register("nearby_flowers", () -> new MemoryModuleType<>(Optional.of(BlockPos.CODEC)));
 
 	/** 附近蜂箱位置 (BlockPos) — 沫沫专属 */
 	public static final DeferredHolder<MemoryModuleType<?>, MemoryModuleType<BlockPos>> NEAREST_BEEHIVE =
@@ -37,7 +36,7 @@ public final class GirlfriendsMemoryTypes {
 			REGISTER.register("nearest_water", () -> new MemoryModuleType<>(Optional.of(BlockPos.CODEC)));
 
 	/** 附近可挖掘矿石 (List<BlockPos>) — 梅疏专属 喵~ */
-	public static final DeferredHolder<MemoryModuleType<?>, MemoryModuleType<List<BlockPos>>> NEARBY_ORES =
+	public static final DeferredHolder<MemoryModuleType<?>, MemoryModuleType<BlockPos>> NEARBY_ORES =
 			REGISTER.register("nearby_ores", () -> new MemoryModuleType<>(Optional.empty()));
 
 	/** 末影珍珠瞬移目标 (BlockPos) — 幽若专属 喵~ */

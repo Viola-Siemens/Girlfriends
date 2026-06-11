@@ -2,8 +2,13 @@ package com.hexagram2021.girlfriends.common.entity.ai.behavior;
 
 import com.google.common.collect.ImmutableList;
 import com.hexagram2021.girlfriends.common.entity.GirlfriendEntity;
+import com.hexagram2021.girlfriends.common.entity.GirlfriendEntityTags;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.behavior.*;
+import net.minecraft.world.entity.player.Player;
+
+import java.util.List;
 
 /**
  * 角色 AI 行为包工具类喵~
@@ -13,22 +18,33 @@ import net.minecraft.world.entity.ai.behavior.*;
  *
  * @author liudongyu
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
 public final class GirlfriendCommonAiPackages {
 	/**
 	 * 核心行为包 — 始终生效的游泳行为喵~
 	 *
+	 * @param girlfriend 角色
 	 * @param builder 行为列表
 	 * @param minDist 停止跟随的距离
 	 * @param maxDist 放弃跟随的距离
 	 */
-	public static void addCoreActivities(ImmutableList.Builder<Pair<Integer, BehaviorControl<GirlfriendEntity>>> builder,
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static void addCoreActivities(GirlfriendEntity girlfriend,
+										 ImmutableList.Builder<Pair<Integer, BehaviorControl<GirlfriendEntity>>> builder,
 										 int minDist, int maxDist) {
 		builder.add(
 				Pair.of(0, new Swim(0.8F)),
+				Pair.of(0, (BehaviorControl) InteractWithDoor.create()),
+				Pair.of(1, (BehaviorControl) new LookAtTargetSink(45, 90)),
 				Pair.of(1, StayCloseToIntimatePlayer.create(minDist, maxDist, 1.0F)),
-				Pair.of(6, (BehaviorControl) SetEntityLookTarget.create(4.0F)),
-				Pair.of(7, (BehaviorControl) new DoNothing(30, 60))
+				Pair.of(2, (BehaviorControl) new MoveToTargetSink(80, 120)),
+				Pair.of(6, new RunOne<>(List.of(
+						Pair.of(SetEntityLookTarget.create(EntityType.CAT, 8.0F), 2),
+						Pair.of(SetEntityLookTarget.create(EntityType.WOLF, 8.0F), 2),
+						Pair.of(SetEntityLookTarget.create(mob -> mob.is(GirlfriendEntityTags.GIRLFRIENDS), 8.0F), 4),
+						Pair.of(SetEntityLookTarget.create(mob -> mob instanceof Player player && girlfriend.isInterestedIn(player), 8.0F), 4)
+				))),
+				Pair.of(7, (BehaviorControl) new DoNothing(30, 60)),
+				Pair.of(49, (BehaviorControl) UpdateActivityFromSchedule.create())
 		);
 	}
 

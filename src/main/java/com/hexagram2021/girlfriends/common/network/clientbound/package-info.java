@@ -1,5 +1,5 @@
 /**
- * 角色 AI 行为包 — Brain 日程行为编排喵~
+ * Girlfriends 网络同步与交互摘要包喵~
  *
  * @author liudongyu
  */
@@ -7,7 +7,7 @@
 @FieldsAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-package com.hexagram2021.girlfriends.common.entity.ai.behavior;
+package com.hexagram2021.girlfriends.common.network.clientbound;
 
 import com.mojang.logging.annotations.FieldsAreNonnullByDefault;
 import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
