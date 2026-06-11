@@ -27,20 +27,8 @@ public final class GirlfriendCommonAiPackages {
 		builder.add(
 				Pair.of(0, new Swim(0.8F)),
 				Pair.of(1, StayCloseToIntimatePlayer.create(minDist, maxDist, 1.0F)),
-				Pair.of(3, (BehaviorControl) SetEntityLookTarget.create(4.0F))
-		);
-	}
-
-	/**
-	 * 默认闲置行为包 — 闲逛、注视、休息喵~
-	 *
-	 * @param builder 行为列表
-	 */
-	public static void addIdleActivities(ImmutableList.Builder<Pair<Integer, BehaviorControl<GirlfriendEntity>>> builder) {
-		builder.add(
-				Pair.of(0, (BehaviorControl) RandomStroll.stroll(0.5F)),
-				Pair.of(1, (BehaviorControl) SetEntityLookTarget.create(8.0F)),
-				Pair.of(2, (BehaviorControl) new DoNothing(30, 60))
+				Pair.of(6, (BehaviorControl) SetEntityLookTarget.create(4.0F)),
+				Pair.of(7, (BehaviorControl) new DoNothing(30, 60))
 		);
 	}
 

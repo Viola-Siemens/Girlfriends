@@ -20,12 +20,12 @@ import java.util.Set;
 public class GirlfriendShelterSensor extends Sensor<GirlfriendEntity> {
 	@Override
 	public Set<MemoryModuleType<?>> requires() {
-		return Set.of(GirlfriendsMemoryTypes.MEETING_POINT.get());
+		return Set.of(GirlfriendsMemoryTypes.SHELTER_POINT.get());
 	}
 
 	@Override
 	protected void doTick(ServerLevel level, GirlfriendEntity entity) {
-		entity.getBrain().setMemory(GirlfriendsMemoryTypes.MEETING_POINT.get(),
+		entity.getBrain().setMemory(GirlfriendsMemoryTypes.SHELTER_POINT.get(),
 				GlobalPos.of(level.dimension(), entity.blockPosition()));
 	}
 }

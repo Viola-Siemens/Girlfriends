@@ -3,6 +3,7 @@ package com.hexagram2021.girlfriends.common.entity;
 import com.google.common.collect.ImmutableList;
 import com.hexagram2021.girlfriends.common.character.GirlfriendTypes;
 import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsActivities;
+import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsMemoryTypes;
 import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsSensorTypes;
 import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsEnvironmentAttributes;
 import com.hexagram2021.girlfriends.common.entity.ai.behavior.GirlfriendCommonAiPackages;
@@ -13,6 +14,8 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.ActivityData;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.BehaviorControl;
+import net.minecraft.world.entity.ai.behavior.GoToTargetLocation;
+import net.minecraft.world.entity.ai.behavior.RandomStroll;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
@@ -43,8 +46,11 @@ public class MomoEntity extends GirlfriendEntity {
 	@Override
 	protected Brain.Provider<GirlfriendEntity> getBrainProvider() {
 		return Brain.provider(
-				List.of(GirlfriendsSensorTypes.SHELTER_SENSOR.get()),
-				_ -> {
+				List.of(
+						GirlfriendsSensorTypes.SHELTER_SENSOR.get(),
+						GirlfriendsSensorTypes.FLOWER_SENSOR.get(),
+						GirlfriendsSensorTypes.BEEHIVE_SENSOR.get()
+				), _ -> {
 					ImmutableList.Builder<ActivityData<GirlfriendEntity>> activities = ImmutableList.builder();
 
 					ImmutableList.Builder<Pair<Integer, BehaviorControl<GirlfriendEntity>>> morning = ImmutableList.builder();
@@ -59,6 +65,14 @@ public class MomoEntity extends GirlfriendEntity {
 					GirlfriendCommonAiPackages.addCoreActivities(afternoon, 3, 16);
 					GirlfriendCommonAiPackages.addCoreActivities(sunset, 3, 16);
 					GirlfriendCommonAiPackages.addCoreActivities(nightRest, 3, 16);
+
+					// 工作行为
+					dayWork.add(
+							Pair.of(2, GoToTargetLocation.create(GirlfriendsMemoryTypes.NEAREST_BEEHIVE.get(), 3, 0.6F))
+					);
+					afternoon.add(
+							Pair.of(2, (BehaviorControl) RandomStroll.stroll(0.5F))
+					);
 
 					activities.add(ActivityData.create(GirlfriendsActivities.MORNING.get(), morning.build()));
 					activities.add(ActivityData.create(GirlfriendsActivities.DAY_WORK.get(), dayWork.build()));
