@@ -6,19 +6,21 @@ import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsActivities;
 import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsMemoryTypes;
 import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsSensorTypes;
 import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsEnvironmentAttributes;
-import com.hexagram2021.girlfriends.common.entity.ai.behavior.BackToShelter;
+import com.hexagram2021.girlfriends.common.entity.ai.behavior.GirlfriendCalmDown;
 import com.hexagram2021.girlfriends.common.entity.ai.behavior.GirlfriendCommonAiPackages;
+import com.hexagram2021.girlfriends.common.entity.ai.behavior.RunOneLoop;
+import com.hexagram2021.girlfriends.common.entity.ai.behavior.ShelterBoundRandomStroll;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.SharedConstants;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.ActivityData;
 import net.minecraft.world.entity.ai.Brain;
-import net.minecraft.world.entity.ai.behavior.BehaviorControl;
-import net.minecraft.world.entity.ai.behavior.GoToTargetLocation;
-import net.minecraft.world.entity.ai.behavior.RandomLookAround;
-import net.minecraft.world.entity.ai.behavior.RandomStroll;
+import net.minecraft.world.entity.ai.behavior.*;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.level.Level;
 
@@ -52,6 +54,7 @@ public class MomoEntity extends GirlfriendEntity {
 	protected Brain.Provider<GirlfriendEntity> getBrainProvider() {
 		return Brain.provider(
 				List.of(
+						SensorType.HURT_BY,
 						GirlfriendsSensorTypes.SHELTER_SENSOR.get(),
 						GirlfriendsSensorTypes.FLOWER_SENSOR.get(),
 						GirlfriendsSensorTypes.BEEHIVE_SENSOR.get()
@@ -59,6 +62,7 @@ public class MomoEntity extends GirlfriendEntity {
 					ImmutableList.Builder<ActivityData<GirlfriendEntity>> activities = ImmutableList.builder();
 
 					ImmutableList.Builder<Pair<Integer, BehaviorControl<GirlfriendEntity>>> core = ImmutableList.builder();
+					ImmutableList.Builder<Pair<Integer, BehaviorControl<GirlfriendEntity>>> panic = ImmutableList.builder();
 					ImmutableList.Builder<Pair<Integer, BehaviorControl<GirlfriendEntity>>> morning = ImmutableList.builder();
 					ImmutableList.Builder<Pair<Integer, BehaviorControl<GirlfriendEntity>>> dayWork = ImmutableList.builder();
 					ImmutableList.Builder<Pair<Integer, BehaviorControl<GirlfriendEntity>>> afternoon = ImmutableList.builder();
@@ -68,17 +72,39 @@ public class MomoEntity extends GirlfriendEntity {
 					// 通用行为
 					GirlfriendCommonAiPackages.addCoreActivities(girlfriend, core, 3, 16);
 
+					// 恐慌行为
+					panic.add(
+							Pair.of(0, GirlfriendCalmDown.create()),
+							Pair.of(1, (BehaviorControl<GirlfriendEntity>)(Object) SetWalkTargetAwayFrom.entity(MemoryModuleType.NEAREST_HOSTILE, 0.8F, 6, false)),
+							Pair.of(1, (BehaviorControl<GirlfriendEntity>)(Object) SetWalkTargetAwayFrom.entity(MemoryModuleType.HURT_BY_ENTITY, 0.8F, 6, false)),
+							Pair.of(2, ShelterBoundRandomStroll.create(0.8F))
+					);
+
 					// 工作行为
+					morning.add(
+							Pair.of(49, (BehaviorControl<GirlfriendEntity>)(Object) UpdateActivityFromSchedule.create())
+					);
 					dayWork.add(
-							Pair.of(2, GoToTargetLocation.create(GirlfriendsMemoryTypes.NEAREST_BEEHIVE.get(), 3, 0.6F))
+							Pair.of(3, new RunOneLoop<>(List.of(
+									GoToTargetLocation.create(GirlfriendsMemoryTypes.NEAREST_BEEHIVE.get(), 3, 0.5F),
+									GoToTargetLocation.create(GirlfriendsMemoryTypes.NEARBY_FLOWER.get(), 2, 0.5F)
+							), 10 * SharedConstants.TICKS_PER_SECOND, 2 * SharedConstants.TICKS_PER_SECOND)),
+							Pair.of(49, (BehaviorControl<GirlfriendEntity>)(Object) UpdateActivityFromSchedule.create())
 					);
 					afternoon.add(
 							Pair.of(1, (BehaviorControl<GirlfriendEntity>)(Object) new RandomLookAround(UniformInt.of(150, 250), 30.0F, -10.0F, 0.0F)),
-							Pair.of(1, BackToShelter.create(16, 48, 0.4F)),
-							Pair.of(2, (BehaviorControl<GirlfriendEntity>)(Object) RandomStroll.stroll(0.4F))
+							Pair.of(3, ShelterBoundRandomStroll.create(0.4F)),
+							Pair.of(49, (BehaviorControl<GirlfriendEntity>)(Object) UpdateActivityFromSchedule.create())
+					);
+					sunset.add(
+							Pair.of(49, (BehaviorControl<GirlfriendEntity>)(Object) UpdateActivityFromSchedule.create())
+					);
+					nightRest.add(
+							Pair.of(49, (BehaviorControl<GirlfriendEntity>)(Object) UpdateActivityFromSchedule.create())
 					);
 
 					activities.add(ActivityData.create(Activity.CORE, core.build()));
+					activities.add(ActivityData.create(Activity.PANIC, panic.build()));
 					activities.add(ActivityData.create(GirlfriendsActivities.MORNING.get(), morning.build()));
 					activities.add(ActivityData.create(GirlfriendsActivities.DAY_WORK.get(), dayWork.build()));
 					activities.add(ActivityData.create(GirlfriendsActivities.AFTERNOON.get(), afternoon.build()));

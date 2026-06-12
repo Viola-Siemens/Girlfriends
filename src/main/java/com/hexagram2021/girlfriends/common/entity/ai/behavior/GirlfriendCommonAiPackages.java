@@ -34,8 +34,10 @@ public final class GirlfriendCommonAiPackages {
 		builder.add(
 				Pair.of(0, new Swim(0.8F)),
 				Pair.of(0, (BehaviorControl) InteractWithDoor.create()),
+				Pair.of(0, new GirlfriendPanicTrigger()),
 				Pair.of(1, (BehaviorControl) new LookAtTargetSink(45, 90)),
 				Pair.of(1, StayCloseToIntimatePlayer.create(minDist, maxDist, 1.0F)),
+				Pair.of(1, BackToShelter.create(16, 48, 0.4F)),
 				Pair.of(2, (BehaviorControl) new MoveToTargetSink(80, 120)),
 				Pair.of(6, new RunOne<>(List.of(
 						Pair.of(SetEntityLookTarget.create(EntityType.CAT, 8.0F), 2),
@@ -43,8 +45,7 @@ public final class GirlfriendCommonAiPackages {
 						Pair.of(SetEntityLookTarget.create(mob -> mob.is(GirlfriendEntityTags.GIRLFRIENDS), 8.0F), 4),
 						Pair.of(SetEntityLookTarget.create(mob -> mob instanceof Player player && girlfriend.isInterestedIn(player), 8.0F), 4)
 				))),
-				Pair.of(7, (BehaviorControl) new DoNothing(30, 60)),
-				Pair.of(49, (BehaviorControl) UpdateActivityFromSchedule.create())
+				Pair.of(7, (BehaviorControl) new DoNothing(30, 60))
 		);
 	}
 

@@ -3,6 +3,7 @@ package com.hexagram2021.girlfriends.common.entity;
 import com.hexagram2021.girlfriends.common.blessing.FollowMode;
 import com.hexagram2021.girlfriends.common.character.GirlfriendType;
 import com.hexagram2021.girlfriends.common.character.GirlfriendsRegistries;
+import net.minecraft.SharedConstants;
 import net.minecraft.core.Holder;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -43,6 +44,8 @@ public abstract class GirlfriendEntity extends PathfinderMob {
 	private static final String TAG_FOLLOW_MODE = "follow_mode";
 	private static final String TAG_FOLLOW_TARGET = "follow_target";
 	private static final String TAG_LIKED_PLAYER = "liked_player";
+
+	private int healCooldown = 0;
 
 	@Nullable
 	private UUID likedPlayerUuid;
@@ -166,9 +169,19 @@ public abstract class GirlfriendEntity extends PathfinderMob {
 	@Override
 	protected void customServerAiStep(ServerLevel level) {
 		ProfilerFiller profiler = Profiler.get();
-		profiler.push("villagerBrain");
+		profiler.push("girlfriendBrain");
 		((Brain<GirlfriendEntity>) this.getBrain()).tick(level, this);
 		profiler.pop();
+
+		this.healCooldown -= 1;
+		if(this.healCooldown <= 0) {
+			if(this.getHealth() < this.getMaxHealth()) {
+				this.heal(1.0F);
+			}
+			this.healCooldown = 4 * SharedConstants.TICKS_PER_SECOND + this.getRandom().nextInt(SharedConstants.TICKS_PER_SECOND);
+		}
+
+		super.customServerAiStep(level);
 	}
 
 	/**

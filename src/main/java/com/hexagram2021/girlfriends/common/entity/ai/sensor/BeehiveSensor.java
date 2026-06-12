@@ -42,7 +42,7 @@ public class BeehiveSensor extends Sensor<GirlfriendEntity> {
 		this.triedCount = 0;
 		this.lastUpdate = level.getGameTime() + level.getRandom().nextInt(20);
 		PoiManager poiManager = level.getPoiManager();
-		Predicate<BlockPos> cacheTest = (pos) -> {
+		Predicate<BlockPos> cacheTest = pos -> {
 			long key = pos.asLong();
 			if (this.batchCache.containsKey(key)) {
 				return false;
