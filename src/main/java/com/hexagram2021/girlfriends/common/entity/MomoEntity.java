@@ -19,6 +19,7 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl;
 import net.minecraft.world.entity.ai.behavior.GoToTargetLocation;
 import net.minecraft.world.entity.ai.behavior.RandomLookAround;
 import net.minecraft.world.entity.ai.behavior.RandomStroll;
+import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
@@ -57,6 +58,7 @@ public class MomoEntity extends GirlfriendEntity {
 				), girlfriend -> {
 					ImmutableList.Builder<ActivityData<GirlfriendEntity>> activities = ImmutableList.builder();
 
+					ImmutableList.Builder<Pair<Integer, BehaviorControl<GirlfriendEntity>>> core = ImmutableList.builder();
 					ImmutableList.Builder<Pair<Integer, BehaviorControl<GirlfriendEntity>>> morning = ImmutableList.builder();
 					ImmutableList.Builder<Pair<Integer, BehaviorControl<GirlfriendEntity>>> dayWork = ImmutableList.builder();
 					ImmutableList.Builder<Pair<Integer, BehaviorControl<GirlfriendEntity>>> afternoon = ImmutableList.builder();
@@ -64,11 +66,7 @@ public class MomoEntity extends GirlfriendEntity {
 					ImmutableList.Builder<Pair<Integer, BehaviorControl<GirlfriendEntity>>> nightRest = ImmutableList.builder();
 
 					// 通用行为
-					GirlfriendCommonAiPackages.addCoreActivities(girlfriend, morning, 3, 16);
-					GirlfriendCommonAiPackages.addCoreActivities(girlfriend, dayWork, 3, 16);
-					GirlfriendCommonAiPackages.addCoreActivities(girlfriend, afternoon, 3, 16);
-					GirlfriendCommonAiPackages.addCoreActivities(girlfriend, sunset, 3, 16);
-					GirlfriendCommonAiPackages.addCoreActivities(girlfriend, nightRest, 3, 16);
+					GirlfriendCommonAiPackages.addCoreActivities(girlfriend, core, 3, 16);
 
 					// 工作行为
 					dayWork.add(
@@ -76,10 +74,11 @@ public class MomoEntity extends GirlfriendEntity {
 					);
 					afternoon.add(
 							Pair.of(1, (BehaviorControl<GirlfriendEntity>)(Object) new RandomLookAround(UniformInt.of(150, 250), 30.0F, -10.0F, 0.0F)),
-							Pair.of(1, BackToShelter.create(16, 0.6F)),
-							Pair.of(2, (BehaviorControl<GirlfriendEntity>)(Object) RandomStroll.stroll(0.5F))
+							Pair.of(1, BackToShelter.create(16, 48, 0.4F)),
+							Pair.of(2, (BehaviorControl<GirlfriendEntity>)(Object) RandomStroll.stroll(0.4F))
 					);
 
+					activities.add(ActivityData.create(Activity.CORE, core.build()));
 					activities.add(ActivityData.create(GirlfriendsActivities.MORNING.get(), morning.build()));
 					activities.add(ActivityData.create(GirlfriendsActivities.DAY_WORK.get(), dayWork.build()));
 					activities.add(ActivityData.create(GirlfriendsActivities.AFTERNOON.get(), afternoon.build()));

@@ -14,7 +14,7 @@ public class FlowerSensor extends GirlfriendBlockSensor {
 	 * 构造花朵传感器
 	 */
 	public FlowerSensor() {
-		super(GirlfriendsMemoryTypes.NEARBY_FLOWERS.get(), 8);
+		super(GirlfriendsMemoryTypes.NEARBY_FLOWER.get(), 8);
 	}
 
 	@Override

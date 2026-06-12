@@ -11,8 +11,13 @@ import java.util.Locale;
  * @author liudongyu
  */
 public enum FollowMode implements StringRepresentable {
+	/** 非跟随 */
+	NONE,
+	/** 停留 */
 	STAY,
+	/** 跟随 */
 	FOLLOW,
+	/** 家园 */
 	HOME;
 
 	public static final Codec<FollowMode> CODEC = StringRepresentable.fromEnum(FollowMode::values);
@@ -34,5 +39,13 @@ public enum FollowMode implements StringRepresentable {
 	@Override
 	public String getSerializedName() {
 		return this.name().toLowerCase(Locale.ROOT);
+	}
+
+	/**
+	 * STAY 或 FOLLOW 状态下无需回家
+	 * @return 是否不需要寻路回家
+	 */
+	public boolean shouldIgnoreHome() {
+		return this == STAY || this == FOLLOW;
 	}
 }
