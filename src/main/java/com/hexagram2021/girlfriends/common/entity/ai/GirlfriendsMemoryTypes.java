@@ -1,6 +1,7 @@
 package com.hexagram2021.girlfriends.common.entity.ai;
 
 import com.hexagram2021.girlfriends.GirlfriendsMod;
+import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.Registries;
@@ -30,6 +31,14 @@ public final class GirlfriendsMemoryTypes {
 	/** 附近花朵位置列表 (BlockPos) — 沫沫专属 喵~ */
 	public static final DeferredHolder<MemoryModuleType<?>, MemoryModuleType<BlockPos>> NEARBY_FLOWER =
 			REGISTER.register("nearby_flower", () -> new MemoryModuleType<>(Optional.of(BlockPos.CODEC)));
+
+	/** 是否生产了骨粉 (Boolean) — 沫沫专属 喵~ */
+	public static final DeferredHolder<MemoryModuleType<?>, MemoryModuleType<Boolean>> PRODUCED_BONE_MEAL =
+			REGISTER.register("produced_bone_meal", () -> new MemoryModuleType<>(Optional.of(Codec.BOOL)));
+
+	/** 附近花朵数量 (Integer) — 沫沫专属 喵~ */
+	public static final DeferredHolder<MemoryModuleType<?>, MemoryModuleType<Integer>> NEARBY_FLOWER_COUNT =
+			REGISTER.register("nearby_flower_count", () -> new MemoryModuleType<>(Optional.of(Codec.INT)));
 
 	/** 附近蜂箱位置 (BlockPos) — 沫沫专属 */
 	public static final DeferredHolder<MemoryModuleType<?>, MemoryModuleType<BlockPos>> NEAREST_BEEHIVE =

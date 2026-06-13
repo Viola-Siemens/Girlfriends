@@ -13,12 +13,15 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.profiling.Profiler;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.npc.InventoryCarrier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
@@ -37,13 +40,18 @@ import java.util.UUID;
  *
  * @author liudongyu
  */
-public abstract class GirlfriendEntity extends PathfinderMob {
+@SuppressWarnings("java:S2160")
+public abstract class GirlfriendEntity extends PathfinderMob implements InventoryCarrier {
 	private static final EntityDataAccessor<Integer> DATA_FOLLOW_MODE =
 			SynchedEntityData.defineId(GirlfriendEntity.class, EntityDataSerializers.INT);
 
 	private static final String TAG_FOLLOW_MODE = "follow_mode";
 	private static final String TAG_FOLLOW_TARGET = "follow_target";
 	private static final String TAG_LIKED_PLAYER = "liked_player";
+
+	private static final int INVENTORY_SIZE = 18;
+
+	private final SimpleContainer inventory = new SimpleContainer(INVENTORY_SIZE);
 
 	private int healCooldown = 0;
 
@@ -56,6 +64,7 @@ public abstract class GirlfriendEntity extends PathfinderMob {
 	protected GirlfriendEntity(EntityType<? extends PathfinderMob> entityType, Level level) {
 		super(entityType, level);
 		this.followTargetUuid = null;
+		this.setCanPickUpLoot(true);
 	}
 
 	/**
@@ -78,12 +87,8 @@ public abstract class GirlfriendEntity extends PathfinderMob {
 	}
 
 	@Override
-	protected Brain<?> makeBrain(Brain.Packed packed) {
-		Brain<?> brain = this.getBrainProvider().makeBrain(this, packed);
-
-		this.registerBrainGoals(brain);
-
-		return brain;
+	public boolean removeWhenFarAway(double distSqr) {
+		return false;
 	}
 
 	/**
@@ -165,6 +170,20 @@ public abstract class GirlfriendEntity extends PathfinderMob {
 				.add(Attributes.ARMOR, 0.0D);
 	}
 
+	@Override
+	public SimpleContainer getInventory() {
+		return this.inventory;
+	}
+
+	@Override
+	protected Brain<?> makeBrain(Brain.Packed packed) {
+		Brain<?> brain = this.getBrainProvider().makeBrain(this, packed);
+
+		this.registerBrainGoals(brain);
+
+		return brain;
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void customServerAiStep(ServerLevel level) {
@@ -182,6 +201,11 @@ public abstract class GirlfriendEntity extends PathfinderMob {
 		}
 
 		super.customServerAiStep(level);
+	}
+
+	@Override
+	protected void pickUpItem(ServerLevel level, ItemEntity entity) {
+		InventoryCarrier.pickUpItem(level, this, this, entity);
 	}
 
 	/**
@@ -224,6 +248,8 @@ public abstract class GirlfriendEntity extends PathfinderMob {
 		if (this.likedPlayerUuid != null) {
 			output.store(TAG_LIKED_PLAYER, UUIDUtil.CODEC, this.likedPlayerUuid);
 		}
+
+		this.writeInventoryToTag(output);
 	}
 
 	@Override
@@ -233,10 +259,7 @@ public abstract class GirlfriendEntity extends PathfinderMob {
 		input.read(TAG_FOLLOW_TARGET, UUIDUtil.CODEC).ifPresent(uuid -> this.followTargetUuid = uuid);
 		input.read(TAG_LIKED_PLAYER, UUIDUtil.CODEC).ifPresent(uuid -> this.likedPlayerUuid = uuid);
 		input.read("Brain", Brain.Packed.CODEC).ifPresent(packed -> this.brain = this.makeBrain(packed));
-	}
 
-	@Override
-	public boolean removeWhenFarAway(double distSqr) {
-		return false;
+		this.readInventoryFromTag(input);
 	}
 }

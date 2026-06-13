@@ -20,13 +20,33 @@ import java.util.Set;
  * @author liudongyu
  */
 public abstract class GirlfriendBlockSensor extends Sensor<GirlfriendEntity> {
-	private final MemoryModuleType<BlockPos> nearbyBlock;
+	protected final MemoryModuleType<BlockPos> nearbyBlock;
 	private final int scanRange;
+	protected final long memoryTicksToLive;
+	protected final long ticksToIgnore;
 	private Long2LongMap unreachableCache = Long2LongMaps.EMPTY_MAP;
 
+	/**
+	 * 构造方块传感器
+	 * @param nearbyBlock 方块位置记忆
+	 * @param scanRange 扫描范围
+	 */
 	protected GirlfriendBlockSensor(MemoryModuleType<BlockPos> nearbyBlock, int scanRange) {
+		this(nearbyBlock, scanRange, 10L * SharedConstants.TICKS_PER_SECOND, 30L * SharedConstants.TICKS_PER_SECOND);
+	}
+
+	/**
+	 * 构造方块传感器
+	 * @param nearbyBlock 方块位置记忆
+	 * @param scanRange 扫描范围
+	 * @param memoryTicksToLive 记忆时长
+	 * @param ticksToIgnore 忽略已发现方块时长
+	 */
+	protected GirlfriendBlockSensor(MemoryModuleType<BlockPos> nearbyBlock, int scanRange, long memoryTicksToLive, long ticksToIgnore) {
 		this.nearbyBlock = nearbyBlock;
 		this.scanRange = scanRange;
+		this.memoryTicksToLive = memoryTicksToLive;
+		this.ticksToIgnore = ticksToIgnore;
 	}
 
 	@Override
@@ -48,9 +68,7 @@ public abstract class GirlfriendBlockSensor extends Sensor<GirlfriendEntity> {
 				tempCache.put(pos.asLong(), unreachableUntilTime);
 			} else if(this.attractsGirlfriend(entity.level().getBlockState(pos))) {
 				Path path = entity.getNavigation().createPath(pos, 1);
-				if (path != null && path.canReach()) {
-					entity.getBrain().setMemoryWithExpiry(this.nearbyBlock, pos, 60L * SharedConstants.TICKS_PER_SECOND);
-					tempCache.put(pos.asLong(), entity.level().getGameTime() + 90L * SharedConstants.TICKS_PER_SECOND);
+				if (path != null && path.canReach() && this.addAndCheck(entity, pos, tempCache)) {
 					break;
 				}
 			}
@@ -58,5 +76,23 @@ public abstract class GirlfriendBlockSensor extends Sensor<GirlfriendEntity> {
 		this.unreachableCache = tempCache;
 	}
 
+	/**
+	 * 检测方块是否吸引角色
+	 * @param blockState 方块状态
+	 * @return 是否吸引角色
+	 */
 	protected abstract boolean attractsGirlfriend(BlockState blockState);
+
+	/**
+	 * 添加方块并检查是否需要跳出循环
+	 * @param entity 实体
+	 * @param pos 方块位置
+	 * @param tempCache 缓存
+	 * @return 是否需要跳出循环
+	 */
+	protected boolean addAndCheck(GirlfriendEntity entity, BlockPos pos, Long2LongOpenHashMap tempCache) {
+		entity.getBrain().setMemoryWithExpiry(this.nearbyBlock, pos.immutable(), this.memoryTicksToLive);
+		tempCache.put(pos.asLong(), entity.level().getGameTime() + this.ticksToIgnore);
+		return true;
+	}
 }
