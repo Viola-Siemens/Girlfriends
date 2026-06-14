@@ -44,7 +44,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 技术栈
 
-- **Minecraft 版本**: 1.26.1.2（NeoForge 26.1.2.71）
+- **Minecraft 版本**: 26.1.2（NeoForge 26.1.2.71）
 - **Java 版本**: Java 25（toolchain）
 - **构建工具**: Gradle + NeoForge ModDev Plugin 2.0.141
 - **测试框架**: JUnit Jupiter 5.13.4
@@ -52,7 +52,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 架构分层
 
-代码位于 `com.hexagram2021.girlfriends` 包下，采用四层架构。
+代码位于 `com.hexagram2021.girlfriends` 包下，分为五层。
 
 ### 1. 领域模型层（Data Model）
 
@@ -61,7 +61,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | 关键类型 | 位置 | 职责 |
 |---|---|---|
 | `GirlfriendsWorldData` | `common/persist/` | 世界级 SavedData，持有所有 characters/relations/homes 三张核心表 |
-| `CharacterWorldState` | `common/character/` | 单角色世界状态（存活、实体 UUID、委托槽、绑定、庇护所列表） |
+| `CharacterWorldState` | `common/character/` | 单角色世界状态（存活、实体 UUID、委托槽、绑定、庇护所列表、跟随模式） |
 | `PlayerCharacterRelation` | `common/relationship/` | 玩家对单角色的关系（好感值 0~1000、亲密确认、每日计数、已完成固定委托集合） |
 | `HomeState` | `common/home/` | 玩家家园绑定（伙伴 ID、床锚点、活跃标记） |
 | `CharacterBindingState` | `common/binding/` | 角色多人绑定与动摇期状态 |
@@ -86,19 +86,57 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 所有 Service 构造方法支持注入外部依赖（如 `Function<Identifier, Optional<GirlfriendType>>`），便于单元测试中使用模拟实现。
 
-### 3. Minecraft 集成层（Integration Layer）
+### 3. 实体与 AI 层（Entity & AI Layer）
 
-- **`GirlfriendsMod`**: 模组入口，注册 Registry、网络包、ServerReloadListener
-- **`GirlfriendsNetwork`**: 网络包注册与处理入口。所有 Serverbound handler 在服务端重新校验权限与状态（不信任客户端）
+角色实体和 AI 行为系统。实体注册在 `common/entity/`，AI 组件在 `common/entity/ai/`。
+
+**实体架构**:
+- `GirlfriendEntity`（抽象基类，extends `PathfinderMob` implements `InventoryCarrier`）— 统一管理跟随模式、爱慕玩家 UUID、18 格背包、自动回血、定时同步到 WorldState、Brain 刷新
+- 子类覆写 `getGirlfriendTypeId()` 返回角色类型 ID，并提供差异化 Brain Provider 及 Behavior 注册
+- 目前实现：`MomoEntity`（沫沫），其余四位角色待后续 Story 实现
+
+**AI 子系统**（使用原版 Brain/Schedule 体系）:
+- `GirlfriendsActivities` — 六个自定义 Activity：`MORNING`、`DAY_WORK`、`AFTERNOON`、`SUNSET`、`NIGHT_REST`、`FOLLOW`，通过 DeferredRegister 注册到原版 Activity 注册表
+- `GirlfriendsMemoryTypes` — 自定义 MemoryModuleType：庇护所位置、家园床点、花朵/蜂箱/水域/矿石位置（各角色专属）、骨粉产出标记等
+- `GirlfriendsSensorTypes` — 自定义 SensorType：`ShelterSensor`、`FlowerSensor`、`BeehiveSensor`
+- `GirlfriendsEnvironmentAttributes` — 环境属性（如沫沫日程表），驱动 AI 按游戏时刻自动切换 Activity
+- `GirlfriendCommonAiPackages` — 所有角色共用的 Core Activity 行为（跟随判定、睡眠、日程更新等）
+- 通用 Behavior：`StayCloseToIntimatePlayer`（跟随贴近）、`GirlfriendCalmDown`（恐慌冷却）、`GirlfriendPanicTrigger`（恐慌触发）、`RunOneLoop`（循环执行行为列表）、`BackToShelter`（返回庇护所）、`ShelterBoundRandomStroll`（庇护所附近漫步）
+- 沫沫专属 Behavior：`PlantAndHarvestFlower`（种花/采花）、`ProduceBoneMeal`（生产骨粉）
+
+AI 设计关键点：
+- 使用原版 `Brain.provider()` + `ActivityData` + `Schedule` 体系，不自行造轮子
+- 每个角色通过 `EnvironmentAttribute<Activity>` 注册日程表，由 `UpdateActivityFromSchedule` 行为驱动时段切换
+- 跟随模式（FOLLOW）作为独立 Activity，与日常日程互斥：在跟随状态下 Brain 调度 FOLLOW activity，否则按日程执行
+- Brain 支持运行时刷新（`refreshBrain`），在跟随模式切换等场景重建行为树
+
+### 4. Minecraft 集成层（Integration Layer）
+
+- **`GirlfriendsMod`**: 模组入口，注册自定义 Registry、EntityType、Activity、MemoryModuleType、SensorType、EnvironmentAttribute、网络包、ServerReloadListener、命令、实体事件监听
+- **`GirlfriendEntityEvents`**: 实体生命周期事件处理器 — EntityJoinLevel（标记存活、同步 UUID）、ServerTick.Post（每日维护：重置计数器、过期/刷新随机委托）、LivingDeath（标记死亡、记录死亡坐标）
+- **`GirlfriendsNetwork`**: 网络包注册与处理入口。所有 Serverbound handler 校验玩家是否可以接触到目标实体（`canReachEntity`，距离 ≤8）。当前注册 3 个 serverbound + 2 个 clientbound 包
 - **`GirlfriendsRegistries`**: 自定义注册表（`GIRLFRIEND_TYPE_REGISTRY`、`BLESSING_TYPE_REGISTRY`）
 - **`GirlfriendTypes`** / **`BlessingTypes`**: 内置类型通过 DeferredRegister 注册
+- **`AffectionCommand`**: `/affection get|set|add <girlfriend> <player> [value]` 调试命令，权限等级 GAMEMASTERS
 
 网络协议版本硬编码为 `"1"`，使用 NeoForge `PayloadRegistrar` 注册 play-to-client 和 play-to-server 包。
 
-### 4. 表现层（Presentation Layer）
+**网络包清单**:
 
-- **`GirlfriendsModClient`**: 客户端入口，注册配置界面扩展点
-- **`ClientInteractionStore`**: 客户端交互摘要缓存
+| 方向 | 包类型 | 用途 |
+|---|---|---|
+| C→S | `ServerboundGiveGiftPacket` | 玩家向角色赠礼 |
+| C→S | `ServerboundAcceptQuestPacket` | 玩家接取角色当前委托 |
+| C→S | `ServerboundSetFollowModePacket` | 切换角色跟随模式（需亲密确认） |
+| S→C | `ClientboundSyncInteractionDataPacket` | 同步交互摘要到客户端 |
+| S→C | `ClientboundQuestIconPacket` | 同步委托图标状态 |
+
+### 5. 表现层（Presentation Layer）
+
+- **`GirlfriendsModClient`**: 客户端入口，注册 EntityRenderer 和 ModelLayer
+- **`ClientInteractionStore`**: 客户端交互摘要缓存（`InteractionSummary` + `QuestIconSummary`）
+- **`GirlfriendRenderer`**: 角色实体渲染器（使用 `GirlfriendModel`）
+- **`GirlfriendsModelLayers`**: 模型层定义
 
 ## 数据驱动系统
 
@@ -106,17 +144,37 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - **`GiftPreferenceManager`**: 从 `data/<ns>/girlfriends/gift_preferences/*.json` 加载角色礼物偏好（favorite/liked/accepted/disliked 四个档位 + tag 支持）
 - **`BlessingParameterManager`**: 从 `data/<ns>/girlfriends/blessing_parameters/*.json` 加载祝福参数
-- **`FixedQuestDefinitionManager`**: 固定委托定义加载
+- **`FixedQuestDefinitionManager`**: 固定委托定义加载（含 objective 解析）
 - **`RandomQuestTemplateManager`**: 随机委托模板加载
+
+## 委托目标处理器（Quest Objective Handler）
+
+委托目标使用策略模式，`QuestObjectiveHandler` 接口定义六个生命周期方法：
+
+```java
+boolean canAccept(QuestInstance)     // 接取条件校验
+void onAccept(QuestInstance)         // 接取时初始化进度
+void onEvent(QuestInstance, Object)  // 处理目标相关事件
+boolean isCompleted(QuestInstance)   // 完成判定
+CompoundTag serializeProgress()      // 序列化进度
+void deserializeProgress(CompoundTag) // 反序列化进度
+```
+
+已注册的处理器类型（在 JSON 中由 `type` 字段指定）：
+`item_delivery`、`structure_visit`、`block_stay`、`collect`、`deliver`、`build`、`accompany`、`fight`。
+
+部分处理器逻辑待后续 Story 根据 GDD 完善（标记 TODO）。
 
 ## 核心设计原则
 
 1. **服务端权威**: 所有关系、奖励、委托、家园与祝福判定以服务端 `SavedData` 为准。客户端只展示摘要，不提交可信状态
-2. **不可变注册表**: `GirlfriendType` / `BlessingType` 使用 NeoForge 自定义注册表（非 enum），支持附属模组扩展
+2. **不可变注册表**: `GirlfriendType` / `BlessingType` 使用 NeoForge 自定义注册表（非 enum），支持附属模组扩展；Activity / MemoryModuleType / SensorType 使用原版注册表
 3. **依赖注入**: 所有 Service 的依赖（如 WorldData、各种 Manager）通过构造函数传入，支持单元测试中替换
 4. **委托单槽互斥**: `CharacterWorldState.currentQuest` 每个角色只有 1 个委托槽，固定委托优先于随机委托
 5. **原子状态更新**: `GirlfriendsWorldData` 提供 `updateRelation()` / `updateCharacter()` / `updateHome()` 方法，接受 Consumer 并在内部调用 `setDirty()`
 6. **NBT 序列化**: 所有持久化 key 使用小写蛇形命名（如 `pending_respawn`、`follow_mode`），根数据节点含 `data_version` 用于格式迁移
+7. **实体-状态双向同步**: `syncToWorldState`（实体→持久化）每 ~10 秒自动执行；`syncFromWorldState`（持久化→实体）在实体加载时执行；命令/网络包在修改后即时同步
+8. **原版 AI 体系**: 使用 Minecraft 原版的 Brain/Schedule/Activity/Memory/Sensor 体系，不自行造 AI 调度轮子
 
 ## 测试规范
 
@@ -126,9 +184,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 使用 `Identifier.fromNamespaceAndPath(GirlfriendsMod.MODID, "xxx")` 构造角色 ID
 - 固定 UUID 使用 `UUID.fromString("00000000-0000-0000-0000-00000000000X")` 确保可重现
 
-## 暂未实现
+## 开发状态
 
-模组目前只实现了底层系统架构，暂未实现角色创建、生成与交互的逻辑，等待后续开发完善。
+- **已完成**: 底层系统架构（Story 01~09）— 持久化、关系、赠礼、委托、绑定、家园、祝福、重生、网络协议
+- **已完成**: REQ-7 角色实体与 AI — `GirlfriendEntity` 抽象基类、`MomoEntity` 完整实现（含日程 AI 和传感器）、客户端渲染器、命令系统、实体事件处理器
+- **进行中**: 委托目标处理器具体逻辑（部分标记 TODO，等待 GDD 细化）
+- **待实现**: 渔溪/梅疏/晚萤/幽若四个角色的实体子类及专属 AI Behavior、委托奖励发放、GUI 交互界面、角色自然生成逻辑
 
 ## Git 提交规范
 
@@ -143,7 +204,9 @@ scope: 需求/故事编号，如 REQ-7
 - `docs/v0.1.0/DR_system.md`: 底层系统技术设计（架构、持久化、服务接口、性能分析）
 - `docs/v0.1.0/GDD/`: 五位角色游戏设计文档（固定委托线、随机委托模板、偏好、终章奖励）
 - `docs/v0.1.0/PLAN_story_*.md`: 各 Story 实现计划
+- `docs/superpowers/specs/2026-06-07-character-entity-ai-design.md`: REQ-7 角色实体与 AI 技术规格
+- `docs/superpowers/plans/2026-06-07-character-entity-ai-plan.md`: REQ-7 实施计划
 
 ## 文档基线
 
-本文基于提交 `4749bfd4928a3637a5ab2ba7efb8b342c7da5bb6` 的内容创建，后续更新时可以以此为基准，阅读 git 变更，避免全量阅读项目内容。
+本文基于提交 `3f0b9b8`（REQ-7 角色实体接入四大系统）的内容创建。后续更新时可以以此为基准，阅读 git 变更，避免全量阅读项目内容。
