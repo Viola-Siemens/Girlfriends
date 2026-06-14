@@ -15,7 +15,9 @@ import com.hexagram2021.girlfriends.common.relationship.RelationshipService;
 import net.minecraft.IdentifierException;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.Contract;
 
+import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -62,7 +64,8 @@ public class InteractionSummaryService {
 				canFollow(relation, state),
 				canInviteHome(relation, stage),
 				buildKnownGiftPreferences(relation),
-				buildQuestContentSummary(state)
+				buildQuestContentSummary(state),
+				needsIntimacyConfirmation(relation)
 		);
 	}
 
@@ -72,6 +75,7 @@ public class InteractionSummaryService {
 	 * @param girlfriendTypeId 角色类型 ID 喵~
 	 * @return 委托图标摘要喵~
 	 */
+	@Nullable
 	public QuestIconSummary buildQuestIcon(Identifier girlfriendTypeId) {
 		CharacterWorldState state = this.worldData.getExistingCharacterState(girlfriendTypeId);
 		QuestContentSummary quest = buildQuestContentSummary(state);
@@ -91,20 +95,32 @@ public class InteractionSummaryService {
 		return Mth.clamp(progress, 0.0F, 1.0F);
 	}
 
-	private static boolean canFollow(PlayerCharacterRelation relation, CharacterWorldState state) {
+	@Contract("_,null -> false")
+	private static boolean canFollow(PlayerCharacterRelation relation, @Nullable CharacterWorldState state) {
 		return state != null && state.isAlive() && relation.isConfirmedIntimacy();
 	}
 
-	private static boolean canGiveGift(CharacterWorldState state) {
+	@Contract("null -> false")
+	private static boolean canGiveGift(@Nullable CharacterWorldState state) {
 		return state != null && state.isAlive();
 	}
 
-	private static boolean canAcceptQuest(CharacterWorldState state) {
+	@Contract("null -> false")
+	private static boolean canAcceptQuest(@Nullable CharacterWorldState state) {
 		if(state == null || !state.isAlive()) {
 			return false;
 		}
 		QuestInstance quest = state.getCurrentQuest();
 		return quest != null && quest.getState() == QuestState.AVAILABLE && quest.getOwnerPlayerUuid() == null;
+	}
+
+	/**
+	 * 判断是否需要确认亲密关系喵~
+	 * <p>
+	 * 好感度达到 700 且尚未确认亲密关系时需要提示玩家喵~
+	 */
+	private static boolean needsIntimacyConfirmation(PlayerCharacterRelation relation) {
+		return relation.getAffection() >= 700.0F && !relation.isConfirmedIntimacy();
 	}
 
 	private static boolean canInviteHome(PlayerCharacterRelation relation, AffectionStage stage) {
@@ -119,6 +135,7 @@ public class InteractionSummaryService {
 				.toList();
 	}
 
+	@Nullable
 	private static KnownGiftPreferenceSummary parseKnownGiftPreference(String value) {
 		try {
 			if(value.startsWith("#")) {
@@ -130,7 +147,8 @@ public class InteractionSummaryService {
 		}
 	}
 
-	private static QuestContentSummary buildQuestContentSummary(CharacterWorldState state) {
+	@Nullable
+	private static QuestContentSummary buildQuestContentSummary(@Nullable CharacterWorldState state) {
 		if(state == null || state.getCurrentQuest() == null) {
 			return null;
 		}
@@ -156,6 +174,7 @@ public class InteractionSummaryService {
 		);
 	}
 
+	@Nullable
 	private static Identifier parseQuestIdentifierOrNull(String questId) {
 		try {
 			return Identifier.parse(questId);

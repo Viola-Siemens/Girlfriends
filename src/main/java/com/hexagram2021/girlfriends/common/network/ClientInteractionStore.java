@@ -40,7 +40,7 @@ public final class ClientInteractionStore {
 	 *
 	 * @param summary 委托图标摘要喵~
 	 */
-	public static void setQuestIcon(QuestIconSummary summary) {
+	public static void setQuestIcon(@Nullable QuestIconSummary summary) {
 		if(summary == null) {
 			return;
 		}

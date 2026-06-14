@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 
 import net.minecraft.util.RandomSource;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Collections;
@@ -62,6 +63,7 @@ public class RandomQuestTemplateManager extends SimplePreparableReloadListener<M
 	 * @param random 随机数生成器喵~
 	 * @return 随机委托定义，无匹配时返回 null 喵~
 	 */
+	@Nullable
 	public QuestDefinition getRandomDefinitionForType(Identifier girlfriendTypeId, RandomSource random) {
 		List<QuestDefinition> candidates = this.definitions.values().stream()
 				.filter(d -> d.girlfriendTypeId().equals(girlfriendTypeId))

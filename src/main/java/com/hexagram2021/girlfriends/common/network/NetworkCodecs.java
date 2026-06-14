@@ -9,6 +9,7 @@ import com.hexagram2021.girlfriends.common.quest.QuestType;
 import com.hexagram2021.girlfriends.common.relationship.AffectionStage;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -36,6 +37,7 @@ public final class NetworkCodecs {
 		buffer.writeBoolean(summary.canInviteHome());
 		writeKnownGiftPreferences(buffer, summary.knownGiftPreferences());
 		writeQuestContentSummary(buffer, summary.currentQuest());
+		buffer.writeBoolean(summary.needsIntimacyConfirmation());
 	}
 
 	/**
@@ -54,7 +56,8 @@ public final class NetworkCodecs {
 				buffer.readBoolean(),
 				buffer.readBoolean(),
 				readKnownGiftPreferences(buffer),
-				readQuestContentSummary(buffer)
+				readQuestContentSummary(buffer),
+				buffer.readBoolean()
 		);
 	}
 
@@ -108,7 +111,7 @@ public final class NetworkCodecs {
 		return List.copyOf(summaries);
 	}
 
-	private static void writeQuestContentSummary(RegistryFriendlyByteBuf buffer, QuestContentSummary summary) {
+	private static void writeQuestContentSummary(RegistryFriendlyByteBuf buffer, @Nullable QuestContentSummary summary) {
 		buffer.writeBoolean(summary != null);
 		if(summary == null) {
 			return;
@@ -121,6 +124,7 @@ public final class NetworkCodecs {
 		writeStrings(buffer, summary.objectiveSummaryKeys());
 	}
 
+	@Nullable
 	private static QuestContentSummary readQuestContentSummary(RegistryFriendlyByteBuf buffer) {
 		if(!buffer.readBoolean()) {
 			return null;

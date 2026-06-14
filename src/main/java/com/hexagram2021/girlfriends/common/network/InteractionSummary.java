@@ -6,6 +6,7 @@ import com.hexagram2021.girlfriends.common.quest.QuestType;
 import com.hexagram2021.girlfriends.common.relationship.AffectionStage;
 import net.minecraft.resources.Identifier;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -20,6 +21,7 @@ import java.util.List;
  * @param canInviteHome 是否可邀请回家喵~
  * @param knownGiftPreferences 已发现礼物偏好喵~
  * @param currentQuest 当前委托摘要喵~
+ * @param needsIntimacyConfirmation 是否需要确认亲密关系喵~
  * @author liudongyu
  */
 public record InteractionSummary(
@@ -31,7 +33,8 @@ public record InteractionSummary(
 		boolean canFollow,
 		boolean canInviteHome,
 		List<KnownGiftPreferenceSummary> knownGiftPreferences,
-		QuestContentSummary currentQuest
+		@Nullable QuestContentSummary currentQuest,
+		boolean needsIntimacyConfirmation
 ) {
 	/**
 	 * 已发现礼物偏好摘要喵~

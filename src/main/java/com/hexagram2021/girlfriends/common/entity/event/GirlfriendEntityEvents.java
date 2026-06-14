@@ -75,7 +75,7 @@ public final class GirlfriendEntityEvents {
 				relationshipService,
 				id -> FixedQuestDefinitionManager.INSTANCE.getDefinition(id).orElse(null),
 				id -> RandomQuestTemplateManager.INSTANCE.getRandomDefinitionForType(id, overworld.getRandom()),
-				() -> 5 + overworld.getRandom().nextInt(6)
+				randomSource -> 5 + randomSource.nextInt(6)
 		);
 
 		for (Map.Entry<Identifier, CharacterWorldState> entry : data.getCharacters().entrySet()) {
@@ -88,7 +88,7 @@ public final class GirlfriendEntityEvents {
 			questService.expireRandomQuest(girlfriendTypeId, gameDay);
 			// 如果没有委托，尝试刷新随机委托
 			if (state.getCurrentQuest() == null) {
-				questService.refreshRandomQuest(girlfriendTypeId, gameDay);
+				questService.refreshRandomQuest(girlfriendTypeId, gameDay, overworld.getRandom());
 			}
 		}
 	}

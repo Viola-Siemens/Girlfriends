@@ -207,6 +207,11 @@ scope: 需求/故事编号，如 REQ-7
 - `docs/superpowers/specs/2026-06-07-character-entity-ai-design.md`: REQ-7 角色实体与 AI 技术规格
 - `docs/superpowers/plans/2026-06-07-character-entity-ai-plan.md`: REQ-7 实施计划
 
+## 参考项目目录
+
+- `Sources-26.1.2`: Minecraft 26.1.2 和 NeoForge 源码
+- `Tetrachord-Lib`: TetrachordLib 模组，提供了 KD 树、线段树等数据结构
+
 ## 文档基线
 
 本文基于提交 `3f0b9b8`（REQ-7 角色实体接入四大系统）的内容创建。后续更新时可以以此为基准，阅读 git 变更，避免全量阅读项目内容。

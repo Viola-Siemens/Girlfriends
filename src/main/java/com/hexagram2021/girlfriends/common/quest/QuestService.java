@@ -5,11 +5,12 @@ import com.hexagram2021.girlfriends.common.relationship.AffectionStage;
 import com.hexagram2021.girlfriends.common.relationship.PlayerCharacterRelation;
 import com.hexagram2021.girlfriends.common.relationship.RelationshipService;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.RandomSource;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
-import java.util.function.IntSupplier;
+import java.util.function.ToIntFunction;
 
 /**
  * 委托状态与规则服务喵~
@@ -19,9 +20,9 @@ import java.util.function.IntSupplier;
 public class QuestService {
 	private final GirlfriendsWorldData worldData;
 	private final RelationshipService relationshipService;
-	private final Function<String, QuestDefinition> fixedQuestDefinitionGetter;
-	private final Function<Identifier, QuestDefinition> randomQuestDefinitionGetter;
-	private final IntSupplier randomDaysSupplier;
+	private final Function<String, @Nullable QuestDefinition> fixedQuestDefinitionGetter;
+	private final Function<Identifier, @Nullable QuestDefinition> randomQuestDefinitionGetter;
+	private final ToIntFunction<RandomSource> randomDaysSupplier;
 
 	/**
 	 * 创建委托服务喵~
@@ -30,7 +31,7 @@ public class QuestService {
 	 * @param relationshipService 关系服务喵~
 	 */
 	public QuestService(GirlfriendsWorldData worldData, RelationshipService relationshipService) {
-		this(worldData, relationshipService, id -> null, girlfriendTypeId -> null, QuestService::defaultRandomDays);
+		this(worldData, relationshipService, _ -> null, _ -> null, QuestService::defaultRandomDays);
 	}
 
 	/**
@@ -45,9 +46,9 @@ public class QuestService {
 	public QuestService(
 			GirlfriendsWorldData worldData,
 			RelationshipService relationshipService,
-			Function<String, QuestDefinition> fixedQuestDefinitionGetter,
-			Function<Identifier, QuestDefinition> randomQuestDefinitionGetter,
-			IntSupplier randomDaysSupplier
+			Function<String, @Nullable QuestDefinition> fixedQuestDefinitionGetter,
+			Function<Identifier, @Nullable QuestDefinition> randomQuestDefinitionGetter,
+			ToIntFunction<RandomSource> randomDaysSupplier
 	) {
 		this.worldData = worldData;
 		this.relationshipService = relationshipService;
@@ -165,9 +166,10 @@ public class QuestService {
 	 *
 	 * @param girlfriendTypeId 角色类型 ID 喵~
 	 * @param currentDay 当前游戏日喵~
+	 * @param randomSource 随机数发生器喵~
 	 * @return 是否刷新成功喵~
 	 */
-	public boolean refreshRandomQuest(Identifier girlfriendTypeId, long currentDay) {
+	public boolean refreshRandomQuest(Identifier girlfriendTypeId, long currentDay, RandomSource randomSource) {
 		QuestInstance currentQuest = this.worldData.getCharacterState(girlfriendTypeId).getCurrentQuest();
 		if(currentQuest != null) {
 			return false;
@@ -182,7 +184,7 @@ public class QuestService {
 		instance.setRequiredStage(definition.requiredStage());
 		instance.setState(QuestState.AVAILABLE);
 		instance.setCreatedDay(currentDay);
-		instance.setExpireDay(currentDay + Math.max(1, this.randomDaysSupplier.getAsInt()));
+		instance.setExpireDay(currentDay + Math.max(1, this.randomDaysSupplier.applyAsInt(randomSource)));
 		instance.setProgress(definition.objectives().serializeProgress(instance));
 		this.worldData.updateCharacter(girlfriendTypeId, state -> state.setCurrentQuest(instance));
 		return true;
@@ -241,6 +243,7 @@ public class QuestService {
 		return requiredStage != AffectionStage.HOME_PARTNER || relation.isHomePartner();
 	}
 
+	@Nullable
 	private QuestObjectiveGroup resolveObjectives(QuestInstance questInstance) {
 		if(questInstance.getQuestType() == QuestType.FIXED) {
 			QuestDefinition definition = this.fixedQuestDefinitionGetter.apply(questInstance.getQuestId());
@@ -265,7 +268,7 @@ public class QuestService {
 		return (questInstance.getCharacterId() + "/random").equals(questInstance.getQuestId());
 	}
 
-	private static String buildFixedQuestId(Identifier girlfriendTypeId, int fixedIndex) {
+	private static String buildFixedQuestId(@Nullable Identifier girlfriendTypeId, int fixedIndex) {
 		return girlfriendTypeId + "/fixed_" + fixedIndex;
 	}
 
@@ -285,7 +288,7 @@ public class QuestService {
 		return AffectionStage.HOME_PARTNER;
 	}
 
-	private static int defaultRandomDays() {
-		return 5 + (int)(Math.random() * 6);
+	private static int defaultRandomDays(RandomSource random) {
+		return 5 + random.nextInt(6);
 	}
 }
