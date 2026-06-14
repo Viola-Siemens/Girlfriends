@@ -1,8 +1,13 @@
 package com.hexagram2021.girlfriends.common.entity;
 
 import com.hexagram2021.girlfriends.common.blessing.FollowMode;
+import com.hexagram2021.girlfriends.common.character.CharacterWorldState;
 import com.hexagram2021.girlfriends.common.character.GirlfriendType;
 import com.hexagram2021.girlfriends.common.character.GirlfriendsRegistries;
+import com.hexagram2021.girlfriends.common.network.InteractionSummaryService;
+import com.hexagram2021.girlfriends.common.network.clientbound.ClientboundSyncInteractionDataPacket;
+import com.hexagram2021.girlfriends.common.persist.GirlfriendsWorldData;
+import com.hexagram2021.girlfriends.common.relationship.RelationshipService;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.Holder;
 import net.minecraft.core.UUIDUtil;
@@ -11,8 +16,11 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.profiling.Profiler;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -53,6 +61,7 @@ public abstract class GirlfriendEntity extends PathfinderMob implements Inventor
 	private final SimpleContainer inventory = new SimpleContainer(INVENTORY_SIZE);
 
 	private int healCooldown = 0;
+	private int worldStateSyncCooldown = 0;
 
 	@Nullable
 	private UUID likedPlayerUuid;
@@ -108,7 +117,7 @@ public abstract class GirlfriendEntity extends PathfinderMob implements Inventor
 
 	/**
 	 * 获取跟随玩家<br/>
-	 * 角色只有可能跟随喜爱的玩家
+	 * 角色只有可能跟随爱慕的玩家
 	 *
 	 * @return 跟随玩家，非跟随状态、非玩家、不同维度时返回 null
 	 */
@@ -134,6 +143,76 @@ public abstract class GirlfriendEntity extends PathfinderMob implements Inventor
 			return true;
 		}
 		return this.likedPlayerUuid.equals(player.getUUID());
+	}
+
+	/**
+	 * 设置当前爱慕玩家 UUID 喵~
+	 *
+	 * @param playerUuid 玩家 UUID，null 表示清除喵~
+	 */
+	public void setLikedPlayerUuid(@Nullable UUID playerUuid) {
+		this.likedPlayerUuid = playerUuid;
+	}
+
+	/**
+	 * 将实体运行时状态同步到持久化世界数据喵~
+	 * <br/>
+	 * 将 entityUuid、followMode、followTargetUuid 写入 CharacterWorldState 喵~
+	 *
+	 * @param data 世界数据喵~
+	 */
+	public void syncToWorldState(GirlfriendsWorldData data) {
+		Identifier girlfriendTypeId = this.getGirlfriendTypeId();
+		data.updateCharacter(girlfriendTypeId, state -> state.setEntityUuid(this.getUUID()));
+	}
+
+	/**
+	 * 从持久化世界数据同步到实体运行时状态喵~
+	 * <p>
+	 * 读取 CharacterWorldState 的 followMode、followTargetUuid 并应用到实体喵~
+	 *
+	 * @param data 世界数据喵~
+	 */
+	public void syncFromWorldState(GirlfriendsWorldData data) {
+		Identifier girlfriendTypeId = this.getGirlfriendTypeId();
+		CharacterWorldState state = data.getExistingCharacterState(girlfriendTypeId);
+		if (state != null) {
+			this.setFollowMode(state.getFollowMode());
+			this.likedPlayerUuid = state.getFollowTargetUuid();
+		}
+	}
+
+	/**
+	 * 玩家与实体交互喵~
+	 * <p>
+	 * 服务端：构建交互摘要并通过网络包发送给玩家喵~
+	 * 客户端：返回 SUCCESS 触发 GUI 打开（SubTask 2 实现）喵~
+	 *
+	 * @param player 玩家喵~
+	 * @param hand 交互手喵~
+	 * @return 交互结果喵~
+	 */
+	@Override
+	public InteractionResult mobInteract(Player player, InteractionHand hand) {
+		if (this.level().isClientSide()) {
+			return InteractionResult.SUCCESS;
+		}
+		if (player instanceof ServerPlayer serverPlayer) {
+			ServerLevel level = (ServerLevel)this.level();
+			GirlfriendsWorldData data = level.getServer().overworld()
+					.getDataStorage().computeIfAbsent(GirlfriendsWorldData.TYPE);
+			// 先同步实体状态到世界数据
+			this.syncToWorldState(data);
+			// 构建并发送交互摘要
+			RelationshipService relationshipService = new RelationshipService(data);
+			InteractionSummaryService summaryService = new InteractionSummaryService(data, relationshipService);
+			serverPlayer.connection.send(
+					new ClientboundSyncInteractionDataPacket(
+							summaryService.build(player.getUUID(), this.getGirlfriendTypeId())
+					)
+			);
+		}
+		return InteractionResult.SUCCESS;
 	}
 
 	/**
@@ -178,6 +257,15 @@ public abstract class GirlfriendEntity extends PathfinderMob implements Inventor
 				this.heal(1.0F);
 			}
 			this.healCooldown = 4 * SharedConstants.TICKS_PER_SECOND + this.getRandom().nextInt(SharedConstants.TICKS_PER_SECOND);
+		}
+
+		// 每 200 tick（10 秒）同步实体状态到世界数据喵~
+		this.worldStateSyncCooldown -= 1;
+		if (this.worldStateSyncCooldown <= 0) {
+			GirlfriendsWorldData data = level.getServer().overworld()
+					.getDataStorage().computeIfAbsent(GirlfriendsWorldData.TYPE);
+			this.syncToWorldState(data);
+			this.worldStateSyncCooldown = 200 + this.getRandom().nextInt(40);
 		}
 
 		super.customServerAiStep(level);

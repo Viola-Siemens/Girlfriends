@@ -33,6 +33,10 @@ import java.util.Optional;
 public class FixedQuestDefinitionManager extends SimplePreparableReloadListener<Map<String, QuestDefinition>> {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	private static final FileToIdConverter LISTER = FileToIdConverter.json("girlfriends/fixed_quests");
+
+	/** 固定委托管理器单例喵~ */
+	public static final FixedQuestDefinitionManager INSTANCE = new FixedQuestDefinitionManager();
+
 	private Map<String, QuestDefinition> definitions = Map.of();
 
 	/**
@@ -120,6 +124,11 @@ public class FixedQuestDefinitionManager extends SimplePreparableReloadListener<
 						Identifier.parse(getString(objectiveObject, "block_id").orElse("minecraft:air")),
 						getInt(objectiveObject, "required_ticks").orElse(20)
 				));
+				case "collect" -> objectives.add(new CollectObjectiveHandler());
+				case "deliver" -> objectives.add(new DeliverObjectiveHandler());
+				case "build" -> objectives.add(new BuildObjectiveHandler());
+				case "accompany" -> objectives.add(new AccompanyObjectiveHandler());
+				case "fight" -> objectives.add(new FightObjectiveHandler());
 				case "noop" -> {
 					// no-op
 				}

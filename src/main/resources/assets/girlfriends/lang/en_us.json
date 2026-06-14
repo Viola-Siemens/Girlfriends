@@ -1,13 +1,12 @@
 {
-  "itemGroup.examplemod": "Example Mod Tab",
-  "block.examplemod.example_block": "Example Block",
-  "item.examplemod.example_item": "Example Item",
+  "commands.girlfriends.affection.get": "%1$s's affection for %2$s: %3$.1f",
+  "commands.girlfriends.affection.set": "Set %1$s's affection for %2$s: %3$.1f → %4$.1f",
+  "commands.girlfriends.affection.add": "Changed %1$s's affection for %2$s: %3$s%4$.1f (now %5$.1f)",
+  "commands.girlfriends.affection.not_a_girlfriend": "The specified entity is not a Girlfriend character",
 
-  "examplemod.configuration.title": "Example Mod Configs",
-  "examplemod.configuration.section.examplemod.common.toml": "Example Mod Configs",
-  "examplemod.configuration.section.examplemod.common.toml.title": "Example Mod Configs",
-  "examplemod.configuration.items": "Item List",
-  "examplemod.configuration.logDirtBlock": "Log Dirt Block",
-  "examplemod.configuration.magicNumberIntroduction": "Magic Number Text",
-  "examplemod.configuration.magicNumber": "Magic Number"
+  "girlfriends.girlfriend_type.momo": "Momo",
+  "girlfriends.girlfriend_type.yuxi": "Yuxi",
+  "girlfriends.girlfriend_type.meishu": "Meishu",
+  "girlfriends.girlfriend_type.wanying": "Wanying",
+  "girlfriends.girlfriend_type.youruo": "Youruo"
 }

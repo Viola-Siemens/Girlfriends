@@ -63,6 +63,7 @@ public class GirlfriendsWorldData extends SavedData {
 	 * @param girlfriendTypeId 角色类型 ID 喵~
 	 * @return 已存在的关系状态喵~
 	 */
+	@Nullable
 	public PlayerCharacterRelation getExistingRelation(UUID playerUuid, Identifier girlfriendTypeId) {
 		return this.relations.get(new RelationKey(playerUuid, girlfriendTypeId));
 	}
@@ -158,6 +159,15 @@ public class GirlfriendsWorldData extends SavedData {
 	 */
 	public Map<RelationKey, PlayerCharacterRelation> getRelations() {
 		return this.relations;
+	}
+
+	/**
+	 * 获取全部角色世界状态喵~
+	 *
+	 * @return 角色世界状态映射喵~
+	 */
+	public Map<Identifier, CharacterWorldState> getCharacters() {
+		return this.characters;
 	}
 
 	/**

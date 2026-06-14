@@ -1,7 +1,6 @@
 package com.hexagram2021.girlfriends.common.quest;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
@@ -13,10 +12,13 @@ import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import org.slf4j.Logger;
 
+import net.minecraft.util.RandomSource;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -28,6 +30,10 @@ import java.util.Optional;
 public class RandomQuestTemplateManager extends SimplePreparableReloadListener<Map<String, QuestDefinition>> {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	private static final FileToIdConverter LISTER = FileToIdConverter.json("girlfriends/random_quest_templates");
+
+	/** 随机委托模板管理器单例喵~ */
+	public static final RandomQuestTemplateManager INSTANCE = new RandomQuestTemplateManager();
+
 	private Map<String, QuestDefinition> definitions = Map.of();
 
 	/**
@@ -47,6 +53,23 @@ public class RandomQuestTemplateManager extends SimplePreparableReloadListener<M
 	 */
 	public Map<String, QuestDefinition> getDefinitions() {
 		return this.definitions;
+	}
+
+	/**
+	 * 按角色类型随机获取一个委托模板喵~
+	 *
+	 * @param girlfriendTypeId 角色类型 ID 喵~
+	 * @param random 随机数生成器喵~
+	 * @return 随机委托定义，无匹配时返回 null 喵~
+	 */
+	public QuestDefinition getRandomDefinitionForType(Identifier girlfriendTypeId, RandomSource random) {
+		List<QuestDefinition> candidates = this.definitions.values().stream()
+				.filter(d -> d.girlfriendTypeId().equals(girlfriendTypeId))
+				.toList();
+		if (candidates.isEmpty()) {
+			return null;
+		}
+		return candidates.get(random.nextInt(candidates.size()));
 	}
 
 	@Override

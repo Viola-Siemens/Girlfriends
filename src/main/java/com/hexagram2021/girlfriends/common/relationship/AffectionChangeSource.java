@@ -12,5 +12,7 @@ public enum AffectionChangeSource {
 	HOME_DAILY,
 	HOME_CONFLICT,
 	PLAYER_ATTACK,
-	CHARACTER_DEATH_RESET
+	CHARACTER_DEATH_RESET,
+	/** 调试命令喵~ */
+	COMMAND
 }

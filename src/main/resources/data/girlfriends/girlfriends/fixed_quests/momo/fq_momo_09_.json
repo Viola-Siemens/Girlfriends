@@ -2,8 +2,8 @@
 	"quest_id": "girlfriends:fq_momo_09",
 	"character_id": "girlfriends:momo",
 	"fixed_index": 9,
-	"required_stage": "",
-	"required_affection": ,
+	"required_stage": "intimate",
+	"required_affection": 750,
 	"prerequisite_fixed_indices": [8],
 	"objectives": [
 		{
@@ -14,7 +14,7 @@
 		}
 	],
 	"rewards": {
-		"affection": 
+		"affection": 50
 	},
 	"title_key": "quest.girlfriends.fq_momo_09.title",
 	"description_key": "quest.girlfriends.fq_momo_09.description"

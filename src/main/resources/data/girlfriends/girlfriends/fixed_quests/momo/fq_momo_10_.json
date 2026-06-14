@@ -2,8 +2,8 @@
 	"quest_id": "girlfriends:fq_momo_10",
 	"character_id": "girlfriends:momo",
 	"fixed_index": 10,
-	"required_stage": "",
-	"required_affection": ,
+	"required_stage": "home_partner",
+	"required_affection": 900,
 	"prerequisite_fixed_indices": [9],
 	"objectives": [
 		{
@@ -14,7 +14,7 @@
 		}
 	],
 	"rewards": {
-		"affection": 
+		"affection": 50
 	},
 	"title_key": "quest.girlfriends.fq_momo_10.title",
 	"description_key": "quest.girlfriends.fq_momo_10.description"
