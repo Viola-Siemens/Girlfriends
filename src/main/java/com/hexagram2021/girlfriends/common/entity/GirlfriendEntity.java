@@ -46,7 +46,6 @@ public abstract class GirlfriendEntity extends PathfinderMob implements Inventor
 			SynchedEntityData.defineId(GirlfriendEntity.class, EntityDataSerializers.INT);
 
 	private static final String TAG_FOLLOW_MODE = "follow_mode";
-	private static final String TAG_FOLLOW_TARGET = "follow_target";
 	private static final String TAG_LIKED_PLAYER = "liked_player";
 
 	private static final int INVENTORY_SIZE = 18;
@@ -58,12 +57,9 @@ public abstract class GirlfriendEntity extends PathfinderMob implements Inventor
 	@Nullable
 	private UUID likedPlayerUuid;
 
-	@Nullable
-	private UUID followTargetUuid;
-
 	protected GirlfriendEntity(EntityType<? extends PathfinderMob> entityType, Level level) {
 		super(entityType, level);
-		this.followTargetUuid = null;
+		this.likedPlayerUuid = null;
 		this.setCanPickUpLoot(true);
 	}
 
@@ -111,32 +107,16 @@ public abstract class GirlfriendEntity extends PathfinderMob implements Inventor
 	}
 
 	/**
-	 * 获取跟随目标玩家 UUID 喵~
-	 *
-	 * @return 跟随目标 UUID，可能为 null 喵~
-	 */
-	@Nullable
-	public UUID getFollowTargetUuid() {
-		return this.followTargetUuid;
-	}
-
-	/**
-	 * 设置跟随目标玩家 UUID 喵~
-	 *
-	 * @param uuid 目标玩家 UUID，可为 null 喵~
-	 */
-	public void setFollowTargetUuid(@Nullable UUID uuid) {
-		this.followTargetUuid = uuid;
-	}
-
-	/**
-	 * 获取跟随玩家
+	 * 获取跟随玩家<br/>
+	 * 角色只有可能跟随喜爱的玩家
 	 *
 	 * @return 跟随玩家，非跟随状态、非玩家、不同维度时返回 null
 	 */
 	@Nullable
 	public Player getFollowedPlayer() {
-		if(this.followTargetUuid != null && this.level().getEntity(this.followTargetUuid) instanceof Player player) {
+		if(this.likedPlayerUuid != null &&
+				this.getFollowMode().isStayOrFollow() &&
+				this.level().getEntity(this.likedPlayerUuid) instanceof Player player) {
 			return player;
 		}
 		return null;
@@ -242,9 +222,6 @@ public abstract class GirlfriendEntity extends PathfinderMob implements Inventor
 	protected void addAdditionalSaveData(ValueOutput output) {
 		super.addAdditionalSaveData(output);
 		output.store(TAG_FOLLOW_MODE, FollowMode.CODEC, this.getFollowMode());
-		if (this.followTargetUuid != null) {
-			output.store(TAG_FOLLOW_TARGET, UUIDUtil.CODEC, this.followTargetUuid);
-		}
 		if (this.likedPlayerUuid != null) {
 			output.store(TAG_LIKED_PLAYER, UUIDUtil.CODEC, this.likedPlayerUuid);
 		}
@@ -256,7 +233,6 @@ public abstract class GirlfriendEntity extends PathfinderMob implements Inventor
 	protected void readAdditionalSaveData(ValueInput input) {
 		super.readAdditionalSaveData(input);
 		input.read(TAG_FOLLOW_MODE, FollowMode.CODEC).ifPresent(this::setFollowMode);
-		input.read(TAG_FOLLOW_TARGET, UUIDUtil.CODEC).ifPresent(uuid -> this.followTargetUuid = uuid);
 		input.read(TAG_LIKED_PLAYER, UUIDUtil.CODEC).ifPresent(uuid -> this.likedPlayerUuid = uuid);
 		input.read("Brain", Brain.Packed.CODEC).ifPresent(packed -> this.brain = this.makeBrain(packed));
 

@@ -40,6 +40,7 @@ public final class PlantAndHarvestFlower {
 						level.destroyBlock(flowerBlockPos, true, entity);
 						flowerPos.erase();
 					} else if(entity.updateBoneMealTick()) {
+						// 花朵不足
 						prepareBoneMeal(entity);
 						// 催熟
 						ItemStack mainHandItem = entity.getItemInHand(InteractionHand.MAIN_HAND);
@@ -78,7 +79,7 @@ public final class PlantAndHarvestFlower {
 	}
 
 	private static void prepareBoneMeal(MomoEntity entity) {
-		// 花朵不足，准备骨粉
+		// 准备骨粉
 		SimpleContainer inventory = entity.getInventory();
 		for (int slot = 0; slot < inventory.getContainerSize(); ++slot) {
 			if (inventory.getItem(slot).is(Items.BONE_MEAL)) {

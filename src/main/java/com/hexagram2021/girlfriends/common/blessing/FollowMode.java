@@ -45,7 +45,7 @@ public enum FollowMode implements StringRepresentable {
 	 * STAY 或 FOLLOW 状态下无需回家
 	 * @return 是否不需要寻路回家
 	 */
-	public boolean shouldIgnoreHome() {
+	public boolean isStayOrFollow() {
 		return this == STAY || this == FOLLOW;
 	}
 }

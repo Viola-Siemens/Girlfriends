@@ -29,7 +29,7 @@ public final class BackToShelter {
 	 */
 	public static OneShot<GirlfriendEntity> create(int closeEnoughDist, int tooFarDist, float speedModifier) {
 		return BehaviorBuilder.create(i -> i.group(i.present(GirlfriendsMemoryTypes.SHELTER_POINT.get()), i.registered(GirlfriendsMemoryTypes.HOME_BED_POINT.get()), i.absent(MemoryModuleType.ATTACK_TARGET), i.absent(MemoryModuleType.WALK_TARGET), i.registered(MemoryModuleType.LOOK_TARGET)).apply(i, (location, bed, _, _, _) -> (_, body, _) -> {
-			if(body.getFollowMode().shouldIgnoreHome()) {
+			if(body.getFollowMode().isStayOrFollow()) {
 				// 跟随玩家，不回家
 				return false;
 			}

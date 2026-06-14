@@ -35,6 +35,10 @@ public final class GirlfriendsActivities {
 	public static final DeferredHolder<Activity, Activity> NIGHT_REST =
 			REGISTER.register("night_rest", () -> new Activity(GirlfriendsMod.MODID + "$night_rest"));
 
+	/** 跟随喵~ */
+	public static final DeferredHolder<Activity, Activity> FOLLOW =
+			REGISTER.register("follow", () -> new Activity(GirlfriendsMod.MODID + "$follow"));
+
 	private GirlfriendsActivities() {
 	}
 }

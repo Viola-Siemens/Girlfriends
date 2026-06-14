@@ -44,25 +44,25 @@ public final class ShelterBoundRandomStroll {
 	public static OneShot<GirlfriendEntity> create(float speedModifier, int maxXzDist, int maxYDist, int tooFarDist) {
 		return BehaviorBuilder.create(i -> i.group(i.absent(MemoryModuleType.WALK_TARGET), i.present(GirlfriendsMemoryTypes.SHELTER_POINT.get()), i.registered(GirlfriendsMemoryTypes.HOME_BED_POINT.get())).apply(i, (walkTarget, shelterLocation, homeBedLocation) -> (level, body, _) -> {
 			BlockPos bodyPos = body.blockPosition();
-			Vec3 landPos;
-			if (level.isVillage(bodyPos)) {
-				landPos = LandRandomPos.getPos(body, maxXzDist, maxYDist);
-			} else {
-				SectionPos sectionPos = SectionPos.of(bodyPos);
-				SectionPos optimalSectionPos = SectionPos.of(
-						body.getFollowMode() == FollowMode.HOME ?
-								i.tryGet(homeBedLocation).map(GlobalPos::pos).orElse(bodyPos) :
-								i.get(shelterLocation).pos()
-				);
-				if (optimalSectionPos != sectionPos) {
-					landPos = DefaultRandomPos.getPosTowards(body, maxXzDist, maxYDist, Vec3.atBottomCenterOf(optimalSectionPos.center()), Math.PI / 2.0D);
-				} else {
-					landPos = LandRandomPos.getPos(body, maxXzDist, maxYDist);
-				}
-			}
+			SectionPos sectionPos = SectionPos.of(bodyPos);
+			SectionPos optimalSectionPos = SectionPos.of(
+					body.getFollowMode() == FollowMode.HOME ?
+							i.tryGet(homeBedLocation).map(GlobalPos::pos).orElse(bodyPos) :
+							i.get(shelterLocation).pos()
+			);
+			Vec3 landPos = optimalSectionPos != sectionPos ?
+					DefaultRandomPos.getPosTowards(
+							body, maxXzDist, maxYDist,
+							Vec3.atBottomCenterOf(optimalSectionPos.center()),
+							Math.PI / 2.0D
+					) : LandRandomPos.getPos(body, maxXzDist, maxYDist);
 
 			if(landPos != null && !landPos.closerThan(bodyPos.getBottomCenter(), tooFarDist)) {
-				return false;
+				if(body.getFollowMode().isStayOrFollow()) {
+					landPos = LandRandomPos.getPos(body, maxXzDist, maxYDist);
+				} else {
+					return false;
+				}
 			}
 
 			walkTarget.setOrErase(Optional.ofNullable(landPos).map(pos -> new WalkTarget(pos, speedModifier, 0)));

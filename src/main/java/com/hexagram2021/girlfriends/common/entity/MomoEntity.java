@@ -66,7 +66,7 @@ public class MomoEntity extends GirlfriendEntity {
 	 * @return 如果未到更新时间，则返回 false 且不更新；否则更新并返回 true
 	 */
 	public boolean updateBoneMealTick() {
-		if(this.level().getGameTime() >= this.nextBoneMealTick) {
+		if(!this.getFollowMode().isStayOrFollow() && this.level().getGameTime() >= this.nextBoneMealTick) {
 			this.nextBoneMealTick = level().getGameTime() + 30L * SharedConstants.TICKS_PER_SECOND;
 			return true;
 		}
@@ -92,9 +92,10 @@ public class MomoEntity extends GirlfriendEntity {
 					ImmutableList.Builder<Pair<Integer, BehaviorControl<GirlfriendEntity>>> afternoon = ImmutableList.builder();
 					ImmutableList.Builder<Pair<Integer, BehaviorControl<GirlfriendEntity>>> sunset = ImmutableList.builder();
 					ImmutableList.Builder<Pair<Integer, BehaviorControl<GirlfriendEntity>>> nightRest = ImmutableList.builder();
+					ImmutableList.Builder<Pair<Integer, BehaviorControl<GirlfriendEntity>>> follow = ImmutableList.builder();
 
 					// 通用行为
-					GirlfriendCommonAiPackages.addCoreActivities(girlfriend, core, 3, 16);
+					GirlfriendCommonAiPackages.addCoreActivities(girlfriend, core);
 
 					// 恐慌行为
 					panic.add(
@@ -131,6 +132,12 @@ public class MomoEntity extends GirlfriendEntity {
 							Pair.of(49, (BehaviorControl<GirlfriendEntity>)(Object) UpdateActivityFromSchedule.create())
 					);
 
+					// 跟随行为
+					follow.add(
+							Pair.of(1, StayCloseToIntimatePlayer.create(3, 16, 1.0F)),
+							Pair.of(1, (BehaviorControl<GirlfriendEntity>)(Object) PlantAndHarvestFlower.create(4, 2.0D))
+					);
+
 					activities.add(ActivityData.create(Activity.CORE, core.build()));
 					activities.add(ActivityData.create(Activity.PANIC, panic.build()));
 					activities.add(ActivityData.create(GirlfriendsActivities.MORNING.get(), morning.build()));
@@ -138,6 +145,7 @@ public class MomoEntity extends GirlfriendEntity {
 					activities.add(ActivityData.create(GirlfriendsActivities.AFTERNOON.get(), afternoon.build()));
 					activities.add(ActivityData.create(GirlfriendsActivities.SUNSET.get(), sunset.build()));
 					activities.add(ActivityData.create(GirlfriendsActivities.NIGHT_REST.get(), nightRest.build()));
+					activities.add(ActivityData.create(GirlfriendsActivities.FOLLOW.get(), follow.build()));
 
 					return activities.build();
 				}

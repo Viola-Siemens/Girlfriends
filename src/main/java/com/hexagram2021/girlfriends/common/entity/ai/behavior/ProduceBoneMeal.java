@@ -27,9 +27,9 @@ public final class ProduceBoneMeal {
 		return BehaviorBuilder.create(i -> i.group(i.registered(GirlfriendsMemoryTypes.PRODUCED_BONE_MEAL.get())).apply(i, producedBoneMeal -> (level, entity, _) -> {
 			Optional<Boolean> optional = i.tryGet(producedBoneMeal);
 
-			if(optional.isEmpty()) {
-				// 清理周围杂草
-				BlockPos.withinManhattan(entity.blockPosition(), 5, 3, 5).forEach(pos -> {
+			if(optional.isEmpty() || !optional.get()) {
+				// 清理周围小范围内杂草
+				BlockPos.withinManhattan(entity.blockPosition(), 3, 2, 3).forEach(pos -> {
 					if(level.getBlockState(pos).is(GirlfriendBlockTags.GRASS_TO_WEED)) {
 						level.destroyBlock(pos, false, entity);
 					}

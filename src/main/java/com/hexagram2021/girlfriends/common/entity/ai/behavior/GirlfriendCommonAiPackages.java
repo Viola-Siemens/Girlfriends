@@ -24,19 +24,15 @@ public final class GirlfriendCommonAiPackages {
 	 *
 	 * @param girlfriend 角色
 	 * @param builder 行为列表
-	 * @param minDist 停止跟随的距离
-	 * @param maxDist 放弃跟随的距离
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void addCoreActivities(GirlfriendEntity girlfriend,
-										 ImmutableList.Builder<Pair<Integer, BehaviorControl<GirlfriendEntity>>> builder,
-										 int minDist, int maxDist) {
+										 ImmutableList.Builder<Pair<Integer, BehaviorControl<GirlfriendEntity>>> builder) {
 		builder.add(
 				Pair.of(0, new Swim(0.8F)),
 				Pair.of(0, (BehaviorControl) InteractWithDoor.create()),
 				Pair.of(0, new GirlfriendPanicTrigger()),
 				Pair.of(1, (BehaviorControl) new LookAtTargetSink(45, 90)),
-				Pair.of(1, StayCloseToIntimatePlayer.create(minDist, maxDist, 1.0F)),
 				Pair.of(1, BackToShelter.create(16, 48, 0.4F)),
 				Pair.of(2, (BehaviorControl) new MoveToTargetSink(80, 120)),
 				Pair.of(6, new RunOne<>(List.of(
