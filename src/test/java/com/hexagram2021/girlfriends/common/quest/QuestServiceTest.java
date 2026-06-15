@@ -5,6 +5,8 @@ import com.hexagram2021.girlfriends.common.persist.GirlfriendsWorldData;
 import com.hexagram2021.girlfriends.common.relationship.PlayerCharacterRelation;
 import com.hexagram2021.girlfriends.common.relationship.RelationshipService;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -63,9 +65,10 @@ class QuestServiceTest {
 	void refreshRandomQuestCreatesQuestWhenSlotIsEmpty() {
 		GirlfriendsWorldData data = new GirlfriendsWorldData();
 		RelationshipService relationshipService = new RelationshipService(data);
-		QuestService service = new QuestService(data, relationshipService, id -> null, id -> null, () -> 11);
+		QuestService service = new QuestService(data, relationshipService, id -> null, id -> null, _ -> 11);
+		RandomSource randomSource = new LegacyRandomSource(42L);
 
-		Assertions.assertTrue(service.refreshRandomQuest(MOMO_ID, 100L));
+		Assertions.assertTrue(service.refreshRandomQuest(MOMO_ID, 100L, randomSource));
 		Assertions.assertNotNull(data.getCharacterState(MOMO_ID).getCurrentQuest());
 		Assertions.assertEquals(QuestType.RANDOM, data.getCharacterState(MOMO_ID).getCurrentQuest().getQuestType());
 		Assertions.assertEquals(111L, data.getCharacterState(MOMO_ID).getCurrentQuest().getExpireDay());
@@ -78,9 +81,10 @@ class QuestServiceTest {
 	void expireRandomQuestClearsExpiredQuest() {
 		GirlfriendsWorldData data = new GirlfriendsWorldData();
 		RelationshipService relationshipService = new RelationshipService(data);
-		QuestService service = new QuestService(data, relationshipService, id -> null, id -> null, () -> 11);
+		QuestService service = new QuestService(data, relationshipService, id -> null, id -> null, _ -> 11);
+		RandomSource randomSource = new LegacyRandomSource(42L);
 
-		Assertions.assertTrue(service.refreshRandomQuest(MOMO_ID, 100L));
+		Assertions.assertTrue(service.refreshRandomQuest(MOMO_ID, 100L, randomSource));
 		Assertions.assertTrue(service.expireRandomQuest(MOMO_ID, 111L));
 		Assertions.assertNull(data.getCharacterState(MOMO_ID).getCurrentQuest());
 	}
@@ -92,7 +96,7 @@ class QuestServiceTest {
 	void refreshRandomQuestDoesNotReplaceAcceptedFixedQuest() {
 		GirlfriendsWorldData data = new GirlfriendsWorldData();
 		RelationshipService relationshipService = new RelationshipService(data);
-		QuestService service = new QuestService(data, relationshipService, id -> null, id -> null, () -> 11);
+		QuestService service = new QuestService(data, relationshipService, id -> null, id -> null, _ -> 11);
 		UUID playerUuid = UUID.fromString("00000000-0000-0000-0000-000000000028");
 		PlayerCharacterRelation relation = data.getOrCreateRelation(playerUuid, MOMO_ID);
 		relation.setAffection(150);
@@ -100,8 +104,9 @@ class QuestServiceTest {
 		Assertions.assertTrue(service.publishFixedQuest(playerUuid, MOMO_ID, 1, 100L));
 		Assertions.assertTrue(service.acceptCurrentQuest(playerUuid, MOMO_ID));
 		QuestInstance currentQuest = data.getCharacterState(MOMO_ID).getCurrentQuest();
+		RandomSource randomSource = new LegacyRandomSource(42L);
 
-		Assertions.assertFalse(service.refreshRandomQuest(MOMO_ID, 100L));
+		Assertions.assertFalse(service.refreshRandomQuest(MOMO_ID, 100L, randomSource));
 		Assertions.assertSame(currentQuest, data.getCharacterState(MOMO_ID).getCurrentQuest());
 	}
 }
