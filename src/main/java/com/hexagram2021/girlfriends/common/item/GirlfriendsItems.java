@@ -1,9 +1,8 @@
 package com.hexagram2021.girlfriends.common.item;
 
 import com.hexagram2021.girlfriends.GirlfriendsMod;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Item;
-import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 /**
@@ -12,14 +11,14 @@ import net.neoforged.neoforge.registries.DeferredRegister;
  * @author liudongyu
  */
 public final class GirlfriendsItems {
-	public static final DeferredRegister<Item> REGISTER =
-			DeferredRegister.create(Registries.ITEM, GirlfriendsMod.MODID);
+	public static final DeferredRegister.Items REGISTER =
+			DeferredRegister.createItems(GirlfriendsMod.MODID);
 
-	public static final DeferredHolder<Item, Item> BOUQUET =
-			REGISTER.register("bouquet", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> BOUQUET =
+			REGISTER.registerSimpleItem("bouquet", () -> new Item.Properties().stacksTo(1));
 
-	public static final DeferredHolder<Item, WateringCanItem> WATERING_CAN =
-			REGISTER.register("watering_can", () -> new WateringCanItem(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<WateringCanItem> WATERING_CAN =
+			REGISTER.registerItem("watering_can", WateringCanItem::new, () -> new Item.Properties().stacksTo(1));
 
 	private GirlfriendsItems() {
 	}
