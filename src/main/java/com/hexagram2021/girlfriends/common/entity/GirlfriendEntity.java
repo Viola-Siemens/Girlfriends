@@ -4,6 +4,7 @@ import com.hexagram2021.girlfriends.common.blessing.FollowMode;
 import com.hexagram2021.girlfriends.common.character.CharacterWorldState;
 import com.hexagram2021.girlfriends.common.character.GirlfriendType;
 import com.hexagram2021.girlfriends.common.character.GirlfriendsRegistries;
+import com.hexagram2021.girlfriends.common.network.ClientInteractionStore;
 import com.hexagram2021.girlfriends.common.network.InteractionSummaryService;
 import com.hexagram2021.girlfriends.common.network.clientbound.ClientboundSyncInteractionDataPacket;
 import com.hexagram2021.girlfriends.common.quest.FixedQuestDefinitionManager;
@@ -198,6 +199,7 @@ public abstract class GirlfriendEntity extends PathfinderMob implements Inventor
 	@Override
 	public InteractionResult mobInteract(Player player, InteractionHand hand) {
 		if (this.level().isClientSide()) {
+			ClientInteractionStore.markPendingInteraction(this.getGirlfriendTypeId());
 			return InteractionResult.SUCCESS;
 		}
 		if (player instanceof ServerPlayer serverPlayer) {
