@@ -4,6 +4,9 @@
   "commands.girlfriends.affection.add": "已调整 %1$s 对 %2$s 的好感度：%3$s%4$.1f（当前 %5$.1f）",
   "commands.girlfriends.affection.not_a_girlfriend": "指定实体不是女友角色",
 
+  "item.girlfriends.bouquet": "花束",
+  "item.girlfriends.watering_can": "洒水壶",
+
   "girlfriends.girlfriend_type.momo": "沫沫",
   "girlfriends.girlfriend_type.yuxi": "渔溪",
   "girlfriends.girlfriend_type.meishu": "梅疏",

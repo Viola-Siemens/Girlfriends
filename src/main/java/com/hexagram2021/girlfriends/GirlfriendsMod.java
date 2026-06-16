@@ -2,6 +2,7 @@ package com.hexagram2021.girlfriends;
 
 import com.hexagram2021.girlfriends.common.blessing.BlessingParameterManager;
 import com.hexagram2021.girlfriends.common.blessing.BlessingTypes;
+import com.hexagram2021.girlfriends.common.block.GirlfriendsBlocks;
 import com.hexagram2021.girlfriends.common.character.GirlfriendTypes;
 import com.hexagram2021.girlfriends.common.character.GirlfriendsRegistries;
 import com.hexagram2021.girlfriends.common.entity.GirlfriendEntity;
@@ -13,6 +14,7 @@ import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsSensorTypes;
 import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsEnvironmentAttributes;
 import com.hexagram2021.girlfriends.common.command.AffectionCommand;
 import com.hexagram2021.girlfriends.common.gift.GiftPreferenceManager;
+import com.hexagram2021.girlfriends.common.item.GirlfriendsItems;
 import com.hexagram2021.girlfriends.common.network.GirlfriendsNetwork;
 import com.hexagram2021.girlfriends.common.quest.FixedQuestDefinitionManager;
 import com.hexagram2021.girlfriends.common.quest.RandomQuestTemplateManager;
@@ -56,11 +58,14 @@ public class GirlfriendsMod {
 		NeoForge.EVENT_BUS.addListener(events::onEntityJoinWorld);
 		NeoForge.EVENT_BUS.addListener(events::onServerTick);
 		NeoForge.EVENT_BUS.addListener(events::onEntityDie);
+
 		BlessingTypes.REGISTER.register(modEventBus);
 		GirlfriendTypes.REGISTER.register(modEventBus);
 		GirlfriendsActivities.REGISTER.register(modEventBus);
+		GirlfriendsBlocks.REGISTER.register(modEventBus);
 		GirlfriendsEntities.REGISTER.register(modEventBus);
 		GirlfriendsEnvironmentAttributes.REGISTER.register(modEventBus);
+		GirlfriendsItems.REGISTER.register(modEventBus);
 		GirlfriendsMemoryTypes.REGISTER.register(modEventBus);
 		GirlfriendsSensorTypes.REGISTER.register(modEventBus);
 	}

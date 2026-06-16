@@ -4,6 +4,9 @@
   "commands.girlfriends.affection.add": "Changed %1$s's affection for %2$s: %3$s%4$.1f (now %5$.1f)",
   "commands.girlfriends.affection.not_a_girlfriend": "The specified entity is not a Girlfriend character",
 
+  "item.girlfriends.bouquet": "Bouquet",
+  "item.girlfriends.watering_can": "Watering Can",
+
   "girlfriends.girlfriend_type.momo": "Momo",
   "girlfriends.girlfriend_type.yuxi": "Yuxi",
   "girlfriends.girlfriend_type.meishu": "Meishu",
