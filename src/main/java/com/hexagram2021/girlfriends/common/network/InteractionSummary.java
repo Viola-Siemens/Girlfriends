@@ -1,5 +1,6 @@
 package com.hexagram2021.girlfriends.common.network;
 
+import com.hexagram2021.girlfriends.common.blessing.FollowMode;
 import com.hexagram2021.girlfriends.common.gift.GiftPreferenceLevel;
 import com.hexagram2021.girlfriends.common.quest.QuestState;
 import com.hexagram2021.girlfriends.common.quest.QuestType;
@@ -19,6 +20,7 @@ import java.util.List;
  * @param canAcceptQuest 是否可接取委托喵~
  * @param canFollow 是否可跟随喵~
  * @param canInviteHome 是否可邀请回家喵~
+ * @param followMode 当前跟随模式喵~
  * @param knownGiftPreferences 已发现礼物偏好喵~
  * @param currentQuest 当前委托摘要喵~
  * @param needsIntimacyConfirmation 是否需要确认亲密关系喵~
@@ -32,6 +34,7 @@ public record InteractionSummary(
 		boolean canAcceptQuest,
 		boolean canFollow,
 		boolean canInviteHome,
+		FollowMode followMode,
 		List<KnownGiftPreferenceSummary> knownGiftPreferences,
 		@Nullable QuestContentSummary currentQuest,
 		boolean needsIntimacyConfirmation
@@ -55,6 +58,7 @@ public record InteractionSummary(
 	 * @param titleKey 标题本地化键喵~
 	 * @param descriptionKey 描述本地化键喵~
 	 * @param objectiveSummaryKeys 目标摘要本地化键列表喵~
+	 * @param questCompleted 委托目标是否已完成喵~
 	 */
 	public record QuestContentSummary(
 			Identifier questId,
@@ -62,7 +66,8 @@ public record InteractionSummary(
 			QuestState questState,
 			String titleKey,
 			String descriptionKey,
-			List<String> objectiveSummaryKeys
+			List<String> objectiveSummaryKeys,
+			boolean questCompleted
 	) {
 	}
 }

@@ -244,7 +244,7 @@ public class QuestService {
 	}
 
 	@Nullable
-	private QuestObjectiveGroup resolveObjectives(QuestInstance questInstance) {
+	public QuestObjectiveGroup resolveObjectives(QuestInstance questInstance) {
 		if(questInstance.getQuestType() == QuestType.FIXED) {
 			QuestDefinition definition = this.fixedQuestDefinitionGetter.apply(questInstance.getQuestId());
 			if(definition != null) {

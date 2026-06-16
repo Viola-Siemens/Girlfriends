@@ -4,6 +4,7 @@ import com.hexagram2021.girlfriends.GirlfriendsMod;
 import com.hexagram2021.girlfriends.common.character.CharacterWorldState;
 import com.hexagram2021.girlfriends.common.persist.GirlfriendsWorldData;
 import com.hexagram2021.girlfriends.common.quest.QuestInstance;
+import com.hexagram2021.girlfriends.common.quest.QuestService;
 import com.hexagram2021.girlfriends.common.quest.QuestState;
 import com.hexagram2021.girlfriends.common.quest.QuestType;
 import com.hexagram2021.girlfriends.common.relationship.AffectionStage;
@@ -35,7 +36,7 @@ class InteractionSummaryServiceTest {
 		relation.getKnownGiftPreferences().add("#minecraft:flowers");
 		relation.getKnownGiftPreferences().add("invalid id");
 
-		InteractionSummaryService service = new InteractionSummaryService(data, new RelationshipService(data));
+		InteractionSummaryService service = new InteractionSummaryService(data, new RelationshipService(data), new QuestService(data, new RelationshipService(data)));
 		InteractionSummary summary = service.build(playerUuid, MOMO_ID);
 
 		assertEquals(AffectionStage.AFFECTION, summary.stage());
@@ -62,7 +63,7 @@ class InteractionSummaryServiceTest {
 		quest.setProgress(progress);
 		state.setCurrentQuest(quest);
 
-		InteractionSummaryService service = new InteractionSummaryService(data, new RelationshipService(data));
+		InteractionSummaryService service = new InteractionSummaryService(data, new RelationshipService(data), new QuestService(data, new RelationshipService(data)));
 		InteractionSummary summary = service.build(playerUuid, MOMO_ID);
 
 		assertNotNull(summary.currentQuest());
@@ -82,7 +83,7 @@ class InteractionSummaryServiceTest {
 		quest.setQuestId("invalid id");
 		state.setCurrentQuest(quest);
 
-		InteractionSummaryService service = new InteractionSummaryService(data, new RelationshipService(data));
+		InteractionSummaryService service = new InteractionSummaryService(data, new RelationshipService(data), new QuestService(data, new RelationshipService(data)));
 
 		assertNull(service.build(playerUuid, MOMO_ID).currentQuest());
 		assertNull(service.buildQuestIcon(MOMO_ID));

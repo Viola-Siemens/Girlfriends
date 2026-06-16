@@ -1,6 +1,7 @@
 package com.hexagram2021.girlfriends.common.network;
 
 import com.google.common.collect.Lists;
+import com.hexagram2021.girlfriends.common.blessing.FollowMode;
 import com.hexagram2021.girlfriends.common.gift.GiftPreferenceLevel;
 import com.hexagram2021.girlfriends.common.network.InteractionSummary.KnownGiftPreferenceSummary;
 import com.hexagram2021.girlfriends.common.network.InteractionSummary.QuestContentSummary;
@@ -35,6 +36,7 @@ public final class NetworkCodecs {
 		buffer.writeBoolean(summary.canAcceptQuest());
 		buffer.writeBoolean(summary.canFollow());
 		buffer.writeBoolean(summary.canInviteHome());
+		buffer.writeEnum(summary.followMode());
 		writeKnownGiftPreferences(buffer, summary.knownGiftPreferences());
 		writeQuestContentSummary(buffer, summary.currentQuest());
 		buffer.writeBoolean(summary.needsIntimacyConfirmation());
@@ -55,6 +57,7 @@ public final class NetworkCodecs {
 				buffer.readBoolean(),
 				buffer.readBoolean(),
 				buffer.readBoolean(),
+				buffer.readEnum(FollowMode.class),
 				readKnownGiftPreferences(buffer),
 				readQuestContentSummary(buffer),
 				buffer.readBoolean()
@@ -122,6 +125,7 @@ public final class NetworkCodecs {
 		buffer.writeUtf(summary.titleKey());
 		buffer.writeUtf(summary.descriptionKey());
 		writeStrings(buffer, summary.objectiveSummaryKeys());
+		buffer.writeBoolean(summary.questCompleted());
 	}
 
 	@Nullable
@@ -135,7 +139,8 @@ public final class NetworkCodecs {
 				buffer.readEnum(QuestState.class),
 				buffer.readUtf(),
 				buffer.readUtf(),
-				readStrings(buffer)
+				readStrings(buffer),
+				buffer.readBoolean()
 		);
 	}
 

@@ -2,12 +2,15 @@ package com.hexagram2021.girlfriends.common.network;
 
 import com.google.common.collect.Lists;
 import com.hexagram2021.girlfriends.GirlfriendsMod;
+import com.hexagram2021.girlfriends.common.blessing.FollowMode;
 import com.hexagram2021.girlfriends.common.character.CharacterWorldState;
 import com.hexagram2021.girlfriends.common.gift.GiftPreferenceLevel;
 import com.hexagram2021.girlfriends.common.network.InteractionSummary.KnownGiftPreferenceSummary;
 import com.hexagram2021.girlfriends.common.network.InteractionSummary.QuestContentSummary;
 import com.hexagram2021.girlfriends.common.persist.GirlfriendsWorldData;
 import com.hexagram2021.girlfriends.common.quest.QuestInstance;
+import com.hexagram2021.girlfriends.common.quest.QuestObjectiveGroup;
+import com.hexagram2021.girlfriends.common.quest.QuestService;
 import com.hexagram2021.girlfriends.common.quest.QuestState;
 import com.hexagram2021.girlfriends.common.relationship.AffectionStage;
 import com.hexagram2021.girlfriends.common.relationship.PlayerCharacterRelation;
@@ -32,16 +35,19 @@ public class InteractionSummaryService {
 	private static final String QUEST_KEY_PREFIX = "quest." + GirlfriendsMod.MODID + ".";
 	private final GirlfriendsWorldData worldData;
 	private final RelationshipService relationshipService;
+	private final QuestService questService;
 
 	/**
 	 * 创建角色交互摘要服务喵~
 	 *
 	 * @param worldData 世界数据喵~
 	 * @param relationshipService 关系服务喵~
+	 * @param questService 委托服务喵~
 	 */
-	public InteractionSummaryService(GirlfriendsWorldData worldData, RelationshipService relationshipService) {
+	public InteractionSummaryService(GirlfriendsWorldData worldData, RelationshipService relationshipService, QuestService questService) {
 		this.worldData = worldData;
 		this.relationshipService = relationshipService;
+		this.questService = questService;
 	}
 
 	/**
@@ -55,6 +61,7 @@ public class InteractionSummaryService {
 		PlayerCharacterRelation relation = this.relationshipService.getRelation(playerUuid, girlfriendTypeId);
 		AffectionStage stage = this.relationshipService.getEffectiveStage(relation);
 		CharacterWorldState state = this.worldData.getExistingCharacterState(girlfriendTypeId);
+		FollowMode followMode = state != null ? state.getFollowMode() : FollowMode.NONE;
 		return new InteractionSummary(
 				girlfriendTypeId,
 				stage,
@@ -63,8 +70,9 @@ public class InteractionSummaryService {
 				canAcceptQuest(state),
 				canFollow(relation, state),
 				canInviteHome(relation, stage),
+				followMode,
 				buildKnownGiftPreferences(relation),
-				buildQuestContentSummary(state),
+				buildQuestContentSummary(state != null ? state.getCurrentQuest() : null),
 				needsIntimacyConfirmation(relation)
 		);
 	}
@@ -78,7 +86,7 @@ public class InteractionSummaryService {
 	@Nullable
 	public QuestIconSummary buildQuestIcon(Identifier girlfriendTypeId) {
 		CharacterWorldState state = this.worldData.getExistingCharacterState(girlfriendTypeId);
-		QuestContentSummary quest = buildQuestContentSummary(state);
+		QuestContentSummary quest = buildQuestContentSummary(state != null ? state.getCurrentQuest() : null);
 		if(quest == null) {
 			return null;
 		}
@@ -148,11 +156,10 @@ public class InteractionSummaryService {
 	}
 
 	@Nullable
-	private static QuestContentSummary buildQuestContentSummary(@Nullable CharacterWorldState state) {
-		if(state == null || state.getCurrentQuest() == null) {
+	private QuestContentSummary buildQuestContentSummary(@Nullable QuestInstance quest) {
+		if(quest == null) {
 			return null;
 		}
-		QuestInstance quest = state.getCurrentQuest();
 		Identifier questId = parseQuestIdentifierOrNull(quest.getQuestId());
 		if(questId == null) {
 			return null;
@@ -164,13 +171,21 @@ public class InteractionSummaryService {
 			}
 		}
 		objectiveSummaryKeys.sort(String::compareTo);
+
+		boolean questCompleted = false;
+		QuestObjectiveGroup objectives = this.questService.resolveObjectives(quest);
+		if(objectives != null) {
+			questCompleted = objectives.isCompleted(quest);
+		}
+
 		return new QuestContentSummary(
 				questId,
 				quest.getQuestType(),
 				quest.getState(),
 				QUEST_KEY_PREFIX + questId.getPath() + ".title",
 				QUEST_KEY_PREFIX + questId.getPath() + ".description",
-				List.copyOf(objectiveSummaryKeys)
+				List.copyOf(objectiveSummaryKeys),
+				questCompleted
 		);
 	}
 

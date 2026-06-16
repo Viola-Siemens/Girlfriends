@@ -6,6 +6,7 @@ import com.hexagram2021.girlfriends.common.character.GirlfriendType;
 import com.hexagram2021.girlfriends.common.character.GirlfriendsRegistries;
 import com.hexagram2021.girlfriends.common.network.InteractionSummaryService;
 import com.hexagram2021.girlfriends.common.network.clientbound.ClientboundSyncInteractionDataPacket;
+import com.hexagram2021.girlfriends.common.quest.QuestService;
 import com.hexagram2021.girlfriends.common.persist.GirlfriendsWorldData;
 import com.hexagram2021.girlfriends.common.relationship.RelationshipService;
 import net.minecraft.SharedConstants;
@@ -205,7 +206,8 @@ public abstract class GirlfriendEntity extends PathfinderMob implements Inventor
 			this.syncToWorldState(data);
 			// 构建并发送交互摘要
 			RelationshipService relationshipService = new RelationshipService(data);
-			InteractionSummaryService summaryService = new InteractionSummaryService(data, relationshipService);
+			QuestService questService = new QuestService(data, relationshipService);
+			InteractionSummaryService summaryService = new InteractionSummaryService(data, relationshipService, questService);
 			serverPlayer.connection.send(
 					new ClientboundSyncInteractionDataPacket(
 							summaryService.build(player.getUUID(), this.getGirlfriendTypeId())
