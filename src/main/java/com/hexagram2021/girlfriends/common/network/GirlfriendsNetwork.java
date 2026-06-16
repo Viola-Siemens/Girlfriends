@@ -49,7 +49,17 @@ public final class GirlfriendsNetwork {
 	}
 
 	private static void handleSyncInteractionData(ClientboundSyncInteractionDataPacket packet, IPayloadContext context) {
-		context.enqueueWork(() -> ClientInteractionStore.setSummary(packet.summary()));
+		context.enqueueWork(() -> {
+			ClientInteractionStore.setSummary(packet.summary());
+			if (ClientInteractionStore.consumePendingInteraction(packet.summary().girlfriendTypeId())) {
+				net.minecraft.client.Minecraft.getInstance().setScreen(
+					new com.hexagram2021.girlfriends.client.screen.MainInteractionScreen(
+						packet.summary().girlfriendTypeId(),
+						packet.summary()
+					)
+				);
+			}
+		});
 	}
 
 	private static void handleQuestIcon(ClientboundQuestIconPacket packet, IPayloadContext context) {
