@@ -4,6 +4,7 @@ import net.minecraft.resources.Identifier;
 
 import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -14,6 +15,26 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class ClientInteractionStore {
 	private static final Map<Identifier, InteractionSummary> SUMMARIES = new ConcurrentHashMap<>();
 	private static final Map<Identifier, QuestIconSummary> QUEST_ICONS = new ConcurrentHashMap<>();
+	private static final Set<Identifier> PENDING_INTERACTIONS = ConcurrentHashMap.newKeySet();
+
+	/**
+	 * 标记待处理的交互，用于 mobInteract 客户端侧触发界面打开喵~
+	 *
+	 * @param girlfriendTypeId 角色类型 ID 喵~
+	 */
+	public static void markPendingInteraction(Identifier girlfriendTypeId) {
+		PENDING_INTERACTIONS.add(girlfriendTypeId);
+	}
+
+	/**
+	 * 原子获取并清除待处理交互标记喵~
+	 *
+	 * @param girlfriendTypeId 角色类型 ID 喵~
+	 * @return 是否存在待处理标记喵~
+	 */
+	public static boolean consumePendingInteraction(Identifier girlfriendTypeId) {
+		return PENDING_INTERACTIONS.remove(girlfriendTypeId);
+	}
 
 	/**
 	 * 存储交互摘要喵~
