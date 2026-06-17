@@ -98,7 +98,7 @@ public final class AffectionCommand {
 				"commands.girlfriends.affection.get",
 				girlfriend.getDisplayName(),
 				player.getDisplayName(),
-				relation.getAffection()
+				String.format("%.1f", relation.getAffection())
 		), false);
 
 		return 1;
@@ -125,8 +125,8 @@ public final class AffectionCommand {
 				"commands.girlfriends.affection.set",
 				girlfriend.getDisplayName(),
 				player.getDisplayName(),
-				oldValue,
-				targetValue
+				String.format("%.1f", oldValue),
+				String.format("%.1f", targetValue)
 		), true);
 
 		return 1;
@@ -151,8 +151,8 @@ public final class AffectionCommand {
 				girlfriend.getDisplayName(),
 				player.getDisplayName(),
 				delta >= 0 ? "+" : "",
-				delta,
-				newValue
+				String.format("%.1f", delta),
+				String.format("%.1f", newValue)
 		), true);
 
 		return 1;

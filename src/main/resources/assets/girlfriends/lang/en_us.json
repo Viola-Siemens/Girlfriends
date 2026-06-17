@@ -1,7 +1,7 @@
 {
-  "commands.girlfriends.affection.get": "%1$s's affection for %2$s: %3$.1f",
-  "commands.girlfriends.affection.set": "Set %1$s's affection for %2$s: %3$.1f → %4$.1f",
-  "commands.girlfriends.affection.add": "Changed %1$s's affection for %2$s: %3$s%4$.1f (now %5$.1f)",
+  "commands.girlfriends.affection.get": "%1$s's affection for %2$s: %3$s",
+  "commands.girlfriends.affection.set": "Set %1$s's affection for %2$s: %3$s → %4$s",
+  "commands.girlfriends.affection.add": "Changed %1$s's affection for %2$s: %3$s%4$s (now %5$s)",
   "commands.girlfriends.affection.not_a_girlfriend": "The specified entity is not a Girlfriend character",
 
   "item.girlfriends.bouquet": "Bouquet",
@@ -35,8 +35,8 @@
   "message.girlfriends.invite_home_failed": "Failed to invite home. Please check if your respawn point is a double bed.",
   "message.girlfriends.invite_home_no_respawn": "Please set your respawn point before inviting home.",
 
-  "girlfriends.gift.accepted": "%1$s accepted your gift, affection %2$+.1f",
-  "girlfriends.gift.disliked": "It seems that %1$s doesn't like your gift, affection %2$+.1f",
+  "girlfriends.gift.accepted": "%1$s accepted your gift, affection %2$s",
+  "girlfriends.gift.disliked": "It seems that %1$s doesn't like your gift, affection %2$s",
   "girlfriends.gift.rejected": "%1$s isn't interested in this gift...",
   "girlfriends.gift.daily_cap_reached": "%1$s doesn't want any more gifts today...",
   "girlfriends.gift.permission_denied": "Unable to give gift to %1$s",

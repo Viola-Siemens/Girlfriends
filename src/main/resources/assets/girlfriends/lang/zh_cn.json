@@ -1,7 +1,7 @@
 {
-  "commands.girlfriends.affection.get": "%1$s 对 %2$s 的好感度：%3$.1f",
-  "commands.girlfriends.affection.set": "已将 %1$s 对 %2$s 的好感度从 %3$.1f 设置为 %4$.1f",
-  "commands.girlfriends.affection.add": "已调整 %1$s 对 %2$s 的好感度：%3$s%4$.1f（当前 %5$.1f）",
+  "commands.girlfriends.affection.get": "%1$s 对 %2$s 的好感度：%3$s",
+  "commands.girlfriends.affection.set": "已将 %1$s 对 %2$s 的好感度从 %3$s 设置为 %4$s",
+  "commands.girlfriends.affection.add": "已调整 %1$s 对 %2$s 的好感度：%3$s%4$s（当前 %5$s）",
   "commands.girlfriends.affection.not_a_girlfriend": "指定实体不是女友角色",
 
   "item.girlfriends.bouquet": "花束",
@@ -35,8 +35,8 @@
   "message.girlfriends.invite_home_failed": "邀请入住失败，请检查重生点是否为双人床。",
   "message.girlfriends.invite_home_no_respawn": "请先设置重生点再邀请入住。",
 
-  "girlfriends.gift.accepted": "%1$s 收下了礼物，好感度 %2$+.1f",
-  "girlfriends.gift.disliked": "看起来 %1$s 对你的礼物不太高兴，好感度 %2$+.1f",
+  "girlfriends.gift.accepted": "%1$s 收下了礼物，好感度 %2$s",
+  "girlfriends.gift.disliked": "看起来 %1$s 对你的礼物不太高兴，好感度 %2$s",
   "girlfriends.gift.rejected": "%1$s 对这个礼物不感兴趣...",
   "girlfriends.gift.daily_cap_reached": "%1$s 今天已经不想再收礼物了...",
   "girlfriends.gift.permission_denied": "无法向 %1$s 赠送礼物",

@@ -218,7 +218,7 @@ public final class GirlfriendsNetwork {
 
 	private static Component buildGiftMessage(Identifier girlfriendTypeId, GiftResult result) {
 		Component characterName = Component.translatable("girlfriends.girlfriend_type." + girlfriendTypeId.getPath());
-		return Component.translatable(result.messageKey(), characterName, result.affectionDelta());
+		return Component.translatable(result.messageKey(), characterName, String.format("%+.1f", result.affectionDelta()));
 	}
 
 	private static boolean canReachCharacter(GirlfriendsWorldData data, Identifier girlfriendTypeId) {
