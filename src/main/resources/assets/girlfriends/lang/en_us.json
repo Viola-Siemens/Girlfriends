@@ -35,6 +35,12 @@
   "message.girlfriends.invite_home_failed": "Failed to invite home. Please check if your respawn point is a double bed.",
   "message.girlfriends.invite_home_no_respawn": "Please set your respawn point before inviting home.",
 
+  "girlfriends.gift.accepted": "%1$s accepted your gift, affection %2$+.1f",
+  "girlfriends.gift.disliked": "It seems that %1$s doesn't like your gift, affection %2$+.1f",
+  "girlfriends.gift.rejected": "%1$s isn't interested in this gift...",
+  "girlfriends.gift.daily_cap_reached": "%1$s doesn't want any more gifts today...",
+  "girlfriends.gift.permission_denied": "Unable to give gift to %1$s",
+
   "follow.none": "None",
   "follow.follow": "Follow",
   "follow.stay": "Stay",

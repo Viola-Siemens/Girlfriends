@@ -92,7 +92,8 @@ public final class GirlfriendsNetwork {
 			RelationshipService relationshipService = new RelationshipService(data);
 			GiftService giftService = new GiftService(relationshipService, GiftPreferenceManager.INSTANCE,
 					(playerUuid, girlfriendTypeId) -> canReachCharacter(data, girlfriendTypeId));
-			giftService.applyGiftItem(player.getUUID(), packet.girlfriendTypeId(), player.getItemInHand(InteractionHand.MAIN_HAND));
+			GiftResult result = giftService.applyGiftItem(player.getUUID(), packet.girlfriendTypeId(), player.getItemInHand(InteractionHand.MAIN_HAND));
+				player.sendSystemMessage(buildGiftMessage(packet.girlfriendTypeId(), result));
 		}
 	}
 
@@ -210,9 +211,14 @@ public final class GirlfriendsNetwork {
 				if(!result.rejected()) {
 					player.getInventory().removeItem(slotIndex, 1);
 				}
-				player.sendSystemMessage(Component.translatable(result.messageKey()));
+				player.sendSystemMessage(buildGiftMessage(packet.girlfriendTypeId(), result));
 			}
 		}
+	}
+
+	private static Component buildGiftMessage(Identifier girlfriendTypeId, GiftResult result) {
+		Component characterName = Component.translatable("girlfriends.girlfriend_type." + girlfriendTypeId.getPath());
+		return Component.translatable(result.messageKey(), characterName, result.affectionDelta());
 	}
 
 	private static boolean canReachCharacter(GirlfriendsWorldData data, Identifier girlfriendTypeId) {

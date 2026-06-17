@@ -22,6 +22,7 @@ import java.util.function.BiPredicate;
 public class GiftService {
 	private static final float DAILY_GIFT_GAIN_CAP = 15.0F;
 	private static final String MESSAGE_KEY_ACCEPTED = "girlfriends.gift.accepted";
+	private static final String MESSAGE_KEY_DISLIKED = "girlfriends.gift.disliked";
 	private static final String MESSAGE_KEY_REJECTED = "girlfriends.gift.rejected";
 	private static final String MESSAGE_KEY_CAP_REACHED = "girlfriends.gift.daily_cap_reached";
 	private static final String MESSAGE_KEY_PERMISSION_DENIED = "girlfriends.gift.permission_denied";
@@ -101,7 +102,7 @@ public class GiftService {
 		if(affectionDelta > 0) {
 			relation.setDailyGiftGain(Math.min(DAILY_GIFT_GAIN_CAP, relation.getDailyGiftGain() + affectionDelta));
 		}
-		return GiftResult.accepted(level, affectionDelta, MESSAGE_KEY_ACCEPTED);
+		return GiftResult.accepted(level, affectionDelta, affectionDelta > 0 ? MESSAGE_KEY_ACCEPTED : MESSAGE_KEY_DISLIKED);
 	}
 
 	/**

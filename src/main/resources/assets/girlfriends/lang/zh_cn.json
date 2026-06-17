@@ -35,6 +35,12 @@
   "message.girlfriends.invite_home_failed": "邀请入住失败，请检查重生点是否为双人床。",
   "message.girlfriends.invite_home_no_respawn": "请先设置重生点再邀请入住。",
 
+  "girlfriends.gift.accepted": "%1$s 收下了礼物，好感度 %2$+.1f",
+  "girlfriends.gift.disliked": "看起来 %1$s 对你的礼物不太高兴，好感度 %2$+.1f",
+  "girlfriends.gift.rejected": "%1$s 对这个礼物不感兴趣...",
+  "girlfriends.gift.daily_cap_reached": "%1$s 今天已经不想再收礼物了...",
+  "girlfriends.gift.permission_denied": "无法向 %1$s 赠送礼物",
+
   "follow.none": "无",
   "follow.follow": "跟随",
   "follow.stay": "停留",
