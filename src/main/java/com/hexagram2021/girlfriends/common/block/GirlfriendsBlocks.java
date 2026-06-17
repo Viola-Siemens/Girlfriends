@@ -1,8 +1,6 @@
 package com.hexagram2021.girlfriends.common.block;
 
 import com.hexagram2021.girlfriends.GirlfriendsMod;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 /**
@@ -11,8 +9,8 @@ import net.neoforged.neoforge.registries.DeferredRegister;
  * @author liudongyu
  */
 public final class GirlfriendsBlocks {
-	public static final DeferredRegister<Block> REGISTER =
-			DeferredRegister.create(Registries.BLOCK, GirlfriendsMod.MODID);
+	public static final DeferredRegister.Blocks REGISTER =
+			DeferredRegister.createBlocks(GirlfriendsMod.MODID);
 
 	private GirlfriendsBlocks() {
 	}

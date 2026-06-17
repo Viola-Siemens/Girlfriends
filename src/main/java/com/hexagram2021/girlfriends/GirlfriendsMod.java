@@ -5,6 +5,7 @@ import com.hexagram2021.girlfriends.common.blessing.BlessingTypes;
 import com.hexagram2021.girlfriends.common.block.GirlfriendsBlocks;
 import com.hexagram2021.girlfriends.common.character.GirlfriendTypes;
 import com.hexagram2021.girlfriends.common.character.GirlfriendsRegistries;
+import com.hexagram2021.girlfriends.common.components.GirlfriendsDataComponentTypes;
 import com.hexagram2021.girlfriends.common.entity.GirlfriendEntity;
 import com.hexagram2021.girlfriends.common.entity.GirlfriendsEntities;
 import com.hexagram2021.girlfriends.common.entity.event.GirlfriendEntityEvents;
@@ -63,6 +64,7 @@ public class GirlfriendsMod {
 		GirlfriendTypes.REGISTER.register(modEventBus);
 		GirlfriendsActivities.REGISTER.register(modEventBus);
 		GirlfriendsBlocks.REGISTER.register(modEventBus);
+		GirlfriendsDataComponentTypes.REGISTER.register(modEventBus);
 		GirlfriendsEntities.REGISTER.register(modEventBus);
 		GirlfriendsEnvironmentAttributes.REGISTER.register(modEventBus);
 		GirlfriendsItems.REGISTER.register(modEventBus);

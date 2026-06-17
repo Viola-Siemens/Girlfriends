@@ -1,6 +1,7 @@
 package com.hexagram2021.girlfriends.common.item;
 
 import com.hexagram2021.girlfriends.GirlfriendsMod;
+import com.hexagram2021.girlfriends.common.components.GirlfriendsDataComponentTypes;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -18,7 +19,7 @@ public final class GirlfriendsItems {
 			REGISTER.registerSimpleItem("bouquet", () -> new Item.Properties().stacksTo(1));
 
 	public static final DeferredItem<WateringCanItem> WATERING_CAN =
-			REGISTER.registerItem("watering_can", WateringCanItem::new, () -> new Item.Properties().stacksTo(1));
+			REGISTER.registerItem("watering_can", WateringCanItem::new, () -> new Item.Properties().stacksTo(1).component(GirlfriendsDataComponentTypes.WATER_LEVEL, 0));
 
 	private GirlfriendsItems() {
 	}
