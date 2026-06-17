@@ -1,6 +1,7 @@
 package com.hexagram2021.girlfriends.common.network;
 
 import com.hexagram2021.girlfriends.GirlfriendsMod;
+import com.hexagram2021.girlfriends.client.screen.MainInteractionScreen;
 import com.hexagram2021.girlfriends.common.binding.BindingService;
 import com.hexagram2021.girlfriends.common.character.CharacterWorldState;
 import com.hexagram2021.girlfriends.common.entity.GirlfriendEntity;
@@ -70,7 +71,7 @@ public final class GirlfriendsNetwork {
 			ClientInteractionStore.setSummary(packet.summary());
 			if (ClientInteractionStore.consumePendingInteraction(packet.summary().girlfriendTypeId())) {
 				net.minecraft.client.Minecraft.getInstance().setScreen(
-					new com.hexagram2021.girlfriends.client.screen.MainInteractionScreen(
+					new MainInteractionScreen(
 						packet.summary().girlfriendTypeId(),
 						packet.summary()
 					)

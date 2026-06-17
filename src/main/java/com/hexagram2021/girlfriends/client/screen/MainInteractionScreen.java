@@ -46,10 +46,11 @@ public class MainInteractionScreen extends Screen {
 			// 已接取 → 显示交付委托喵~
 			boolean canDeliver = quest.questCompleted();
 			Button deliverBtn = this.addRenderableWidget(
-					Button.builder(Component.translatable("button.girlfriends.deliver_quest"), btn -> {
-								ClientPacketDistributor.sendToServer(new ServerboundDeliverQuestPacket(this.girlfriendTypeId));
-								this.onClose();
-							})
+					Button.builder(Component.translatable("button.girlfriends.deliver_quest"),
+									canDeliver ? _ -> {
+										ClientPacketDistributor.sendToServer(new ServerboundDeliverQuestPacket(this.girlfriendTypeId));
+										this.onClose();
+									} : _ -> {})
 							.bounds(centerX, y, BUTTON_WIDTH, BUTTON_HEIGHT)
 							.build()
 			);
@@ -58,11 +59,9 @@ public class MainInteractionScreen extends Screen {
 			// 未接取 → 显示查看委托喵~
 			boolean hasQuest = quest != null;
 			Button viewQuestBtn = this.addRenderableWidget(
-					Button.builder(Component.translatable("button.girlfriends.view_quest"), btn -> {
-								if(quest != null) {
-									this.minecraft.setScreen(new QuestViewScreen(this.girlfriendTypeId, quest));
-								}
-							})
+					Button.builder(Component.translatable("button.girlfriends.view_quest"),
+									hasQuest ? _ -> this.minecraft.setScreen(new QuestViewScreen(this.girlfriendTypeId, quest))
+											: _ -> {})
 							.bounds(centerX, y, BUTTON_WIDTH, BUTTON_HEIGHT)
 							.build()
 			);
