@@ -11,5 +11,48 @@
   "girlfriends.girlfriend_type.yuxi": "渔溪",
   "girlfriends.girlfriend_type.meishu": "梅疏",
   "girlfriends.girlfriend_type.wanying": "晚萤",
-  "girlfriends.girlfriend_type.youruo": "幽若"
+  "girlfriends.girlfriend_type.youruo": "幽若",
+
+  "girlfriend.momo.name": "沫沫",
+  "girlfriend.yuxi.name": "渔溪",
+  "girlfriend.meishu.name": "梅疏",
+  "girlfriend.wanying.name": "晚萤",
+  "girlfriend.youruo.name": "幽若",
+
+  "screen.girlfriends.interaction": "角色交互",
+  "screen.girlfriends.gift": "赠送礼物",
+  "screen.girlfriends.quest": "委托详情",
+
+  "button.girlfriends.view_quest": "查看委托",
+  "button.girlfriends.deliver_quest": "交付委托",
+  "button.girlfriends.confirm_intimacy": "确立关系",
+  "button.girlfriends.invite_home": "邀请同居",
+  "button.girlfriends.follow_mode": "跟随模式: %s",
+  "button.girlfriends.give_gift": "赠送礼物",
+  "button.girlfriends.close": "关闭",
+  "button.girlfriends.accept_quest": "接受委托",
+  "button.girlfriends.think_again": "我再想想",
+
+  "label.girlfriends.objectives": "目标：",
+
+  "message.girlfriends.quest_completed": "委托已完成！",
+  "message.girlfriends.intimacy_confirmed": "你们的关系更进了一步...",
+  "message.girlfriends.invite_home_success": "角色已邀请入住！",
+  "message.girlfriends.invite_home_failed": "邀请入住失败，请检查重生点是否为双人床。",
+  "message.girlfriends.invite_home_no_respawn": "请先设置重生点再邀请入住。",
+
+  "follow.none": "无",
+  "follow.follow": "跟随",
+  "follow.stay": "停留",
+  "follow.home": "家园",
+
+  "affection.stranger": "陌生人",
+  "affection.familiar": "熟悉",
+  "affection.trust": "信任",
+  "affection.affection": "好感",
+  "affection.intimate": "亲密",
+  "affection.home_partner": "家园伴侣",
+
+  "quest.girlfriends.type.fixed": "固定委托",
+  "quest.girlfriends.type.random": "随机委托"
 }
