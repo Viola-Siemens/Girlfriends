@@ -138,7 +138,7 @@ public class MainInteractionScreen extends Screen {
 		int centerX = this.width / 2;
 		// 标题 - 角色名喵~
 		graphics.centeredText(this.font,
-				Component.translatable("girlfriend." + this.girlfriendTypeId.getPath() + ".name"),
+				Component.translatable("girlfriends.girlfriend_type." + this.girlfriendTypeId.getPath()),
 				centerX, 20, 0xFFFFFF);
 		// 好感阶段 + 进度喵~
 		AffectionStage stage = this.summary.stage();

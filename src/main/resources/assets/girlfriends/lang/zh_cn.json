@@ -13,12 +13,6 @@
   "girlfriends.girlfriend_type.wanying": "晚萤",
   "girlfriends.girlfriend_type.youruo": "幽若",
 
-  "girlfriend.momo.name": "沫沫",
-  "girlfriend.yuxi.name": "渔溪",
-  "girlfriend.meishu.name": "梅疏",
-  "girlfriend.wanying.name": "晚萤",
-  "girlfriend.youruo.name": "幽若",
-
   "screen.girlfriends.interaction": "角色交互",
   "screen.girlfriends.gift": "赠送礼物",
   "screen.girlfriends.quest": "委托详情",
@@ -46,7 +40,7 @@
   "follow.stay": "停留",
   "follow.home": "家园",
 
-  "affection.stranger": "陌生人",
+  "affection.stranger": "陌生",
   "affection.familiar": "熟悉",
   "affection.trust": "信任",
   "affection.affection": "好感",
