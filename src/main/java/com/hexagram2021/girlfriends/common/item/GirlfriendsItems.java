@@ -6,6 +6,8 @@ import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import java.util.List;
+
 /**
  * 模组物品注册表
  *
@@ -20,6 +22,11 @@ public final class GirlfriendsItems {
 
 	public static final DeferredItem<WateringCanItem> WATERING_CAN =
 			REGISTER.registerItem("watering_can", WateringCanItem::new, () -> new Item.Properties().stacksTo(1).component(GirlfriendsDataComponentTypes.WATER_LEVEL, 0));
+
+	public static final List<DeferredItem<?>> ALL_ITEMS = List.of(
+			BOUQUET,
+			WATERING_CAN
+	);
 
 	private GirlfriendsItems() {
 	}

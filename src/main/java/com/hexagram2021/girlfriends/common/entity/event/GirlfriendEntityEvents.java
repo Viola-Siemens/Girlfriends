@@ -2,6 +2,7 @@ package com.hexagram2021.girlfriends.common.entity.event;
 
 import com.hexagram2021.girlfriends.common.character.CharacterWorldState;
 import com.hexagram2021.girlfriends.common.entity.GirlfriendEntity;
+import com.hexagram2021.girlfriends.common.item.GirlfriendsItems;
 import com.hexagram2021.girlfriends.common.persist.GirlfriendsWorldData;
 import com.hexagram2021.girlfriends.common.quest.FixedQuestDefinitionManager;
 import com.hexagram2021.girlfriends.common.quest.QuestService;
@@ -10,10 +11,13 @@ import com.hexagram2021.girlfriends.common.relationship.RelationshipService;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.TriState;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.block.FlowerPotBlock;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 import java.util.Map;
@@ -115,6 +119,18 @@ public final class GirlfriendEntityEvents {
 				state.setPendingRespawn(true);
 				state.setDeathPos(GlobalPos.of(level.dimension(), entity.blockPosition()));
 			});
+		}
+	}
+
+	/**
+	 * 右键方块事件喵~
+	 * @param event 右键方块事件喵~
+	 */
+	@SubscribeEvent
+	public void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
+		if(event.getLevel().getBlockState(event.getHitVec().getBlockPos()).getBlock() instanceof FlowerPotBlock &&
+				event.getItemStack().is(GirlfriendsItems.WATERING_CAN)) {
+			event.setUseBlock(TriState.FALSE);
 		}
 	}
 
