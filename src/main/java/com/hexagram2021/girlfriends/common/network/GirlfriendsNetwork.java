@@ -5,8 +5,12 @@ import com.hexagram2021.girlfriends.common.binding.BindingService;
 import com.hexagram2021.girlfriends.common.character.CharacterWorldState;
 import com.hexagram2021.girlfriends.common.entity.GirlfriendEntity;
 import com.hexagram2021.girlfriends.common.gift.GiftPreferenceManager;
+import com.hexagram2021.girlfriends.common.gift.GiftQuoteManager;
 import com.hexagram2021.girlfriends.common.gift.GiftResult;
 import com.hexagram2021.girlfriends.common.gift.GiftService;
+import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
+import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
+import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
 import com.hexagram2021.girlfriends.common.home.BedValidator;
 import com.hexagram2021.girlfriends.common.home.HomeService;
 import com.hexagram2021.girlfriends.common.network.clientbound.ClientboundQuestIconPacket;
@@ -103,9 +107,10 @@ public final class GirlfriendsNetwork {
 			}
 			RelationshipService relationshipService = new RelationshipService(data);
 			GiftService giftService = new GiftService(relationshipService, GiftPreferenceManager.INSTANCE,
+					GiftQuoteManager.INSTANCE,
 					(playerUuid, girlfriendTypeId) -> canReachCharacter(data, girlfriendTypeId));
 			GiftResult result = giftService.applyGiftItem(player.getUUID(), packet.girlfriendTypeId(), player.getItemInHand(InteractionHand.MAIN_HAND));
-				player.sendSystemMessage(buildGiftMessage(packet.girlfriendTypeId(), result));
+			sendGiftFeedback(player, packet.girlfriendTypeId(), result);
 		}
 	}
 
@@ -218,19 +223,41 @@ public final class GirlfriendsNetwork {
 				}
 				RelationshipService relationshipService = new RelationshipService(data);
 				GiftService giftService = new GiftService(relationshipService, GiftPreferenceManager.INSTANCE,
+						GiftQuoteManager.INSTANCE,
 						(playerUuid, girlfriendTypeId) -> canReachCharacter(data, girlfriendTypeId));
 				GiftResult result = giftService.applyGiftItem(player.getUUID(), packet.girlfriendTypeId(), itemStack);
 				if(!result.rejected()) {
 					player.getInventory().removeItem(slotIndex, 1);
 				}
-				player.sendSystemMessage(buildGiftMessage(packet.girlfriendTypeId(), result));
+				sendGiftFeedback(player, packet.girlfriendTypeId(), result);
 			}
 		}
 	}
 
-	private static Component buildGiftMessage(Identifier girlfriendTypeId, GiftResult result) {
+	/**
+	 * 发送赠礼反馈到玩家——角色台词走聊天栏，好感度变化走 subtitle 喵~
+	 *
+	 * @param player 目标玩家喵~
+	 * @param girlfriendTypeId 角色类型 ID 喵~
+	 * @param result 赠礼结果喵~
+	 */
+	private static void sendGiftFeedback(ServerPlayer player, Identifier girlfriendTypeId, GiftResult result) {
+		// 1. 角色台词 → 聊天栏（若 quoteKey 不为 null）喵~
+		if (result.quoteKey() != null) {
+			player.sendSystemMessage(Component.translatable(result.quoteKey()));
+		}
+
+		// 2. 好感度变化 → subtitle 三联包喵~
+		// subtitle 在原版中必须配合 title 叠加层才能渲染：
+		//   TitlesAnimation 设定时序（5 ticks 淡入，40 ticks 停留 = 2s，10 ticks 淡出 = 0.5s）
+		//   SetTitleText 空标题激活叠加层
+		//   SetSubtitleText 为实际好感度消息喵~
 		Component characterName = Component.translatable("girlfriends.girlfriend_type." + girlfriendTypeId.getPath());
-		return Component.translatable(result.messageKey(), characterName, String.format("%+.1f", result.affectionDelta()));
+		Component subtitleMsg = Component.translatable(result.messageKey(), characterName,
+				String.format("%+.1f", result.affectionDelta()));
+		player.connection.send(new ClientboundSetTitlesAnimationPacket(5, 40, 10));
+		player.connection.send(new ClientboundSetTitleTextPacket(Component.empty()));
+		player.connection.send(new ClientboundSetSubtitleTextPacket(subtitleMsg));
 	}
 
 	private static boolean canReachCharacter(GirlfriendsWorldData data, Identifier girlfriendTypeId) {
