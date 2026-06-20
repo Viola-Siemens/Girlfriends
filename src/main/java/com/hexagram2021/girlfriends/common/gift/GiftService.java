@@ -132,7 +132,7 @@ public class GiftService {
 	public GiftResult applyGift(UUID playerUuid, Identifier girlfriendTypeId, GiftPreferenceLevel level,
 	                            @Nullable Identifier itemId) {
 		if (level == GiftPreferenceLevel.REJECTED) {
-			String quoteKey = extractQuoteKey(girlfriendTypeId, level, itemId);
+			String quoteKey = this.extractQuoteKey(girlfriendTypeId, level, itemId);
 			return GiftResult.rejected(level, MESSAGE_KEY_REJECTED, quoteKey);
 		}
 		if (!this.canReceiveGift.test(playerUuid, girlfriendTypeId)) {
@@ -144,7 +144,7 @@ public class GiftService {
 		}
 
 		// 抽取台词 quoteKey（在确认收礼后才抽取，避免无效随机消耗）喵~
-		String quoteKey = extractQuoteKey(girlfriendTypeId, level, itemId);
+		String quoteKey = this.extractQuoteKey(girlfriendTypeId, level, itemId);
 
 		float affectionDelta = computeAffectionDelta(level, relation.getDailyGiftGain());
 		this.relationshipService.changeAffection(playerUuid, girlfriendTypeId, AffectionChangeSource.GIFT, affectionDelta);
@@ -164,7 +164,7 @@ public class GiftService {
 	 * @return 赠礼结果喵~
 	 */
 	public GiftResult applyGiftItem(UUID playerUuid, Identifier girlfriendTypeId, ItemStack itemStack) {
-		GiftPreferenceLevel level = resolvePreferenceLevel(girlfriendTypeId, itemStack);
+		GiftPreferenceLevel level = this.resolvePreferenceLevel(girlfriendTypeId, itemStack);
 		Identifier itemId = BuiltInRegistries.ITEM.getKey(itemStack.getItem());
 		return this.applyGift(playerUuid, girlfriendTypeId, level, itemId);
 	}
