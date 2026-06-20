@@ -1,0 +1,40 @@
+{
+  "favorite": {
+    "minecraft:ender_pearl": [
+      "girlfriends.gift.quote.youruo.favorite.minecraft.ender_pearl.0",
+      "girlfriends.gift.quote.youruo.favorite.minecraft.ender_pearl.1",
+      "girlfriends.gift.quote.youruo.favorite.minecraft.ender_pearl.2"
+    ]
+  },
+  "liked": [
+    "girlfriends.gift.quote.youruo.liked.0",
+    "girlfriends.gift.quote.youruo.liked.1",
+    "girlfriends.gift.quote.youruo.liked.2",
+    "girlfriends.gift.quote.youruo.liked.3",
+    "girlfriends.gift.quote.youruo.liked.4",
+    "girlfriends.gift.quote.youruo.liked.5",
+    "girlfriends.gift.quote.youruo.liked.6",
+    "girlfriends.gift.quote.youruo.liked.7"
+  ],
+  "accepted": [
+    "girlfriends.gift.quote.youruo.accepted.0",
+    "girlfriends.gift.quote.youruo.accepted.1",
+    "girlfriends.gift.quote.youruo.accepted.2",
+    "girlfriends.gift.quote.youruo.accepted.3",
+    "girlfriends.gift.quote.youruo.accepted.4",
+    "girlfriends.gift.quote.youruo.accepted.5"
+  ],
+  "rejected": [
+    "girlfriends.gift.quote.youruo.rejected.0",
+    "girlfriends.gift.quote.youruo.rejected.1",
+    "girlfriends.gift.quote.youruo.rejected.2",
+    "girlfriends.gift.quote.youruo.rejected.3"
+  ],
+  "disliked": [
+    "girlfriends.gift.quote.youruo.disliked.0",
+    "girlfriends.gift.quote.youruo.disliked.1",
+    "girlfriends.gift.quote.youruo.disliked.2",
+    "girlfriends.gift.quote.youruo.disliked.3",
+    "girlfriends.gift.quote.youruo.disliked.4"
+  ]
+}

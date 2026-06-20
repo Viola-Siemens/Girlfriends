@@ -1,0 +1,40 @@
+{
+  "favorite": {
+    "minecraft:nautilus_shell": [
+      "girlfriends.gift.quote.yuxi.favorite.minecraft.nautilus_shell.0",
+      "girlfriends.gift.quote.yuxi.favorite.minecraft.nautilus_shell.1",
+      "girlfriends.gift.quote.yuxi.favorite.minecraft.nautilus_shell.2"
+    ]
+  },
+  "liked": [
+    "girlfriends.gift.quote.yuxi.liked.0",
+    "girlfriends.gift.quote.yuxi.liked.1",
+    "girlfriends.gift.quote.yuxi.liked.2",
+    "girlfriends.gift.quote.yuxi.liked.3",
+    "girlfriends.gift.quote.yuxi.liked.4",
+    "girlfriends.gift.quote.yuxi.liked.5",
+    "girlfriends.gift.quote.yuxi.liked.6",
+    "girlfriends.gift.quote.yuxi.liked.7"
+  ],
+  "accepted": [
+    "girlfriends.gift.quote.yuxi.accepted.0",
+    "girlfriends.gift.quote.yuxi.accepted.1",
+    "girlfriends.gift.quote.yuxi.accepted.2",
+    "girlfriends.gift.quote.yuxi.accepted.3",
+    "girlfriends.gift.quote.yuxi.accepted.4",
+    "girlfriends.gift.quote.yuxi.accepted.5"
+  ],
+  "rejected": [
+    "girlfriends.gift.quote.yuxi.rejected.0",
+    "girlfriends.gift.quote.yuxi.rejected.1",
+    "girlfriends.gift.quote.yuxi.rejected.2",
+    "girlfriends.gift.quote.yuxi.rejected.3"
+  ],
+  "disliked": [
+    "girlfriends.gift.quote.yuxi.disliked.0",
+    "girlfriends.gift.quote.yuxi.disliked.1",
+    "girlfriends.gift.quote.yuxi.disliked.2",
+    "girlfriends.gift.quote.yuxi.disliked.3",
+    "girlfriends.gift.quote.yuxi.disliked.4"
+  ]
+}
