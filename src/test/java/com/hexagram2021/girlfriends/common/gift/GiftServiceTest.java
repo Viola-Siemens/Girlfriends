@@ -1,6 +1,7 @@
 package com.hexagram2021.girlfriends.common.gift;
 
 import com.hexagram2021.girlfriends.GirlfriendsMod;
+import com.hexagram2021.girlfriends.common.gift.GiftQuoteManager;
 import com.hexagram2021.girlfriends.common.persist.GirlfriendsWorldData;
 import com.hexagram2021.girlfriends.common.relationship.RelationshipService;
 import net.minecraft.resources.Identifier;
@@ -95,5 +96,37 @@ class GiftServiceTest {
 		Assertions.assertEquals(0.0F, result.affectionDelta());
 		Assertions.assertEquals(20.0F, data.getOrCreateRelation(playerUuid, MOMO_ID).getAffection());
 		Assertions.assertEquals(3.0F, data.getOrCreateRelation(playerUuid, MOMO_ID).getDailyGiftGain());
+	}
+
+	/**
+	 * 验证有 GiftQuoteManager 时 favorite 礼物 GiftResult 包含非空 quoteKey 喵~
+	 * 注：此时 GiftQuoteManager.quotesMap 为空（数据包未加载），quoteKey 应为 null 喵~
+	 */
+	@Test
+	void favoriteGiftIncludesQuoteKey() {
+		GirlfriendsWorldData data = new GirlfriendsWorldData();
+		RelationshipService relationshipService = new RelationshipService(data);
+		GiftQuoteManager quoteManager = GiftQuoteManager.INSTANCE;
+		GiftService giftService = new GiftService(relationshipService, null, quoteManager, (_, _) -> true);
+		UUID playerUuid = UUID.fromString("00000000-0000-0000-0000-000000000010");
+
+		GiftResult result = giftService.applyGift(playerUuid, MOMO_ID, GiftPreferenceLevel.FAVORITE);
+		Assertions.assertFalse(result.rejected());
+		Assertions.assertNull(result.quoteKey()); // 无数据包时 quoteKey 为 null
+	}
+
+	/**
+	 * 验证无 GiftQuoteManager 时 GiftResult.quoteKey 为 null（向后兼容）喵~
+	 */
+	@Test
+	void noQuoteManagerLeavesQuoteKeyNull() {
+		GirlfriendsWorldData data = new GirlfriendsWorldData();
+		RelationshipService relationshipService = new RelationshipService(data);
+		GiftService giftService = new GiftService(relationshipService);
+		UUID playerUuid = UUID.fromString("00000000-0000-0000-0000-000000000011");
+
+		GiftResult result = giftService.applyGift(playerUuid, MOMO_ID, GiftPreferenceLevel.FAVORITE);
+		Assertions.assertFalse(result.rejected());
+		Assertions.assertNull(result.quoteKey());
 	}
 }

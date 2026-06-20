@@ -30,6 +30,8 @@ public class GiftService {
 	private final RelationshipService relationshipService;
 	@Nullable
 	private final GiftPreferenceManager giftPreferenceManager;
+	@Nullable
+	private final GiftQuoteManager giftQuoteManager;
 	private final BiPredicate<UUID, Identifier> canReceiveGift;
 
 	/**
@@ -62,10 +64,10 @@ public class GiftService {
 	}
 
 	/**
-	 * 创建赠礼服务喵~
+	 * 创建赠礼服务（含偏好管理器与台词管理器）喵~
 	 *
 	 * @param relationshipService 关系服务喵~
-	 * @param giftPreferenceManager 礼物偏好管理器喵~
+	 * @param giftPreferenceManager 礼物偏好管理器，可为 null 喵~
 	 * @param canReceiveGift 是否允许收礼判定喵~
 	 */
 	public GiftService(
@@ -73,8 +75,36 @@ public class GiftService {
 			@Nullable GiftPreferenceManager giftPreferenceManager,
 			BiPredicate<UUID, Identifier> canReceiveGift
 	) {
+		this(relationshipService, giftPreferenceManager, null, canReceiveGift);
+	}
+
+	/**
+	 * 创建赠礼服务（含台词管理器）喵~
+	 *
+	 * @param relationshipService 关系服务喵~
+	 * @param giftQuoteManager 台词管理器，可为 null 喵~
+	 */
+	public GiftService(RelationshipService relationshipService, @Nullable GiftQuoteManager giftQuoteManager) {
+		this(relationshipService, null, giftQuoteManager, (playerUuid, girlfriendTypeId) -> true);
+	}
+
+	/**
+	 * 创建赠礼服务（含偏好管理器与台词管理器）喵~
+	 *
+	 * @param relationshipService 关系服务喵~
+	 * @param giftPreferenceManager 礼物偏好管理器，可为 null 喵~
+	 * @param giftQuoteManager 台词管理器，可为 null 喵~
+	 * @param canReceiveGift 是否允许收礼判定喵~
+	 */
+	public GiftService(
+			RelationshipService relationshipService,
+			@Nullable GiftPreferenceManager giftPreferenceManager,
+			@Nullable GiftQuoteManager giftQuoteManager,
+			BiPredicate<UUID, Identifier> canReceiveGift
+	) {
 		this.relationshipService = Objects.requireNonNull(relationshipService);
 		this.giftPreferenceManager = giftPreferenceManager;
+		this.giftQuoteManager = giftQuoteManager;
 		this.canReceiveGift = Objects.requireNonNull(canReceiveGift);
 	}
 
@@ -87,22 +117,40 @@ public class GiftService {
 	 * @return 赠礼结果喵~
 	 */
 	public GiftResult applyGift(UUID playerUuid, Identifier girlfriendTypeId, GiftPreferenceLevel level) {
-		if(level == GiftPreferenceLevel.REJECTED) {
-			return GiftResult.rejected(level, MESSAGE_KEY_REJECTED);
+		return applyGift(playerUuid, girlfriendTypeId, level, null);
+	}
+
+	/**
+	 * 按偏好等级应用赠礼结果（含物品 ID，用于 favorite 台词选择）喵~
+	 *
+	 * @param playerUuid 玩家 UUID 喵~
+	 * @param girlfriendTypeId 角色类型 ID 喵~
+	 * @param level 礼物偏好等级喵~
+	 * @param itemId 礼物物品 ID，用于 favorite 台词匹配，可为 null 喵~
+	 * @return 赠礼结果喵~
+	 */
+	public GiftResult applyGift(UUID playerUuid, Identifier girlfriendTypeId, GiftPreferenceLevel level,
+	                            @Nullable Identifier itemId) {
+		// 抽取台词 quoteKey 喵~
+		String quoteKey = extractQuoteKey(girlfriendTypeId, level, itemId);
+
+		if (level == GiftPreferenceLevel.REJECTED) {
+			return GiftResult.rejected(level, MESSAGE_KEY_REJECTED, quoteKey);
 		}
-		if(!this.canReceiveGift.test(playerUuid, girlfriendTypeId)) {
-			return GiftResult.rejected(level, MESSAGE_KEY_PERMISSION_DENIED);
+		if (!this.canReceiveGift.test(playerUuid, girlfriendTypeId)) {
+			return GiftResult.rejected(level, MESSAGE_KEY_PERMISSION_DENIED, null);
 		}
 		PlayerCharacterRelation relation = this.relationshipService.getRelation(playerUuid, girlfriendTypeId);
-		if(level.isPositive() && relation.getDailyGiftGain() >= DAILY_GIFT_GAIN_CAP) {
-			return GiftResult.rejected(level, MESSAGE_KEY_CAP_REACHED);
+		if (level.isPositive() && relation.getDailyGiftGain() >= DAILY_GIFT_GAIN_CAP) {
+			return GiftResult.rejected(level, MESSAGE_KEY_CAP_REACHED, null);
 		}
 		float affectionDelta = computeAffectionDelta(level, relation.getDailyGiftGain());
 		this.relationshipService.changeAffection(playerUuid, girlfriendTypeId, AffectionChangeSource.GIFT, affectionDelta);
-		if(affectionDelta > 0) {
+		if (affectionDelta > 0) {
 			relation.setDailyGiftGain(Math.min(DAILY_GIFT_GAIN_CAP, relation.getDailyGiftGain() + affectionDelta));
 		}
-		return GiftResult.accepted(level, affectionDelta, affectionDelta > 0 ? MESSAGE_KEY_ACCEPTED : MESSAGE_KEY_DISLIKED);
+		String messageKey = affectionDelta > 0 ? MESSAGE_KEY_ACCEPTED : MESSAGE_KEY_DISLIKED;
+		return GiftResult.accepted(level, affectionDelta, messageKey, quoteKey);
 	}
 
 	/**
@@ -115,7 +163,8 @@ public class GiftService {
 	 */
 	public GiftResult applyGiftItem(UUID playerUuid, Identifier girlfriendTypeId, ItemStack itemStack) {
 		GiftPreferenceLevel level = resolvePreferenceLevel(girlfriendTypeId, itemStack);
-		return this.applyGift(playerUuid, girlfriendTypeId, level);
+		Identifier itemId = BuiltInRegistries.ITEM.getKey(itemStack.getItem());
+		return this.applyGift(playerUuid, girlfriendTypeId, level, itemId);
 	}
 
 	private GiftPreferenceLevel resolvePreferenceLevel(Identifier girlfriendTypeId, ItemStack itemStack) {
@@ -163,5 +212,21 @@ public class GiftService {
 			return Math.min(-1, rawDelta);
 		}
 		return 0;
+	}
+
+	@Nullable
+	private String extractQuoteKey(Identifier girlfriendTypeId, GiftPreferenceLevel level, @Nullable Identifier itemId) {
+		if (this.giftQuoteManager == null) {
+			return null;
+		}
+		return switch (level) {
+			case FAVORITE -> itemId != null
+					? this.giftQuoteManager.getRandomFavoriteQuote(girlfriendTypeId, itemId).orElse(null)
+					: null;
+			case LIKED -> this.giftQuoteManager.getRandomLikedQuote(girlfriendTypeId).orElse(null);
+			case ACCEPTED -> this.giftQuoteManager.getRandomAcceptedQuote(girlfriendTypeId).orElse(null);
+			case DISLIKED -> this.giftQuoteManager.getRandomDislikedQuote(girlfriendTypeId).orElse(null);
+			case REJECTED -> this.giftQuoteManager.getRandomRejectedQuote(girlfriendTypeId).orElse(null);
+		};
 	}
 }
