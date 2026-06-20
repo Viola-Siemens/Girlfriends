@@ -114,7 +114,7 @@ AI 设计关键点：
 
 - **`GirlfriendsMod`**: 模组入口，注册自定义 Registry、EntityType、Activity、MemoryModuleType、SensorType、EnvironmentAttribute、网络包、ServerReloadListener、命令、实体事件监听
 - **`GirlfriendEntityEvents`**: 实体生命周期事件处理器 — EntityJoinLevel（标记存活、同步 UUID）、ServerTick.Post（每日维护：重置计数器、过期/刷新随机委托）、LivingDeath（标记死亡、记录死亡坐标）
-- **`GirlfriendsNetwork`**: 网络包注册与处理入口。所有 Serverbound handler 校验玩家是否可以接触到目标实体（`canReachEntity`，距离 ≤8）。当前注册 3 个 serverbound + 2 个 clientbound 包
+- **`GirlfriendsNetwork`**: 网络包注册与处理入口。所有 Serverbound handler 校验玩家是否可以接触到目标实体（`canReachEntity`，距离 ≤8）。不直接引用客户端类，clientbound handler 中的 UI 操作通过静态消费者注入模式委托给 `GirlfriendsModClient`。当前注册 7 个 serverbound + 2 个 clientbound 包
 - **`GirlfriendsRegistries`**: 自定义注册表（`GIRLFRIEND_TYPE_REGISTRY`、`BLESSING_TYPE_REGISTRY`）
 - **`GirlfriendTypes`** / **`BlessingTypes`**: 内置类型通过 DeferredRegister 注册
 - **`AffectionCommand`**: `/affection get|set|add <girlfriend> <player> [value]` 调试命令，权限等级 GAMEMASTERS
@@ -125,10 +125,14 @@ AI 设计关键点：
 
 | 方向 | 包类型 | 用途 |
 |---|---|---|
-| C→S | `ServerboundGiveGiftPacket` | 玩家向角色赠礼 |
+| C→S | `ServerboundGiveGiftPacket` | 玩家手持物品向角色赠礼 |
 | C→S | `ServerboundAcceptQuestPacket` | 玩家接取角色当前委托 |
 | C→S | `ServerboundSetFollowModePacket` | 切换角色跟随模式（需亲密确认） |
-| S→C | `ClientboundSyncInteractionDataPacket` | 同步交互摘要到客户端 |
+| C→S | `ServerboundDeliverQuestPacket` | 玩家交付已完成委托 |
+| C→S | `ServerboundConfirmIntimacyPacket` | 玩家确认亲密关系 |
+| C→S | `ServerboundInviteHomePacket` | 玩家邀请角色同居 |
+| C→S | `ServerboundGiveGiftFromSlotPacket` | 玩家从指定背包槽位向角色赠礼 |
+| S→C | `ClientboundSyncInteractionDataPacket` | 同步交互摘要到客户端（handler 通过注入打开 Screen） |
 | S→C | `ClientboundQuestIconPacket` | 同步委托图标状态 |
 
 ### 5. 表现层（Presentation Layer）
@@ -175,6 +179,7 @@ void deserializeProgress(CompoundTag) // 反序列化进度
 6. **NBT 序列化**: 所有持久化 key 使用小写蛇形命名（如 `pending_respawn`、`follow_mode`），根数据节点含 `data_version` 用于格式迁移
 7. **实体-状态双向同步**: `syncToWorldState`（实体→持久化）每 ~10 秒自动执行；`syncFromWorldState`（持久化→实体）在实体加载时执行；命令/网络包在修改后即时同步
 8. **原版 AI 体系**: 使用 Minecraft 原版的 Brain/Schedule/Activity/Memory/Sensor 体系，不自行造 AI 调度轮子
+9. **物理端隔离**: `common/` 包下的代码不得 import `net.minecraft.client.*` 或 `com.hexagram2021.girlfriends.client.*` 中的任何类，否则在专用服务端加载时 JVM 会因 `NoClassDefFoundError` 崩溃。当 common 代码需要触发客户端行为（如打开 Screen）时，通过静态消费者注入模式：在 common 侧暴露 `@Nullable` 静态字段 + `setXxx()` 方法，由 `GirlfriendsModClient` 在 `onClientSetup` 中注入实现，服务端保持 null 即可安全 no-op 喵~
 
 ## 测试规范
 

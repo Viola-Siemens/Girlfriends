@@ -4,7 +4,10 @@ import com.hexagram2021.girlfriends.GirlfriendsMod;
 import com.hexagram2021.girlfriends.client.model.GirlfriendModel;
 import com.hexagram2021.girlfriends.client.model.GirlfriendsModelLayers;
 import com.hexagram2021.girlfriends.client.renderer.GirlfriendRenderer;
+import com.hexagram2021.girlfriends.client.screen.MainInteractionScreen;
 import com.hexagram2021.girlfriends.common.entity.GirlfriendsEntities;
+import com.hexagram2021.girlfriends.common.network.GirlfriendsNetwork;
+import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -33,11 +36,16 @@ public class GirlfriendsModClient {
     }
 
     /**
-     * 客户端初始化事件
-     * @param event 客户端初始化事件
+     * 客户端初始化事件喵~
+     *
+     * @param event 客户端初始化事件喵~
      */
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
+        // 注入屏幕打开器，将客户端侧 UI 逻辑与 common 网络代码解耦，避免专用服务端加载客户端类喵~
+        GirlfriendsNetwork.setScreenOpener(
+                (id, summary) -> Minecraft.getInstance().setScreen(new MainInteractionScreen(id, summary))
+        );
     }
 
     /**

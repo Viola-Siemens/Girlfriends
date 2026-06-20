@@ -1,7 +1,6 @@
 package com.hexagram2021.girlfriends.common.network;
 
 import com.hexagram2021.girlfriends.GirlfriendsMod;
-import com.hexagram2021.girlfriends.client.screen.MainInteractionScreen;
 import com.hexagram2021.girlfriends.common.binding.BindingService;
 import com.hexagram2021.girlfriends.common.character.CharacterWorldState;
 import com.hexagram2021.girlfriends.common.entity.GirlfriendEntity;
@@ -35,6 +34,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
@@ -47,6 +47,21 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
  */
 public final class GirlfriendsNetwork {
 	private static final String PROTOCOL_VERSION = "1";
+
+	/**
+	 * 客户端侧屏幕打开器，由 {@link com.hexagram2021.girlfriends.client.GirlfriendsModClient} 注入喵~
+	 * 在专用服务端上此字段始终为空，从而隔离客户端类引用喵~
+	 */
+	private static BiConsumer<Identifier, InteractionSummary> screenOpener = (_, _) -> {};
+
+	/**
+	 * 由客户端模组类调用，注入屏幕打开逻辑喵~
+	 *
+	 * @param opener 屏幕打开器，接收角色类型 ID 和交互摘要喵~
+	 */
+	public static void setScreenOpener(BiConsumer<Identifier, InteractionSummary> opener) {
+		screenOpener = opener;
+	}
 
 	/**
 	 * 注册网络数据包喵~
@@ -69,13 +84,9 @@ public final class GirlfriendsNetwork {
 	private static void handleSyncInteractionData(ClientboundSyncInteractionDataPacket packet, IPayloadContext context) {
 		context.enqueueWork(() -> {
 			ClientInteractionStore.setSummary(packet.summary());
+			BiConsumer<Identifier, InteractionSummary> opener = screenOpener;
 			if (ClientInteractionStore.consumePendingInteraction(packet.summary().girlfriendTypeId())) {
-				net.minecraft.client.Minecraft.getInstance().setScreen(
-					new MainInteractionScreen(
-						packet.summary().girlfriendTypeId(),
-						packet.summary()
-					)
-				);
+				opener.accept(packet.summary().girlfriendTypeId(), packet.summary());
 			}
 		});
 	}
@@ -179,7 +190,7 @@ public final class GirlfriendsNetwork {
 				}
 				BlockPos respawnPos = respawnConfig.respawnData().pos();
 				Identifier dimension = respawnConfig.respawnData().dimension().identifier();
-				BedValidator bedValidator = (anchor) -> player.level().getBlockState(
+				BedValidator bedValidator = anchor -> player.level().getBlockState(
 						new BlockPos(anchor.x(), anchor.y(), anchor.z())
 				).getBlock() instanceof net.minecraft.world.level.block.BedBlock;
 				HomeService homeService = new HomeService(data, new RelationshipService(data), bedValidator);
