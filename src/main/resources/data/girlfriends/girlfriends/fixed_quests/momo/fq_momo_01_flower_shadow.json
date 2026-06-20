@@ -8,13 +8,17 @@
 	"objectives": [
 		{
 			"type": "item_delivery",
-			"item": {"tag": "minecraft:small_flowers"},
+			"items": {
+				"tag": "minecraft:small_flowers"
+			},
 			"count": 3,
 			"description_key": "quest.girlfriends.fq_momo_01.objective_0"
 		},
 		{
 			"type": "item_delivery",
-			"item": {"tag": "minecraft:saplings"},
+			"items": {
+				"tag": "minecraft:saplings"
+			},
 			"count": 3,
 			"description_key": "quest.girlfriends.fq_momo_01.objective_1"
 		}

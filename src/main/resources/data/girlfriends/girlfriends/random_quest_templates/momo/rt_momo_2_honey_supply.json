@@ -7,7 +7,17 @@
 	"expire_days_range": [5, 10],
 	"objectives": [
 		{
-			"type": "deliver",
+			"type": "item_delivery",
+			"items": [
+				{
+					"item": "minecraft:honeycomb",
+					"count": 4
+				},
+				{
+					"item": "minecraft:honey_bottle",
+					"count": 4
+				}
+			],
 			"description_key": "quest.girlfriends.rt_momo_2.objective_0"
 		}
 	],
