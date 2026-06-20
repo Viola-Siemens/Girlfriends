@@ -16,6 +16,7 @@ import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsSensorTypes;
 import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsEnvironmentAttributes;
 import com.hexagram2021.girlfriends.common.command.AffectionCommand;
 import com.hexagram2021.girlfriends.common.gift.GiftPreferenceManager;
+import com.hexagram2021.girlfriends.common.gift.GiftQuoteManager;
 import com.hexagram2021.girlfriends.common.item.GirlfriendsItems;
 import com.hexagram2021.girlfriends.common.network.GirlfriendsNetwork;
 import com.hexagram2021.girlfriends.common.quest.FixedQuestDefinitionManager;
@@ -43,6 +44,7 @@ public class GirlfriendsMod {
 	private static final Identifier GIFT_PREFERENCE_MANAGER_ID = Identifier.fromNamespaceAndPath(MODID, "gift_preferences");
 	private static final Identifier FIXED_QUEST_DEFINITION_MANAGER_ID = Identifier.fromNamespaceAndPath(MODID, "fixed_quest_definitions");
 	private static final Identifier RANDOM_QUEST_TEMPLATE_MANAGER_ID = Identifier.fromNamespaceAndPath(MODID, "random_quest_templates");
+	private static final Identifier GIFT_QUOTE_MANAGER_ID = Identifier.fromNamespaceAndPath(MODID, "gift_quotes");
 
 	/**
 	 * 模组主类构造函数喵~
@@ -80,6 +82,7 @@ public class GirlfriendsMod {
 		event.addListener(GIFT_PREFERENCE_MANAGER_ID, GiftPreferenceManager.INSTANCE);
 		event.addListener(FIXED_QUEST_DEFINITION_MANAGER_ID, FixedQuestDefinitionManager.INSTANCE);
 		event.addListener(RANDOM_QUEST_TEMPLATE_MANAGER_ID, RandomQuestTemplateManager.INSTANCE);
+		event.addListener(GIFT_QUOTE_MANAGER_ID, GiftQuoteManager.INSTANCE);
 	}
 
 	private void registerRegistries(NewRegistryEvent event) {
