@@ -131,10 +131,8 @@ public class GiftService {
 	 */
 	public GiftResult applyGift(UUID playerUuid, Identifier girlfriendTypeId, GiftPreferenceLevel level,
 	                            @Nullable Identifier itemId) {
-		// 抽取台词 quoteKey 喵~
-		String quoteKey = extractQuoteKey(girlfriendTypeId, level, itemId);
-
 		if (level == GiftPreferenceLevel.REJECTED) {
+			String quoteKey = extractQuoteKey(girlfriendTypeId, level, itemId);
 			return GiftResult.rejected(level, MESSAGE_KEY_REJECTED, quoteKey);
 		}
 		if (!this.canReceiveGift.test(playerUuid, girlfriendTypeId)) {
@@ -144,6 +142,10 @@ public class GiftService {
 		if (level.isPositive() && relation.getDailyGiftGain() >= DAILY_GIFT_GAIN_CAP) {
 			return GiftResult.rejected(level, MESSAGE_KEY_CAP_REACHED, null);
 		}
+
+		// 抽取台词 quoteKey（在确认收礼后才抽取，避免无效随机消耗）喵~
+		String quoteKey = extractQuoteKey(girlfriendTypeId, level, itemId);
+
 		float affectionDelta = computeAffectionDelta(level, relation.getDailyGiftGain());
 		this.relationshipService.changeAffection(playerUuid, girlfriendTypeId, AffectionChangeSource.GIFT, affectionDelta);
 		if (affectionDelta > 0) {

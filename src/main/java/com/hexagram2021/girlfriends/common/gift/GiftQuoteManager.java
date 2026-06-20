@@ -23,7 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Random;
+import java.util.random.RandomGenerator;
 
 /**
  * 礼物回复台词管理器——从数据包加载各角色语料 i18n key，提供按档位随机抽取接口喵~
@@ -37,7 +37,7 @@ public final class GiftQuoteManager extends SimplePreparableReloadListener<Map<I
 	private static final FileToIdConverter LISTER = FileToIdConverter.json("girlfriends/gift_quotes");
 
 	private Map<Identifier, GiftQuotes> quotesMap = Map.of();
-	private final Random random = new Random();
+	private final RandomGenerator random = RandomGenerator.getDefault();
 
 	private GiftQuoteManager() {
 	}
