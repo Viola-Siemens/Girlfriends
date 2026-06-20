@@ -1,0 +1,58 @@
+{
+  "commands.girlfriends.affection.get": "%1$s 对 %2$s 的好感度：%3$s",
+  "commands.girlfriends.affection.set": "已将 %1$s 对 %2$s 的好感度从 %3$s 设置为 %4$s",
+  "commands.girlfriends.affection.add": "已调整 %1$s 对 %2$s 的好感度：%3$s%4$s（当前 %5$s）",
+  "commands.girlfriends.affection.not_a_girlfriend": "指定实体不是女友角色",
+
+  "item.girlfriends.bouquet": "花束",
+  "item.girlfriends.watering_can": "洒水壶",
+
+  "girlfriends.girlfriend_type.momo": "沫沫",
+  "girlfriends.girlfriend_type.yuxi": "渔溪",
+  "girlfriends.girlfriend_type.meishu": "梅疏",
+  "girlfriends.girlfriend_type.wanying": "晚萤",
+  "girlfriends.girlfriend_type.youruo": "幽若",
+
+  "screen.girlfriends.interaction": "角色交互",
+  "screen.girlfriends.gift": "赠送礼物",
+  "screen.girlfriends.quest": "委托详情",
+
+  "button.girlfriends.view_quest": "查看委托",
+  "button.girlfriends.deliver_quest": "交付委托",
+  "button.girlfriends.confirm_intimacy": "确立关系",
+  "button.girlfriends.invite_home": "邀请同居",
+  "button.girlfriends.follow_mode": "跟随模式: %s",
+  "button.girlfriends.give_gift": "赠送礼物",
+  "button.girlfriends.close": "关闭",
+  "button.girlfriends.accept_quest": "接受委托",
+  "button.girlfriends.think_again": "我再想想",
+
+  "label.girlfriends.objectives": "目标：",
+
+  "message.girlfriends.quest_completed": "委托已完成！",
+  "message.girlfriends.intimacy_confirmed": "你们的关系更进了一步...",
+  "message.girlfriends.invite_home_success": "角色已邀请入住！",
+  "message.girlfriends.invite_home_failed": "邀请入住失败，请检查重生点是否为双人床。",
+  "message.girlfriends.invite_home_no_respawn": "请先设置重生点再邀请入住。",
+
+  "girlfriends.gift.accepted": "%1$s 收下了礼物，好感度 %2$s",
+  "girlfriends.gift.disliked": "看起来 %1$s 对你的礼物不太高兴，好感度 %2$s",
+  "girlfriends.gift.rejected": "%1$s 对这个礼物不感兴趣...",
+  "girlfriends.gift.daily_cap_reached": "%1$s 今天已经不想再收礼物了...",
+  "girlfriends.gift.permission_denied": "无法向 %1$s 赠送礼物",
+
+  "follow.none": "无",
+  "follow.follow": "跟随",
+  "follow.stay": "停留",
+  "follow.home": "家园",
+
+  "affection.stranger": "陌生",
+  "affection.familiar": "熟悉",
+  "affection.trust": "信任",
+  "affection.affection": "好感",
+  "affection.intimate": "亲密",
+  "affection.home_partner": "家园伴侣",
+
+  "quest.girlfriends.type.fixed": "固定委托",
+  "quest.girlfriends.type.random": "随机委托"
+}

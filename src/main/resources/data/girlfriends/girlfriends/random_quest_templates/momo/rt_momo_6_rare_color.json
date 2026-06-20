@@ -1,0 +1,19 @@
+{
+	"template_id": "girlfriends:rt_momo_6",
+	"character_id": "girlfriends:momo",
+	"unlock_stage": "affection",
+	"quest_type": "random",
+	"weight": 10,
+	"expire_days_range": [5, 10],
+	"objectives": [
+		{
+			"type": "collect",
+			"description_key": "quest.girlfriends.rt_momo_6.objective_0"
+		}
+	],
+	"rewards": {
+		"base_affection": 15
+	},
+	"title_key": "quest.girlfriends.rt_momo_6.title",
+	"description_key": "quest.girlfriends.rt_momo_6.description"
+}

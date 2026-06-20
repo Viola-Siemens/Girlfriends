@@ -1,0 +1,34 @@
+{
+	"favorite": [
+		"minecraft:honeycomb",
+		"girlfriends:bouquet"
+	],
+	"liked_tags": [
+		"minecraft:flowers"
+	],
+	"liked_items": [
+		"minecraft:honey_bottle",
+		"minecraft:beehive",
+		"minecraft:bee_nest",
+		"minecraft:bone_meal",
+		"minecraft:composter"
+	],
+	"accepted_tags": [],
+	"accepted_items": [
+		"minecraft:apple",
+		"minecraft:sweet_berries",
+		"minecraft:oak_log",
+		"minecraft:cake",
+		"minecraft:grass_block",
+		"minecraft:wheat",
+		"minecraft:wheat_seeds"
+	],
+	"disliked_tags": [
+		"minecraft:skulls"
+	],
+	"disliked_items": [
+		"minecraft:rotten_flesh",
+		"minecraft:spider_eye",
+		"minecraft:bone"
+	]
+}
