@@ -7,7 +7,17 @@
 	"expire_days_range": [5, 10],
 	"objectives": [
 		{
-			"type": "collect",
+			"type": "item_delivery",
+			"items": [
+				{
+					"item": "minecraft:dandelion",
+					"count": 8
+				},
+				{
+					"item": "minecraft:poppy",
+					"count": 8
+				}
+			],
 			"description_key": "quest.girlfriends.rt_momo_1.objective_0"
 		}
 	],

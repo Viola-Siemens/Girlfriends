@@ -7,8 +7,24 @@
 	"expire_days_range": [5, 10],
 	"objectives": [
 		{
-			"type": "collect",
+			"type": "item_delivery",
+			"items": [
+				{
+					"tag": "minecraft:saplings",
+					"count": 4
+				}
+			],
 			"description_key": "quest.girlfriends.rt_momo_3.objective_0"
+		},
+		{
+			"type": "item_delivery",
+			"items": [
+				{
+					"tag": "c:seeds",
+					"count": 4
+				}
+			],
+			"description_key": "quest.girlfriends.rt_momo_3.objective_1"
 		}
 	],
 	"rewards": {

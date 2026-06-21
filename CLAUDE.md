@@ -183,7 +183,7 @@ void deserializeProgress(CompoundTag) // 反序列化进度
 ```
 
 已注册的处理器类型（在 JSON 中由 `type` 字段指定）：
-`item_delivery`、`structure_visit`、`block_stay`、`collect`、`build`、`accompany`、`fight`。
+`item_delivery`、`structure_visit`、`block_stay`、`build`、`accompany`、`fight`。
 
 部分处理器逻辑待后续 Story 根据 GDD 完善（标记 TODO）。
 

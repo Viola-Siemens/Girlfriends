@@ -128,7 +128,6 @@ public class FixedQuestDefinitionManager extends SimplePreparableReloadListener<
 						Identifier.parse(GsonHelper.getAsString(objectiveObject, "block_id", "minecraft:air")),
 						getInt(objectiveObject, "required_ticks").orElse(20)
 				));
-				case "collect" -> objectives.add(new CollectObjectiveHandler());
 				case "build" -> objectives.add(new BuildObjectiveHandler());
 				case "accompany" -> objectives.add(new AccompanyObjectiveHandler());
 				case "fight" -> objectives.add(new FightObjectiveHandler());
