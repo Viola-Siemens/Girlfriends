@@ -9,9 +9,8 @@ import java.util.List;
  *
  * @author liudongyu
  */
-public class QuestObjectiveGroup {
+public record QuestObjectiveGroup(List<QuestObjectiveHandler> objectives) {
 	private static final String OBJECTIVE_PREFIX = "objective_";
-	private final List<QuestObjectiveHandler> objectives;
 
 	/**
 	 * 创建委托目标组喵~
@@ -36,7 +35,8 @@ public class QuestObjectiveGroup {
 	 *
 	 * @return 目标处理器列表喵~
 	 */
-	public List<QuestObjectiveHandler> getObjectives() {
+	@Override
+	public List<QuestObjectiveHandler> objectives() {
 		return this.objectives;
 	}
 
@@ -56,7 +56,7 @@ public class QuestObjectiveGroup {
 	 * @param questInstance 委托实例喵~
 	 */
 	public void onAccept(QuestInstance questInstance) {
-		for(QuestObjectiveHandler objective : this.objectives) {
+		for (QuestObjectiveHandler objective : this.objectives) {
 			objective.onAccept(questInstance);
 		}
 	}
@@ -65,10 +65,10 @@ public class QuestObjectiveGroup {
 	 * 广播事件到全部目标喵~
 	 *
 	 * @param questInstance 委托实例喵~
-	 * @param event 事件对象喵~
+	 * @param event         事件对象喵~
 	 */
 	public void onEvent(QuestInstance questInstance, Object event) {
-		for(QuestObjectiveHandler objective : this.objectives) {
+		for (QuestObjectiveHandler objective : this.objectives) {
 			objective.onEvent(questInstance, event);
 		}
 	}
@@ -91,7 +91,7 @@ public class QuestObjectiveGroup {
 	 */
 	public CompoundTag serializeProgress(QuestInstance questInstance) {
 		CompoundTag tag = new CompoundTag();
-		for(int index = 0; index < this.objectives.size(); index++) {
+		for (int index = 0; index < this.objectives.size(); index++) {
 			tag.put(OBJECTIVE_PREFIX + index, this.objectives.get(index).serializeProgress(questInstance));
 		}
 		return tag;
@@ -101,10 +101,10 @@ public class QuestObjectiveGroup {
 	 * 反序列化目标组进度喵~
 	 *
 	 * @param questInstance 委托实例喵~
-	 * @param tag 序列化数据喵~
+	 * @param tag           序列化数据喵~
 	 */
 	public void deserializeProgress(QuestInstance questInstance, CompoundTag tag) {
-		for(int index = 0; index < this.objectives.size(); index++) {
+		for (int index = 0; index < this.objectives.size(); index++) {
 			CompoundTag objectiveTag = tag.getCompound(OBJECTIVE_PREFIX + index).orElseGet(CompoundTag::new);
 			this.objectives.get(index).deserializeProgress(questInstance, objectiveTag);
 		}
