@@ -8,22 +8,18 @@
 	"objectives": [
 		{
 			"type": "item_delivery",
-			"items": [
-				{
-					"tag": "minecraft:saplings",
-					"count": 4
-				}
-			],
+			"items": {
+				"tag": "minecraft:saplings",
+				"count": 4
+			},
 			"description_key": "quest.girlfriends.rt_momo_3.objective_0"
 		},
 		{
 			"type": "item_delivery",
-			"items": [
-				{
-					"tag": "c:seeds",
-					"count": 4
-				}
-			],
+			"items": {
+				"tag": "c:seeds",
+				"count": 4
+			},
 			"description_key": "quest.girlfriends.rt_momo_3.objective_1"
 		}
 	],
