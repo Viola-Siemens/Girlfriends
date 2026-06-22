@@ -36,6 +36,11 @@ public final class GiftQuoteManager extends SimplePreparableReloadListener<Map<I
 	private static final Logger LOGGER = LogUtils.getLogger();
 	private static final FileToIdConverter LISTER = FileToIdConverter.json("girlfriends/gift_quotes");
 
+	/**
+	 * 台词 i18n key 的前缀，JSON 中仅存储后缀部分，由 Java 代码统一拼接喵~
+	 */
+	static final String QUOTE_KEY_PREFIX = "girlfriends.gift.quote.";
+
 	private Map<Identifier, GiftQuotes> quotesMap = Map.of();
 	private final RandomGenerator random = RandomGenerator.getDefault();
 
@@ -76,7 +81,7 @@ public final class GiftQuoteManager extends SimplePreparableReloadListener<Map<I
 		if (pool.isEmpty()) {
 			return Optional.empty();
 		}
-		return Optional.of(pool.get(this.random.nextInt(pool.size())));
+		return Optional.of(QUOTE_KEY_PREFIX + pool.get(this.random.nextInt(pool.size())));
 	}
 
 	/**
@@ -156,7 +161,7 @@ public final class GiftQuoteManager extends SimplePreparableReloadListener<Map<I
 		if (pool.isEmpty()) {
 			return Optional.empty();
 		}
-		return Optional.of(pool.get(this.random.nextInt(pool.size())));
+		return Optional.of(QUOTE_KEY_PREFIX + pool.get(this.random.nextInt(pool.size())));
 	}
 
 	private static GiftQuotes parseQuotes(JsonObject jsonObject) {
