@@ -14,8 +14,7 @@ import java.util.List;
  * @author liudongyu
  */
 public final class GirlfriendsItems {
-	public static final DeferredRegister.Items REGISTER =
-			DeferredRegister.createItems(GirlfriendsMod.MODID);
+	public static final DeferredRegister.Items REGISTER = DeferredRegister.createItems(GirlfriendsMod.MODID);
 
 	public static final DeferredItem<Item> BOUQUET =
 			REGISTER.registerSimpleItem("bouquet", () -> new Item.Properties().stacksTo(1));

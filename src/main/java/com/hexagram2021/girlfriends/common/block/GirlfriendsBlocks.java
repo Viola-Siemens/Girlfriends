@@ -9,8 +9,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
  * @author liudongyu
  */
 public final class GirlfriendsBlocks {
-	public static final DeferredRegister.Blocks REGISTER =
-			DeferredRegister.createBlocks(GirlfriendsMod.MODID);
+	public static final DeferredRegister.Blocks REGISTER = DeferredRegister.createBlocks(GirlfriendsMod.MODID);
 
 	private GirlfriendsBlocks() {
 	}
