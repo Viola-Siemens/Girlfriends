@@ -117,7 +117,7 @@ public class GiftService {
 	 * @return 赠礼结果喵~
 	 */
 	public GiftResult applyGift(UUID playerUuid, Identifier girlfriendTypeId, GiftPreferenceLevel level) {
-		return applyGift(playerUuid, girlfriendTypeId, level, null);
+		return this.applyGift(playerUuid, girlfriendTypeId, level, null);
 	}
 
 	/**

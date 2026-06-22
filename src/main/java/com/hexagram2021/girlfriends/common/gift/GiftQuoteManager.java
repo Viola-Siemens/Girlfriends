@@ -91,7 +91,7 @@ public final class GiftQuoteManager extends SimplePreparableReloadListener<Map<I
 	 * @return 随机台词 i18n key，未配置时返回 {@link Optional#empty()} 喵~
 	 */
 	public Optional<String> getRandomLikedQuote(Identifier girlfriendTypeId) {
-		return getRandomFromPool(girlfriendTypeId, GiftQuotes::likedQuotes);
+		return this.getRandomFromPool(girlfriendTypeId, GiftQuotes::likedQuotes);
 	}
 
 	/**
@@ -101,7 +101,7 @@ public final class GiftQuoteManager extends SimplePreparableReloadListener<Map<I
 	 * @return 随机台词 i18n key，未配置时返回 {@link Optional#empty()} 喵~
 	 */
 	public Optional<String> getRandomAcceptedQuote(Identifier girlfriendTypeId) {
-		return getRandomFromPool(girlfriendTypeId, GiftQuotes::acceptedQuotes);
+		return this.getRandomFromPool(girlfriendTypeId, GiftQuotes::acceptedQuotes);
 	}
 
 	/**
@@ -111,7 +111,7 @@ public final class GiftQuoteManager extends SimplePreparableReloadListener<Map<I
 	 * @return 随机台词 i18n key，未配置时返回 {@link Optional#empty()} 喵~
 	 */
 	public Optional<String> getRandomRejectedQuote(Identifier girlfriendTypeId) {
-		return getRandomFromPool(girlfriendTypeId, GiftQuotes::rejectedQuotes);
+		return this.getRandomFromPool(girlfriendTypeId, GiftQuotes::rejectedQuotes);
 	}
 
 	/**
@@ -121,7 +121,7 @@ public final class GiftQuoteManager extends SimplePreparableReloadListener<Map<I
 	 * @return 随机台词 i18n key，未配置时返回 {@link Optional#empty()} 喵~
 	 */
 	public Optional<String> getRandomDislikedQuote(Identifier girlfriendTypeId) {
-		return getRandomFromPool(girlfriendTypeId, GiftQuotes::dislikedQuotes);
+		return this.getRandomFromPool(girlfriendTypeId, GiftQuotes::dislikedQuotes);
 	}
 
 	@Override
