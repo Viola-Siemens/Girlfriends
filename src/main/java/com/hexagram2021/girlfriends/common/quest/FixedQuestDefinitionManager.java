@@ -122,11 +122,10 @@ public class FixedQuestDefinitionManager extends SimplePreparableReloadListener<
 						ItemDeliveryObjectiveHandler.ItemDeliveryRecord.LIST_CODEC.parse(JsonOps.INSTANCE, objectiveObject.get("items")).getOrThrow()
 				));
 				case "structure_visit" -> objectives.add(new StructureVisitObjectiveHandler(
-						GsonHelper.getAsString(objectiveObject, "structures", "")
+						StructureVisitObjectiveHandler.StructureVisitRecord.LIST_CODEC.parse(JsonOps.INSTANCE, objectiveObject.get("structures")).getOrThrow()
 				));
 				case "block_stay" -> objectives.add(new BlockStayObjectiveHandler(
-						Identifier.parse(GsonHelper.getAsString(objectiveObject, "block_id", "minecraft:air")),
-						getInt(objectiveObject, "required_ticks").orElse(20)
+						BlockStayObjectiveHandler.BlockStayRecord.LIST_CODEC.parse(JsonOps.INSTANCE, objectiveObject.get("blocks")).getOrThrow()
 				));
 				case "build" -> objectives.add(new BuildObjectiveHandler());
 				case "accompany" -> objectives.add(new AccompanyObjectiveHandler());
