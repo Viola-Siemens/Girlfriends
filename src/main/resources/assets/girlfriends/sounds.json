@@ -1,0 +1,27 @@
+{
+  "gift.quote.zh_cn.momo.favorite_girlfriends_bouquet_0": {
+    "category": "entity",
+    "sounds": ["girlfriends:zh_cn/momo/favorite_girlfriends_bouquet_0"],
+    "subtitle": "girlfriends.subtitle.voice.momo.favorite"
+  },
+  "gift.quote.zh_cn.momo.favorite_girlfriends_bouquet_1": {
+    "category": "entity",
+    "sounds": ["girlfriends:zh_cn/momo/favorite_girlfriends_bouquet_1"],
+    "subtitle": "girlfriends.subtitle.voice.momo.favorite"
+  },
+  "gift.quote.zh_cn.momo.favorite_girlfriends_bouquet_2": {
+    "category": "entity",
+    "sounds": ["girlfriends:zh_cn/momo/favorite_girlfriends_bouquet_2"],
+    "subtitle": "girlfriends.subtitle.voice.momo.favorite"
+  },
+  "gift.quote.zh_cn.momo.liked_0": {
+    "category": "entity",
+    "sounds": ["girlfriends:zh_cn/momo/liked_0"],
+    "subtitle": "girlfriends.subtitle.voice.momo.liked"
+  },
+  "gift.quote.zh_cn.momo.liked_1": {
+    "category": "entity",
+    "sounds": ["girlfriends:zh_cn/momo/liked_1"],
+    "subtitle": "girlfriends.subtitle.voice.momo.liked"
+  }
+}
