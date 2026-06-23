@@ -19,21 +19,22 @@
 │    → GiftResult.quoteKey ("girlfriends.gift.quote.momo.liked_0")   │
 │    → GirlfriendsNetwork.sendGiftFeedback()                         │
 │        ├─ player.sendSystemMessage(quoteKey)   [现有：聊天栏文字]    │
+│        ├─ 提取 voiceKey: "momo.liked_0"                            │
 │        ├─ 查找角色实体坐标 (CharacterWorldState → Entity)           │
 │        ├─ player.connection.send(ClientboundPlayVoicePacket) [新增]│
 │        └─ player.connection.send(ActionBar)    [现有：好感度变化]    │
 │                                                                    │
-│  ClientboundPlayVoicePacket  ──────────────────────────→ Client    │
+│  ClientboundPlayVoicePacket(voiceKey, x, y, z)  ──────→ Client     │
 └────────────────────────────────────────────────────────────────────┘
 
 ┌─ Client ───────────────────────────────────────────────────────────┐
-│  ClientboundPlayVoicePacket handler                                │
-│    → VoiceManager.quoteKeyToVoiceId(quoteKey)                      │
-│        "girlfriends.gift.quote.momo.liked_0"                       │
-│        → ResourceLocation("girlfriends", "gift.quote.momo.liked_0")│
-│    → SoundEvent.createVariableRangeEvent(voiceId)                  │
-│    → PositionedSoundInstance(soundEvent, SoundSource.VOICE, ...)   │
-│    → Minecraft.getInstance().getSoundManager().play(...)           │
+│  ClientboundPlayVoicePacket handler (enqueueWork → Render Thread)  │
+│    → VoiceManager.getVoice("momo.liked_0")                         │
+│        ├─ getClientLocale() → "zh_cn"                              │
+│        └─ voiceMap.get("zh_cn").get("momo.liked_0")                │
+│          → DeferredHolder<SoundEvent, SoundEvent>                  │
+│    → level.playSound(null, x, y, z, holder, SoundSource.VOICE,     │
+│                       1.0F, 1.0F)                                  │
 │                                                                   │
 │    原版 SoundManager 自动:                                          │
 │    → sounds.json 查找 .ogg 路径 → 播放                             │
@@ -43,79 +44,127 @@
 
 ## 组件设计
 
-### 1. GirlfriendsVoiceManager
-
-**文件**: `src/main/java/com/hexagram2021/girlfriends/common/voice/GirlfriendsVoiceManager.java`
-
-纯工具类，无状态，位于 `common/` 包下供 server/client 共用。
-
-```java
-public final class GirlfriendsVoiceManager {
-    private GirlfriendsVoiceManager() {}
-
-    /**
-     * 将台词 i18n key 转换为语音 ResourceLocation 喵~
-     * 输入:  "girlfriends.gift.quote.momo.liked_0"
-     * 输出:  ResourceLocation("girlfriends", "gift.quote.momo.liked_0")
-     */
-    public static ResourceLocation quoteKeyToVoiceId(String quoteKey) {
-        int firstDot = quoteKey.indexOf('.');
-        return ResourceLocation.fromNamespaceAndPath(
-            quoteKey.substring(0, firstDot), quoteKey.substring(firstDot + 1));
-    }
-}
-```
-
-转换规则：取 i18n key 的第一个 `.` 为界，左侧为 namespace，右侧为 path。例如 `girlfriends.gift.quote.momo.liked_0` → `girlfriends:gift.quote.momo.liked_0`。
-
-当前 locale 硬编码为 `zh_cn`（sounds.json 中映射至 `zh_cn/` 子目录）。未来多 locale 支持时在此层扩展路由逻辑。
-
-### 2. GirlfriendsVoiceEvents
+### 1. GirlfriendsVoiceEvents
 
 **文件**: `src/main/java/com/hexagram2021/girlfriends/common/voice/GirlfriendsVoiceEvents.java`
+
+注册所有语音 SoundEvent，并构建 `locale → voiceKey → DeferredHolder` 两级索引 Map。
 
 ```java
 public final class GirlfriendsVoiceEvents {
     public static final DeferredRegister<SoundEvent> REGISTER =
         DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, GirlfriendsMod.MODID);
 
-    // 沫沫 (29 条)
-    public static final DeferredHolder<SoundEvent, SoundEvent> MOMO_FAVORITE_GIRLFRIENDS_BOUQUET_0 =
-        register("gift.quote.momo.favorite_girlfriends_bouquet_0");
-    public static final DeferredHolder<SoundEvent, SoundEvent> MOMO_LIKED_0 =
-        register("gift.quote.momo.liked_0");
-    // ... 按角色分组，随语音文件增加而扩展
+    /** locale → voiceKey → SoundEvent Holder 两级索引喵~ */
+    static final Map<String, Map<String, DeferredHolder<SoundEvent, SoundEvent>>> VOICE_MAP =
+        new LinkedHashMap<>();
 
-    private static DeferredHolder<SoundEvent, SoundEvent> register(String path) {
-        return REGISTER.register(path,
+    // 沫沫（当前已有 .ogg 的条目）喵~
+    // registryPath 格式: gift.quote.{locale}.{voiceKey}，确保多语言 key 不冲突喵~
+    public static final DeferredHolder<SoundEvent, SoundEvent> MOMO_FAVORITE_GIRLFRIENDS_BOUQUET_0 =
+        register("zh_cn", "momo.favorite_girlfriends_bouquet_0");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MOMO_FAVORITE_GIRLFRIENDS_BOUQUET_1 =
+        register("zh_cn", "momo.favorite_girlfriends_bouquet_1");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MOMO_FAVORITE_GIRLFRIENDS_BOUQUET_2 =
+        register("zh_cn", "momo.favorite_girlfriends_bouquet_2");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MOMO_LIKED_0 =
+        register("zh_cn", "momo.liked_0");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MOMO_LIKED_1 =
+        register("zh_cn", "momo.liked_1");
+    // ... 后续新增语音文件时同步添加
+
+    /**
+     * 注册一个语音 SoundEvent 并录入索引表喵~
+     * registryPath 自动生成为 "gift.quote.{locale}.{voiceKey}" 喵~
+     *
+     * @param locale 语言代码（如 "zh_cn"）喵~
+     * @param voiceKey 语音 key，与文本 JSON 中的后缀一致（如 "momo.liked_0"）喵~
+     * @return DeferredHolder 喵~
+     */
+    private static DeferredHolder<SoundEvent, SoundEvent> register(String locale, String voiceKey) {
+        String registryPath = "gift.quote." + locale + "." + voiceKey;
+        DeferredHolder<SoundEvent, SoundEvent> holder = REGISTER.register(registryPath,
             () -> SoundEvent.createVariableRangeEvent(
-                ResourceLocation.fromNamespaceAndPath(GirlfriendsMod.MODID, path)));
+                Identifier.fromNamespaceAndPath(GirlfriendsMod.MODID, registryPath)));
+        VOICE_MAP.computeIfAbsent(locale, k -> new LinkedHashMap<>()).put(voiceKey, holder);
+        return holder;
     }
 }
 ```
 
-- 注册路径与 i18n key 的 path 部分一致（如 `gift.quote.momo.liked_0`）
+- 注册路径格式：`gift.quote.{locale}.{voiceKey}`（如 `gift.quote.zh_cn.momo.liked_0`），locale 嵌在 key 中确保多语言不冲突
 - 使用 `SoundEvent.createVariableRangeEvent()` 创建，距离衰减范围为默认 16 格
 - 按角色分组，便于维护
+- `VOICE_MAP` 两级索引：`locale` → `voiceKey` → `DeferredHolder`
 - **仅注册已有 `.ogg` 文件的语音条目**（当前 5 条：沫沫 favorite_bouquet 0~2 + liked 0~1）。新增语音文件时同步添加注册
+
+### 2. GirlfriendsVoiceManager
+
+**文件**: `src/main/java/com/hexagram2021/girlfriends/common/voice/GirlfriendsVoiceManager.java`
+
+语音查找工具类，封装 locale 路由与 Map 查询。
+
+```java
+public final class GirlfriendsVoiceManager {
+    private GirlfriendsVoiceManager() {}
+
+    /**
+     * 获取客户端当前语言代码喵~
+     *
+     * @return 当前硬编码返回 "zh_cn" 喵~
+     */
+    public static String getClientLocale() {
+        // TODO 未来根据客户端 I18n 设置动态返回，如 "en_us"、"ja_jp" 等喵~
+        return "zh_cn";
+    }
+
+    /**
+     * 根据语音 key 获取 SoundEvent Holder（内部按当前 locale 路由）喵~
+     *
+     * @param voiceKey 语音 key，如 "momo.liked_0" 喵~
+     * @return 对应的 DeferredHolder，未找到时返回 null 喵~
+     */
+    @Nullable
+    public static DeferredHolder<SoundEvent, SoundEvent> getVoice(String voiceKey) {
+        String locale = getClientLocale();
+        Map<String, DeferredHolder<SoundEvent, SoundEvent>> localeMap =
+            GirlfriendsVoiceEvents.VOICE_MAP.get(locale);
+        if (localeMap == null) {
+            return null;
+        }
+        return localeMap.get(voiceKey);
+    }
+
+    /**
+     * 从完整 i18n quote key 提取语音 voiceKey 喵~
+     * "girlfriends.gift.quote.momo.liked_0" → "momo.liked_0" 喵~
+     *
+     * @param quoteKey 完整 i18n key 喵~
+     * @return voiceKey 喵~
+     */
+    public static String extractVoiceKey(String quoteKey) {
+        return quoteKey.substring(GiftQuoteManager.QUOTE_KEY_PREFIX.length());
+    }
+}
+```
 
 ### 3. ClientboundPlayVoicePacket
 
 **文件**: `src/main/java/com/hexagram2021/girlfriends/common/network/ClientboundPlayVoicePacket.java`
 
 ```java
-public record ClientboundPlayVoicePacket(String quoteKey, double x, double y, double z)
+public record ClientboundPlayVoicePacket(String voiceKey, double x, double y, double z)
     implements CustomPayload {
 
     public static final CustomPayload.Type<ClientboundPlayVoicePacket> TYPE =
-        new CustomPayload.Type<>(ResourceLocation.fromNamespaceAndPath(GirlfriendsMod.MODID, "play_voice"));
+        new CustomPayload.Type<>(Identifier.fromNamespaceAndPath(GirlfriendsMod.MODID, "play_voice"));
 
     public static final StreamCodec<ByteBuf, ClientboundPlayVoicePacket> STREAM_CODEC =
         StreamCodec.composite(
-            ByteBufCodecs.STRING_UTF8, ClientboundPlayVoicePacket::quoteKey,
-            ByteBufCodecs.DOUBLE,        ClientboundPlayVoicePacket::x,
-            ByteBufCodecs.DOUBLE,        ClientboundPlayVoicePacket::y,
-            ByteBufCodecs.DOUBLE,        ClientboundPlayVoicePacket::z,
+            ByteBufCodecs.STRING_UTF8, ClientboundPlayVoicePacket::voiceKey,
+            ByteBufCodecs.DOUBLE,      ClientboundPlayVoicePacket::x,
+            ByteBufCodecs.DOUBLE,      ClientboundPlayVoicePacket::y,
+            ByteBufCodecs.DOUBLE,      ClientboundPlayVoicePacket::z,
             ClientboundPlayVoicePacket::new);
 }
 ```
@@ -140,8 +189,9 @@ private static void sendGiftFeedback(ServerPlayer player, Identifier girlfriendT
         if (state != null && state.isAlive() && state.getEntityUuid() != null) {
             Entity entity = player.level().getEntity(state.getEntityUuid());
             if (entity != null) {
+                String voiceKey = GirlfriendsVoiceManager.extractVoiceKey(result.quoteKey());
                 player.connection.send(new ClientboundPlayVoicePacket(
-                    result.quoteKey(),
+                    voiceKey,
                     entity.getX(), entity.getY(), entity.getZ()));
             }
         }
@@ -151,34 +201,28 @@ private static void sendGiftFeedback(ServerPlayer player, Identifier girlfriendT
 }
 ```
 
-**实体查找**：复用 `canReachEntity()` 现有逻辑（`CharacterWorldState` → entity UUID → `ServerLevel.getEntity()`）。若实体已不存在（死亡卸载等），静默跳过语音，不影响文字消息发送。
-
 `sendGiftFeedback()` 方法签名不变，实体查找在内部完成。
 
 ### 5. Client Handler（静态消费者注入模式）
 
 **修改文件**: `GirlfriendsNetwork`（common）、`GirlfriendsModClient`（client）
 
-遵循项目 `物理端隔离` 原则，`common/` 包不可直接引用 `net.minecraft.client.*`。采用与 `screenOpener` 相同的静态消费者注入模式。
+遵循项目 `物理端隔离` 原则，`common/` 包不可直接引用 `net.minecraft.client.*`。
 
 **common 侧（`GirlfriendsNetwork`）**：
 
 ```java
-// 静态消费者字段，默认为空操作
 @Nullable
 private static Consumer<ClientboundPlayVoicePacket> voiceHandler = null;
 
-/**
- * 注入语音播放 handler（由 GirlfriendsModClient 在 clientSetup 中调用）喵~
- */
 public static void setVoiceHandler(@Nullable Consumer<ClientboundPlayVoicePacket> handler) {
     voiceHandler = handler;
 }
 
-// packet handler 中
 private static void handlePlayVoice(ClientboundPlayVoicePacket packet, IPayloadContext context) {
     Consumer<ClientboundPlayVoicePacket> handler = voiceHandler;
     if (handler != null) {
+        // enqueueWork 在 Render Thread 上执行，满足 level.playSound 的主线程要求喵~
         context.enqueueWork(() -> handler.accept(packet));
     }
 }
@@ -187,20 +231,24 @@ private static void handlePlayVoice(ClientboundPlayVoicePacket packet, IPayloadC
 **client 侧（`GirlfriendsModClient`）**：
 
 ```java
-// 在 onClientSetup 中注入
 GirlfriendsNetwork.setVoiceHandler(packet -> {
-    ResourceLocation voiceId = GirlfriendsVoiceManager.quoteKeyToVoiceId(packet.quoteKey());
-    SoundEvent soundEvent = SoundEvent.createVariableRangeEvent(voiceId);
-    Minecraft.getInstance().getSoundManager().play(
-        new PositionedSoundInstance(soundEvent, SoundSource.VOICE,
-            1.0F, 1.0F, RandomSource.create(),
-            packet.x(), packet.y(), packet.z()));
+    DeferredHolder<SoundEvent, SoundEvent> holder =
+        GirlfriendsVoiceManager.getVoice(packet.voiceKey());
+    if (holder != null) {
+        ClientLevel level = Minecraft.getInstance().level;
+        if (level != null) {
+            level.playSound(null,
+                packet.x(), packet.y(), packet.z(),
+                holder, SoundSource.VOICE, 1.0F, 1.0F);
+        }
+    }
 });
 ```
 
-`SoundSource.VOICE` 使语音受"语音"音量滑块控制。原版 `SoundManager` 自动完成：
-1. 从 `sounds.json` 查找 `.ogg` 文件路径并播放
-2. 从 `sounds.json` 查找 `subtitle` key，若玩家开启了字幕则在右下角显示
+关键点：
+- `context.enqueueWork()` 确保在 Render Thread 上执行，满足 `level.playSound()` 的主线程要求
+- `SoundSource.VOICE` 使语音受"语音"音量滑块控制
+- 原版自动处理：sounds.json 查找 `.ogg` 路径 → 播放 + subtitle 字幕显示
 
 ### 6. GirlfriendsMod 修改
 
@@ -215,20 +263,35 @@ GirlfriendsNetwork.setVoiceHandler(packet -> {
 
 ```json
 {
-  "gift.quote.momo.favorite_girlfriends_bouquet_0": {
+  "gift.quote.zh_cn.momo.favorite_girlfriends_bouquet_0": {
     "category": "entity",
     "sounds": ["girlfriends:zh_cn/momo/favorite_girlfriends_bouquet_0"],
     "subtitle": "girlfriends.subtitle.voice.momo.favorite"
   },
-  "gift.quote.momo.liked_0": {
+  "gift.quote.zh_cn.momo.favorite_girlfriends_bouquet_1": {
+    "category": "entity",
+    "sounds": ["girlfriends:zh_cn/momo/favorite_girlfriends_bouquet_1"],
+    "subtitle": "girlfriends.subtitle.voice.momo.favorite"
+  },
+  "gift.quote.zh_cn.momo.favorite_girlfriends_bouquet_2": {
+    "category": "entity",
+    "sounds": ["girlfriends:zh_cn/momo/favorite_girlfriends_bouquet_2"],
+    "subtitle": "girlfriends.subtitle.voice.momo.favorite"
+  },
+  "gift.quote.zh_cn.momo.liked_0": {
     "category": "entity",
     "sounds": ["girlfriends:zh_cn/momo/liked_0"],
+    "subtitle": "girlfriends.subtitle.voice.momo.liked"
+  },
+  "gift.quote.zh_cn.momo.liked_1": {
+    "category": "entity",
+    "sounds": ["girlfriends:zh_cn/momo/liked_1"],
     "subtitle": "girlfriends.subtitle.voice.momo.liked"
   }
 }
 ```
 
-- key：与 SoundEvent 注册 path 一致（`gift.quote.{character}.{quote_name}`）
+- key：格式 `gift.quote.{locale}.{character}.{quote_name}`，与 SoundEvent 注册 path 一致（如 `gift.quote.zh_cn.momo.liked_0`），locale 嵌入 key 确保多语言命名无冲突
 - `sounds`：指向 locale 子目录的 `.ogg` 文件，路径 `{namespace}:{locale}/{character}/{quote_name}`
 - `subtitle`：字幕 i18n key，按角色 × 情绪档位分组
 - `category`：`"entity"`（当前版本已废弃，由播放时传入的 `SoundSource` 决定；保留以兼容低版本移植）
@@ -280,31 +343,31 @@ assets/girlfriends/sounds/zh_cn/
 | 场景 | 处理方式 |
 |------|----------|
 | 角色实体不存在（已死亡/卸载） | 静默跳过语音，文字消息与 action bar 正常发送 |
+| voiceKey 在 VOICE_MAP 中未找到 | `getVoice()` 返回 null，client handler 静默跳过 |
 | `.ogg` 文件缺失 | `SoundManager` 自动输出 warn 日志，无异常抛出 |
 | 客户端未安装模组 | 服务端发包无响应，无副作用 |
-| `quoteKey` 无对应 SoundEvent 注册 | 客户端 warn 日志，静默跳过 |
 
 ## 测试
 
 | 测试类 | 验证内容 |
 |--------|----------|
-| `GirlfriendsVoiceManagerTest`（新增） | `quoteKeyToVoiceId()` 转换正确性（验证 i18n key → ResourceLocation 映射无误） |
-| `GirlfriendsVoiceEventsTest`（新增） | 当前已注册 SoundEvent 的 ResourceLocation 与 i18n key path 一致性验证 |
+| `GirlfriendsVoiceManagerTest`（新增） | `extractVoiceKey()` 截取正确性、`getVoice()` 按 locale + voiceKey 返回正确 Holder |
+| `GirlfriendsVoiceEventsTest`（新增） | 当前已注册 SoundEvent 与 VOICE_MAP 条目一致性验证 |
 | `ServerboundPacketSerializationTest`（扩展） | `ClientboundPlayVoicePacket` 序列化/反序列化往返 |
 
 ## 文件操作清单
 
 | 操作 | 文件 | 职责 |
 |------|------|------|
-| 新增 | `common/voice/GirlfriendsVoiceManager.java` | quote key → voice ID 转换 |
-| 新增 | `common/voice/GirlfriendsVoiceEvents.java` | `DeferredRegister<SoundEvent>` 注册已有语音的 SoundEvent（当前 5 条，随文件增加而扩展） |
-| 新增 | `common/network/ClientboundPlayVoicePacket.java` | 语音播放网络包 |
-| 修改 | `common/network/GirlfriendsNetwork.java` | 注册 packet codec + `sendGiftFeedback()` 增发语音包 |
+| 新增 | `common/voice/GirlfriendsVoiceManager.java` | voiceKey 提取 + locale 路由 + Map 查询 |
+| 新增 | `common/voice/GirlfriendsVoiceEvents.java` | `DeferredRegister<SoundEvent>` + VOICE_MAP 构建 |
+| 新增 | `common/network/ClientboundPlayVoicePacket.java` | 语音播放网络包（voiceKey + 坐标） |
+| 修改 | `common/network/GirlfriendsNetwork.java` | 注册 packet codec + `sendGiftFeedback()` 增发语音包 + voiceHandler 注入 |
 | 修改 | `GirlfriendsMod.java` | 注册 `VOICE_EVENTS`、注册 play-to-client 包 |
-| 修改 | `GirlfriendsModClient.java` | client handler 注册 |
+| 修改 | `GirlfriendsModClient.java` | client handler 注入（level.playSound） |
 | 新增 | `assets/girlfriends/sounds.json` | SoundEvent → .ogg 映射（手动维护，与语音文件同步增长） |
 | 修改 | `assets/girlfriends/lang/zh_cn.json` | 新增 25 条字幕翻译 |
 | 修改 | `assets/girlfriends/lang/en_us.json` | 新增 25 条字幕翻译 |
 | 新增 | `test/.../voice/GirlfriendsVoiceManagerTest.java` | VoiceManager 单元测试 |
-| 新增 | `test/.../voice/GirlfriendsVoiceEventsTest.java` | SoundEvent 注册验证 |
+| 新增 | `test/.../voice/GirlfriendsVoiceEventsTest.java` | SoundEvent 注册 + VOICE_MAP 验证 |
 | 修改 | `test/.../network/ServerboundPacketSerializationTest.java` | 语音包序列化测试 |
