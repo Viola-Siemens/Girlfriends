@@ -35,7 +35,7 @@ public final class GirlfriendsVoiceEvents {
 			register("zh_cn", "momo.liked_0");
 	public static final DeferredHolder<SoundEvent, SoundEvent> MOMO_LIKED_1 =
 			register("zh_cn", "momo.liked_1");
-	// 后续新增语音文件时同步添加喵~
+	// TODO 后续新增语音文件时同步添加喵~
 
 	private GirlfriendsVoiceEvents() {
 	}

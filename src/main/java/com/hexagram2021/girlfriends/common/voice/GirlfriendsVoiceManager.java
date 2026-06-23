@@ -23,6 +23,7 @@ public final class GirlfriendsVoiceManager {
 	 */
 	public static String getClientLocale() {
 		// TODO 未来根据客户端 I18n 设置动态返回，如 "en_us"、"ja_jp" 等喵~
+		// return Minecraft.getInstance().getLanguageManager().getSelected();
 		return "zh_cn";
 	}
 

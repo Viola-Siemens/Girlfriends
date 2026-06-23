@@ -43,6 +43,7 @@ import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.world.level.block.BedBlock;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -225,7 +226,7 @@ public final class GirlfriendsNetwork {
 				Identifier dimension = respawnConfig.respawnData().dimension().identifier();
 				BedValidator bedValidator = anchor -> player.level().getBlockState(
 						new BlockPos(anchor.x(), anchor.y(), anchor.z())
-				).getBlock() instanceof net.minecraft.world.level.block.BedBlock;
+				).getBlock() instanceof BedBlock;
 				HomeService homeService = new HomeService(data, new RelationshipService(data), bedValidator);
 				if(homeService.inviteHome(player.getUUID(), packet.girlfriendTypeId(), dimension,
 						respawnPos.getX(), respawnPos.getY(), respawnPos.getZ())) {

@@ -2,6 +2,7 @@ package com.hexagram2021.girlfriends.common.gift;
 
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -23,6 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.random.RandomGenerator;
 
 /**
@@ -152,7 +154,7 @@ public final class GiftQuoteManager extends SimplePreparableReloadListener<Map<I
 	}
 
 	private Optional<String> getRandomFromPool(Identifier girlfriendTypeId,
-											   java.util.function.Function<GiftQuotes, List<String>> poolExtractor) {
+											   Function<GiftQuotes, List<String>> poolExtractor) {
 		GiftQuotes quotes = this.quotesMap.get(girlfriendTypeId);
 		if (quotes == null) {
 			return Optional.empty();
@@ -201,7 +203,7 @@ public final class GiftQuoteManager extends SimplePreparableReloadListener<Map<I
 			throw new JsonParseException("Field '" + fieldName + "' must be a JSON array");
 		}
 		JsonArray jsonArray = element.getAsJsonArray();
-		List<String> result = new java.util.ArrayList<>(jsonArray.size());
+		List<String> result = Lists.newArrayListWithCapacity(jsonArray.size());
 		for (JsonElement elem : jsonArray) {
 			if (!elem.isJsonPrimitive() || !elem.getAsJsonPrimitive().isString()) {
 				throw new JsonParseException("Field '" + fieldName + "' must contain only strings");

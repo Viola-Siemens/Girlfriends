@@ -5,6 +5,7 @@ import com.hexagram2021.girlfriends.common.death.ShelterRecord;
 import com.hexagram2021.girlfriends.common.relationship.PlayerCharacterRelation;
 import com.hexagram2021.girlfriends.common.relationship.RelationKey;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.Identifier;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -68,7 +69,7 @@ class GirlfriendsWorldDataTest {
 		CompoundTag charactersTag = new CompoundTag();
 		CompoundTag characterTag = new CompoundTag();
 		CompoundTag shelterTag = new CompoundTag();
-		net.minecraft.nbt.ListTag shelterListTag = new net.minecraft.nbt.ListTag();
+		ListTag shelterListTag = new ListTag();
 		shelterTag.putString("structure_id", "bad id");
 		shelterListTag.add(shelterTag);
 		characterTag.put("discovered_shelters", shelterListTag);
