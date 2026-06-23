@@ -1,5 +1,6 @@
 package com.hexagram2021.girlfriends.common.voice;
 
+import com.google.common.collect.Maps;
 import com.hexagram2021.girlfriends.common.gift.GiftQuoteManager;
 import net.minecraft.sounds.SoundEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -13,6 +14,9 @@ import java.util.Map;
  * @author liudongyu
  */
 public final class GirlfriendsVoiceManager {
+	/** locale → voiceKey → SoundEvent Holder 两级索引喵~ */
+	static final Map<String, Map<String, DeferredHolder<SoundEvent, SoundEvent>>> VOICE_MAP = Maps.newLinkedHashMap();
+
 	private GirlfriendsVoiceManager() {
 	}
 
@@ -35,9 +39,7 @@ public final class GirlfriendsVoiceManager {
 	 */
 	@Nullable
 	public static DeferredHolder<SoundEvent, SoundEvent> getVoice(String voiceKey) {
-		String locale = getClientLocale();
-		Map<String, DeferredHolder<SoundEvent, SoundEvent>> localeMap =
-				GirlfriendsVoiceEvents.VOICE_MAP.get(locale);
+		Map<String, DeferredHolder<SoundEvent, SoundEvent>> localeMap = VOICE_MAP.get(getClientLocale());
 		if (localeMap == null) {
 			return null;
 		}
@@ -53,5 +55,19 @@ public final class GirlfriendsVoiceManager {
 	 */
 	public static String extractVoiceKey(String quoteKey) {
 		return quoteKey.substring(GiftQuoteManager.QUOTE_KEY_PREFIX.length());
+	}
+
+	/**
+	 * 注册语音录入索引表喵~
+	 *
+	 * @see com.hexagram2021.girlfriends.GirlfriendsMod#onCommonSetup
+	 *
+	 * @param locale   语言代码（如 "zh_cn"）喵~
+	 * @param voiceKey 语音 key，与文本 JSON 中的后缀一致（如 "momo.liked_0"）喵~
+	 *
+	 * @throws java.util.ConcurrentModificationException 注意线程安全，保证在主线程（Render thread）调用，避免在子线程修改 VOICE_MAP
+	 */
+	public static void registerVoice(String locale, String voiceKey, DeferredHolder<SoundEvent, SoundEvent> holder) {
+		VOICE_MAP.computeIfAbsent(locale, _ -> Maps.newLinkedHashMap()).put(voiceKey, holder);
 	}
 }

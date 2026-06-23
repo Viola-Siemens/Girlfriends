@@ -1,27 +1,933 @@
 {
   "gift.quote.zh_cn.momo.favorite_girlfriends_bouquet_0": {
     "category": "entity",
-    "sounds": ["girlfriends:zh_cn/momo/favorite_girlfriends_bouquet_0"],
+    "sounds": [
+      "girlfriends:zh_cn/momo/favorite_girlfriends_bouquet_0"
+    ],
     "subtitle": "girlfriends.subtitle.voice.momo.favorite"
   },
   "gift.quote.zh_cn.momo.favorite_girlfriends_bouquet_1": {
     "category": "entity",
-    "sounds": ["girlfriends:zh_cn/momo/favorite_girlfriends_bouquet_1"],
+    "sounds": [
+      "girlfriends:zh_cn/momo/favorite_girlfriends_bouquet_1"
+    ],
     "subtitle": "girlfriends.subtitle.voice.momo.favorite"
   },
   "gift.quote.zh_cn.momo.favorite_girlfriends_bouquet_2": {
     "category": "entity",
-    "sounds": ["girlfriends:zh_cn/momo/favorite_girlfriends_bouquet_2"],
+    "sounds": [
+      "girlfriends:zh_cn/momo/favorite_girlfriends_bouquet_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.momo.favorite"
+  },
+  "gift.quote.zh_cn.momo.favorite_minecraft_honeycomb_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/momo/favorite_minecraft_honeycomb_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.momo.favorite"
+  },
+  "gift.quote.zh_cn.momo.favorite_minecraft_honeycomb_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/momo/favorite_minecraft_honeycomb_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.momo.favorite"
+  },
+  "gift.quote.zh_cn.momo.favorite_minecraft_honeycomb_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/momo/favorite_minecraft_honeycomb_2"
+    ],
     "subtitle": "girlfriends.subtitle.voice.momo.favorite"
   },
   "gift.quote.zh_cn.momo.liked_0": {
     "category": "entity",
-    "sounds": ["girlfriends:zh_cn/momo/liked_0"],
+    "sounds": [
+      "girlfriends:zh_cn/momo/liked_0"
+    ],
     "subtitle": "girlfriends.subtitle.voice.momo.liked"
   },
   "gift.quote.zh_cn.momo.liked_1": {
     "category": "entity",
-    "sounds": ["girlfriends:zh_cn/momo/liked_1"],
+    "sounds": [
+      "girlfriends:zh_cn/momo/liked_1"
+    ],
     "subtitle": "girlfriends.subtitle.voice.momo.liked"
+  },
+  "gift.quote.zh_cn.momo.liked_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/momo/liked_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.momo.liked"
+  },
+  "gift.quote.zh_cn.momo.liked_3": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/momo/liked_3"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.momo.liked"
+  },
+  "gift.quote.zh_cn.momo.liked_4": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/momo/liked_4"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.momo.liked"
+  },
+  "gift.quote.zh_cn.momo.liked_5": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/momo/liked_5"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.momo.liked"
+  },
+  "gift.quote.zh_cn.momo.liked_6": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/momo/liked_6"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.momo.liked"
+  },
+  "gift.quote.zh_cn.momo.liked_7": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/momo/liked_7"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.momo.liked"
+  },
+  "gift.quote.zh_cn.momo.accepted_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/momo/accepted_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.momo.accepted"
+  },
+  "gift.quote.zh_cn.momo.accepted_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/momo/accepted_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.momo.accepted"
+  },
+  "gift.quote.zh_cn.momo.accepted_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/momo/accepted_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.momo.accepted"
+  },
+  "gift.quote.zh_cn.momo.accepted_3": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/momo/accepted_3"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.momo.accepted"
+  },
+  "gift.quote.zh_cn.momo.accepted_4": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/momo/accepted_4"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.momo.accepted"
+  },
+  "gift.quote.zh_cn.momo.accepted_5": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/momo/accepted_5"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.momo.accepted"
+  },
+  "gift.quote.zh_cn.momo.rejected_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/momo/rejected_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.momo.rejected"
+  },
+  "gift.quote.zh_cn.momo.rejected_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/momo/rejected_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.momo.rejected"
+  },
+  "gift.quote.zh_cn.momo.rejected_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/momo/rejected_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.momo.rejected"
+  },
+  "gift.quote.zh_cn.momo.rejected_3": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/momo/rejected_3"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.momo.rejected"
+  },
+  "gift.quote.zh_cn.momo.disliked_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/momo/disliked_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.momo.disliked"
+  },
+  "gift.quote.zh_cn.momo.disliked_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/momo/disliked_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.momo.disliked"
+  },
+  "gift.quote.zh_cn.momo.disliked_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/momo/disliked_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.momo.disliked"
+  },
+  "gift.quote.zh_cn.momo.disliked_3": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/momo/disliked_3"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.momo.disliked"
+  },
+  "gift.quote.zh_cn.momo.disliked_4": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/momo/disliked_4"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.momo.disliked"
+  },
+  "gift.quote.zh_cn.yuxi.favorite_minecraft_nautilus_shell_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/favorite_minecraft_nautilus_shell_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.favorite"
+  },
+  "gift.quote.zh_cn.yuxi.favorite_minecraft_nautilus_shell_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/favorite_minecraft_nautilus_shell_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.favorite"
+  },
+  "gift.quote.zh_cn.yuxi.favorite_minecraft_nautilus_shell_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/favorite_minecraft_nautilus_shell_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.favorite"
+  },
+  "gift.quote.zh_cn.yuxi.liked_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/liked_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.liked"
+  },
+  "gift.quote.zh_cn.yuxi.liked_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/liked_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.liked"
+  },
+  "gift.quote.zh_cn.yuxi.liked_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/liked_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.liked"
+  },
+  "gift.quote.zh_cn.yuxi.liked_3": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/liked_3"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.liked"
+  },
+  "gift.quote.zh_cn.yuxi.liked_4": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/liked_4"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.liked"
+  },
+  "gift.quote.zh_cn.yuxi.liked_5": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/liked_5"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.liked"
+  },
+  "gift.quote.zh_cn.yuxi.liked_6": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/liked_6"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.liked"
+  },
+  "gift.quote.zh_cn.yuxi.liked_7": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/liked_7"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.liked"
+  },
+  "gift.quote.zh_cn.yuxi.accepted_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/accepted_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.accepted"
+  },
+  "gift.quote.zh_cn.yuxi.accepted_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/accepted_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.accepted"
+  },
+  "gift.quote.zh_cn.yuxi.accepted_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/accepted_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.accepted"
+  },
+  "gift.quote.zh_cn.yuxi.accepted_3": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/accepted_3"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.accepted"
+  },
+  "gift.quote.zh_cn.yuxi.accepted_4": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/accepted_4"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.accepted"
+  },
+  "gift.quote.zh_cn.yuxi.accepted_5": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/accepted_5"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.accepted"
+  },
+  "gift.quote.zh_cn.yuxi.rejected_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/rejected_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.rejected"
+  },
+  "gift.quote.zh_cn.yuxi.rejected_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/rejected_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.rejected"
+  },
+  "gift.quote.zh_cn.yuxi.rejected_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/rejected_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.rejected"
+  },
+  "gift.quote.zh_cn.yuxi.rejected_3": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/rejected_3"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.rejected"
+  },
+  "gift.quote.zh_cn.yuxi.disliked_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/disliked_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.disliked"
+  },
+  "gift.quote.zh_cn.yuxi.disliked_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/disliked_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.disliked"
+  },
+  "gift.quote.zh_cn.yuxi.disliked_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/disliked_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.disliked"
+  },
+  "gift.quote.zh_cn.yuxi.disliked_3": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/disliked_3"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.disliked"
+  },
+  "gift.quote.zh_cn.yuxi.disliked_4": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/disliked_4"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.disliked"
+  },
+  "gift.quote.zh_cn.meishu.favorite_minecraft_iron_ingot_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/favorite_minecraft_iron_ingot_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.favorite"
+  },
+  "gift.quote.zh_cn.meishu.favorite_minecraft_iron_ingot_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/favorite_minecraft_iron_ingot_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.favorite"
+  },
+  "gift.quote.zh_cn.meishu.favorite_minecraft_iron_ingot_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/favorite_minecraft_iron_ingot_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.favorite"
+  },
+  "gift.quote.zh_cn.meishu.liked_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/liked_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.liked"
+  },
+  "gift.quote.zh_cn.meishu.liked_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/liked_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.liked"
+  },
+  "gift.quote.zh_cn.meishu.liked_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/liked_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.liked"
+  },
+  "gift.quote.zh_cn.meishu.liked_3": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/liked_3"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.liked"
+  },
+  "gift.quote.zh_cn.meishu.liked_4": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/liked_4"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.liked"
+  },
+  "gift.quote.zh_cn.meishu.liked_5": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/liked_5"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.liked"
+  },
+  "gift.quote.zh_cn.meishu.liked_6": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/liked_6"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.liked"
+  },
+  "gift.quote.zh_cn.meishu.liked_7": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/liked_7"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.liked"
+  },
+  "gift.quote.zh_cn.meishu.accepted_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/accepted_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.accepted"
+  },
+  "gift.quote.zh_cn.meishu.accepted_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/accepted_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.accepted"
+  },
+  "gift.quote.zh_cn.meishu.accepted_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/accepted_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.accepted"
+  },
+  "gift.quote.zh_cn.meishu.accepted_3": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/accepted_3"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.accepted"
+  },
+  "gift.quote.zh_cn.meishu.accepted_4": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/accepted_4"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.accepted"
+  },
+  "gift.quote.zh_cn.meishu.accepted_5": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/accepted_5"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.accepted"
+  },
+  "gift.quote.zh_cn.meishu.rejected_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/rejected_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.rejected"
+  },
+  "gift.quote.zh_cn.meishu.rejected_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/rejected_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.rejected"
+  },
+  "gift.quote.zh_cn.meishu.rejected_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/rejected_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.rejected"
+  },
+  "gift.quote.zh_cn.meishu.rejected_3": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/rejected_3"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.rejected"
+  },
+  "gift.quote.zh_cn.meishu.disliked_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/disliked_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.disliked"
+  },
+  "gift.quote.zh_cn.meishu.disliked_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/disliked_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.disliked"
+  },
+  "gift.quote.zh_cn.meishu.disliked_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/disliked_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.disliked"
+  },
+  "gift.quote.zh_cn.meishu.disliked_3": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/disliked_3"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.disliked"
+  },
+  "gift.quote.zh_cn.meishu.disliked_4": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/disliked_4"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.disliked"
+  },
+  "gift.quote.zh_cn.wanying.favorite_minecraft_blaze_rod_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/favorite_minecraft_blaze_rod_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.favorite"
+  },
+  "gift.quote.zh_cn.wanying.favorite_minecraft_blaze_rod_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/favorite_minecraft_blaze_rod_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.favorite"
+  },
+  "gift.quote.zh_cn.wanying.favorite_minecraft_blaze_rod_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/favorite_minecraft_blaze_rod_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.favorite"
+  },
+  "gift.quote.zh_cn.wanying.liked_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/liked_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.liked"
+  },
+  "gift.quote.zh_cn.wanying.liked_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/liked_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.liked"
+  },
+  "gift.quote.zh_cn.wanying.liked_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/liked_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.liked"
+  },
+  "gift.quote.zh_cn.wanying.liked_3": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/liked_3"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.liked"
+  },
+  "gift.quote.zh_cn.wanying.liked_4": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/liked_4"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.liked"
+  },
+  "gift.quote.zh_cn.wanying.liked_5": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/liked_5"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.liked"
+  },
+  "gift.quote.zh_cn.wanying.liked_6": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/liked_6"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.liked"
+  },
+  "gift.quote.zh_cn.wanying.liked_7": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/liked_7"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.liked"
+  },
+  "gift.quote.zh_cn.wanying.accepted_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/accepted_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.accepted"
+  },
+  "gift.quote.zh_cn.wanying.accepted_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/accepted_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.accepted"
+  },
+  "gift.quote.zh_cn.wanying.accepted_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/accepted_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.accepted"
+  },
+  "gift.quote.zh_cn.wanying.accepted_3": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/accepted_3"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.accepted"
+  },
+  "gift.quote.zh_cn.wanying.accepted_4": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/accepted_4"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.accepted"
+  },
+  "gift.quote.zh_cn.wanying.accepted_5": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/accepted_5"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.accepted"
+  },
+  "gift.quote.zh_cn.wanying.rejected_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/rejected_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.rejected"
+  },
+  "gift.quote.zh_cn.wanying.rejected_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/rejected_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.rejected"
+  },
+  "gift.quote.zh_cn.wanying.rejected_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/rejected_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.rejected"
+  },
+  "gift.quote.zh_cn.wanying.rejected_3": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/rejected_3"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.rejected"
+  },
+  "gift.quote.zh_cn.wanying.disliked_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/disliked_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.disliked"
+  },
+  "gift.quote.zh_cn.wanying.disliked_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/disliked_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.disliked"
+  },
+  "gift.quote.zh_cn.wanying.disliked_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/disliked_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.disliked"
+  },
+  "gift.quote.zh_cn.wanying.disliked_3": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/disliked_3"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.disliked"
+  },
+  "gift.quote.zh_cn.wanying.disliked_4": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/disliked_4"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.disliked"
+  },
+  "gift.quote.zh_cn.youruo.favorite_minecraft_ender_pearl_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/favorite_minecraft_ender_pearl_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.favorite"
+  },
+  "gift.quote.zh_cn.youruo.favorite_minecraft_ender_pearl_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/favorite_minecraft_ender_pearl_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.favorite"
+  },
+  "gift.quote.zh_cn.youruo.favorite_minecraft_ender_pearl_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/favorite_minecraft_ender_pearl_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.favorite"
+  },
+  "gift.quote.zh_cn.youruo.liked_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/liked_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.liked"
+  },
+  "gift.quote.zh_cn.youruo.liked_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/liked_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.liked"
+  },
+  "gift.quote.zh_cn.youruo.liked_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/liked_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.liked"
+  },
+  "gift.quote.zh_cn.youruo.liked_3": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/liked_3"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.liked"
+  },
+  "gift.quote.zh_cn.youruo.liked_4": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/liked_4"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.liked"
+  },
+  "gift.quote.zh_cn.youruo.liked_5": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/liked_5"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.liked"
+  },
+  "gift.quote.zh_cn.youruo.liked_6": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/liked_6"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.liked"
+  },
+  "gift.quote.zh_cn.youruo.liked_7": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/liked_7"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.liked"
+  },
+  "gift.quote.zh_cn.youruo.accepted_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/accepted_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.accepted"
+  },
+  "gift.quote.zh_cn.youruo.accepted_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/accepted_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.accepted"
+  },
+  "gift.quote.zh_cn.youruo.accepted_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/accepted_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.accepted"
+  },
+  "gift.quote.zh_cn.youruo.accepted_3": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/accepted_3"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.accepted"
+  },
+  "gift.quote.zh_cn.youruo.accepted_4": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/accepted_4"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.accepted"
+  },
+  "gift.quote.zh_cn.youruo.accepted_5": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/accepted_5"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.accepted"
+  },
+  "gift.quote.zh_cn.youruo.rejected_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/rejected_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.rejected"
+  },
+  "gift.quote.zh_cn.youruo.rejected_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/rejected_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.rejected"
+  },
+  "gift.quote.zh_cn.youruo.rejected_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/rejected_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.rejected"
+  },
+  "gift.quote.zh_cn.youruo.rejected_3": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/rejected_3"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.rejected"
+  },
+  "gift.quote.zh_cn.youruo.disliked_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/disliked_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.disliked"
+  },
+  "gift.quote.zh_cn.youruo.disliked_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/disliked_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.disliked"
+  },
+  "gift.quote.zh_cn.youruo.disliked_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/disliked_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.disliked"
+  },
+  "gift.quote.zh_cn.youruo.disliked_3": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/disliked_3"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.disliked"
+  },
+  "gift.quote.zh_cn.youruo.disliked_4": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/disliked_4"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.disliked"
   }
 }

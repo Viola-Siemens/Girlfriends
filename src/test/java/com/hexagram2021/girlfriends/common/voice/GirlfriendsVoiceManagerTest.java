@@ -38,8 +38,7 @@ class GirlfriendsVoiceManagerTest {
 
 	@Test
 	void getVoiceReturnsCorrectHolderForExistingKey() {
-		DeferredHolder<SoundEvent, SoundEvent> holder =
-				GirlfriendsVoiceManager.getVoice("momo.liked_0");
+		DeferredHolder<SoundEvent, SoundEvent> holder = GirlfriendsVoiceManager.getVoice("momo.liked_0");
 
 		assertNotNull(holder, "getVoice should return non-null for registered key");
 		assertSame(GirlfriendsVoiceEvents.MOMO_LIKED_0, holder,
@@ -48,15 +47,14 @@ class GirlfriendsVoiceManagerTest {
 
 	@Test
 	void getVoiceReturnsNullForUnknownKey() {
-		DeferredHolder<SoundEvent, SoundEvent> holder =
-				GirlfriendsVoiceManager.getVoice("yuxi.nonexistent");
+		DeferredHolder<SoundEvent, SoundEvent> holder = GirlfriendsVoiceManager.getVoice("yuxi.nonexistent");
 		assertNull(holder);
 	}
 
 	@Test
 	void getVoiceReturnsNullForUnknownLocale() {
 		// 当前仅有 zh_cn locale，查询其他 locale 应返回 null 喵~
-		Map<String, DeferredHolder<SoundEvent, SoundEvent>> entry = GirlfriendsVoiceEvents.VOICE_MAP.get("ja_jp");
-		assertNull(entry, "ja_jp locale should not exist in VOICE_MAP");
+		Map<String, DeferredHolder<SoundEvent, SoundEvent>> entry = GirlfriendsVoiceManager.VOICE_MAP.get("xd_idk");
+		assertNull(entry, "xd_idk locale should not exist in VOICE_MAP");
 	}
 }
