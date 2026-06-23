@@ -180,16 +180,16 @@ public class GiftService {
 
 	private GiftPreferenceLevel resolvePreferenceLevel(GiftPreference preference, ItemStack itemStack) {
 		Identifier itemId = BuiltInRegistries.ITEM.getKey(itemStack.getItem());
-		if(preference.getFavoriteItems().contains(itemId)) {
+		if(preference.favoriteItems().contains(itemId)) {
 			return GiftPreferenceLevel.FAVORITE;
 		}
-		if(preference.getLikedItems().contains(itemId) || matchesAnyTag(itemStack, preference.getLikedTags())) {
+		if(preference.likedItems().contains(itemId) || matchesAnyTag(itemStack, preference.likedTags())) {
 			return GiftPreferenceLevel.LIKED;
 		}
-		if(preference.getAcceptedItems().contains(itemId) || matchesAnyTag(itemStack, preference.getAcceptedTags())) {
+		if(preference.acceptedItems().contains(itemId) || matchesAnyTag(itemStack, preference.acceptedTags())) {
 			return GiftPreferenceLevel.ACCEPTED;
 		}
-		if(preference.getDislikedItems().contains(itemId) || matchesAnyTag(itemStack, preference.getDislikedTags())) {
+		if(preference.dislikedItems().contains(itemId) || matchesAnyTag(itemStack, preference.dislikedTags())) {
 			return GiftPreferenceLevel.DISLIKED;
 		}
 		return GiftPreferenceLevel.REJECTED;
