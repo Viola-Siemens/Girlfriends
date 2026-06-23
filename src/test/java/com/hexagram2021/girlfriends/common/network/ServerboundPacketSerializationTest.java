@@ -1,6 +1,7 @@
 package com.hexagram2021.girlfriends.common.network;
 
 import com.hexagram2021.girlfriends.GirlfriendsMod;
+import com.hexagram2021.girlfriends.common.network.clientbound.ClientboundPlayVoicePacket;
 import com.hexagram2021.girlfriends.common.network.serverbound.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -57,5 +58,19 @@ public class ServerboundPacketSerializationTest {
 		ServerboundGiveGiftFromSlotPacket decoded = ServerboundGiveGiftFromSlotPacket.STREAM_CODEC.decode(registryBuf);
 		assertEquals(TEST_ID, decoded.girlfriendTypeId());
 		assertEquals(15, decoded.slotIndex());
+	}
+
+	@Test
+	void playVoicePacketRoundTrip() {
+		ClientboundPlayVoicePacket packet = new ClientboundPlayVoicePacket(
+				"momo.liked_0", 10.5, 64.0, -20.25);
+		ByteBuf buf = Unpooled.buffer();
+		ClientboundPlayVoicePacket.STREAM_CODEC.encode(buf, packet);
+		ClientboundPlayVoicePacket decoded =
+				ClientboundPlayVoicePacket.STREAM_CODEC.decode(buf);
+		assertEquals("momo.liked_0", decoded.voiceKey());
+		assertEquals(10.5, decoded.x(), 0.001);
+		assertEquals(64.0, decoded.y(), 0.001);
+		assertEquals(-20.25, decoded.z(), 0.001);
 	}
 }
