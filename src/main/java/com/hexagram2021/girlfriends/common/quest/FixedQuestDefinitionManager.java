@@ -1,11 +1,8 @@
 package com.hexagram2021.girlfriends.common.quest;
 
 import com.google.common.collect.Lists;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
+import com.google.common.collect.Maps;
+import com.google.gson.*;
 import com.hexagram2021.girlfriends.common.relationship.AffectionStage;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.JsonOps;
@@ -22,7 +19,6 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -62,7 +58,7 @@ public class FixedQuestDefinitionManager extends SimplePreparableReloadListener<
 
 	@Override
 	protected Map<String, QuestDefinition> prepare(ResourceManager manager, ProfilerFiller profiler) {
-		Map<String, QuestDefinition> prepared = new LinkedHashMap<>();
+		Map<String, QuestDefinition> prepared = Maps.newLinkedHashMap();
 		for(Map.Entry<Identifier, Resource> entry : LISTER.listMatchingResources(manager).entrySet()) {
 			Identifier fileLocation = entry.getKey();
 			Identifier questLocation = LISTER.fileToId(fileLocation);
@@ -84,7 +80,7 @@ public class FixedQuestDefinitionManager extends SimplePreparableReloadListener<
 
 	@Override
 	protected void apply(Map<String, QuestDefinition> preparations, ResourceManager manager, ProfilerFiller profiler) {
-		this.definitions = Collections.unmodifiableMap(new LinkedHashMap<>(preparations));
+		this.definitions = Collections.unmodifiableMap(Maps.newLinkedHashMap(preparations));
 	}
 
 	static QuestDefinition parseDefinition(Identifier fallbackId, JsonObject jsonObject, QuestType defaultQuestType) {

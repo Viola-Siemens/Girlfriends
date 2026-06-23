@@ -1,10 +1,10 @@
 package com.hexagram2021.girlfriends.common.gift;
 
 import com.google.common.collect.ImmutableListMultimap;
+import com.google.common.collect.Sets;
 import net.minecraft.resources.Identifier;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -51,7 +51,7 @@ class GiftQuoteManagerTest {
 	@Test
 	void randomQuoteCoversAllEntries() {
 		List<String> pool = List.of("a", "b", "c", "d", "e", "f", "g", "h");
-		Set<String> seen = new HashSet<>();
+		Set<String> seen = Sets.newHashSet();
 		Random random = new Random(42);
 		for (int i = 0; i < 100; i++) {
 			seen.add(pool.get(random.nextInt(pool.size())));

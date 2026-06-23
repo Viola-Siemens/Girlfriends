@@ -3,11 +3,8 @@ package com.hexagram2021.girlfriends.common.gift;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Lists;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
+import com.google.common.collect.Maps;
+import com.google.gson.*;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.Identifier;
@@ -20,7 +17,6 @@ import org.slf4j.Logger;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -128,7 +124,7 @@ public final class GiftQuoteManager extends SimplePreparableReloadListener<Map<I
 
 	@Override
 	protected Map<Identifier, GiftQuotes> prepare(ResourceManager manager, ProfilerFiller profiler) {
-		Map<Identifier, GiftQuotes> prepared = new LinkedHashMap<>();
+		Map<Identifier, GiftQuotes> prepared = Maps.newLinkedHashMap();
 		for (Map.Entry<Identifier, Resource> entry : LISTER.listMatchingResources(manager).entrySet()) {
 			Identifier fileLocation = entry.getKey();
 			Identifier characterTypeId = LISTER.fileToId(fileLocation);
@@ -150,7 +146,7 @@ public final class GiftQuoteManager extends SimplePreparableReloadListener<Map<I
 
 	@Override
 	protected void apply(Map<Identifier, GiftQuotes> preparations, ResourceManager manager, ProfilerFiller profiler) {
-		this.quotesMap = Collections.unmodifiableMap(new LinkedHashMap<>(preparations));
+		this.quotesMap = Collections.unmodifiableMap(Maps.newLinkedHashMap(preparations));
 	}
 
 	private Optional<String> getRandomFromPool(Identifier girlfriendTypeId,

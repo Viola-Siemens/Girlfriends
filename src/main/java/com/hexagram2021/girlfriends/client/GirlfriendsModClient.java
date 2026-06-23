@@ -7,7 +7,6 @@ import com.hexagram2021.girlfriends.client.renderer.GirlfriendRenderer;
 import com.hexagram2021.girlfriends.client.screen.MainInteractionScreen;
 import com.hexagram2021.girlfriends.common.entity.GirlfriendsEntities;
 import com.hexagram2021.girlfriends.common.network.GirlfriendsNetwork;
-import com.hexagram2021.girlfriends.common.network.clientbound.ClientboundPlayVoicePacket;
 import com.hexagram2021.girlfriends.common.voice.GirlfriendsVoiceManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;

@@ -1,5 +1,6 @@
 package com.hexagram2021.girlfriends.client.renderer;
 
+import com.google.common.collect.Maps;
 import com.hexagram2021.girlfriends.GirlfriendsMod;
 import com.hexagram2021.girlfriends.common.entity.GirlfriendEntity;
 import com.hexagram2021.girlfriends.common.network.ClientInteractionStore;
@@ -19,7 +20,6 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
-import java.util.IdentityHashMap;
 import java.util.Map;
 
 /**
@@ -51,7 +51,7 @@ public class GirlfriendRenderer extends HumanoidMobRenderer<GirlfriendEntity, Hu
 	 * 使用 IdentityHashMap 因为 RenderState 对象每帧重新创建，
 	 * 且 extractRenderState → submitNameDisplay 在同一渲染帧内串行调用喵~
 	 */
-	private final Map<HumanoidRenderState, IconType> iconCache = new IdentityHashMap<>();
+	private final Map<HumanoidRenderState, IconType> iconCache = Maps.newIdentityHashMap();
 
 	/**
 	 * 创建渲染器喵~

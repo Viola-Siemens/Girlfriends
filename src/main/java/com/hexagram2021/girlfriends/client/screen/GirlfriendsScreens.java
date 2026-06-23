@@ -5,8 +5,6 @@ import com.hexagram2021.girlfriends.common.network.InteractionSummary;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.Identifier;
 
-import javax.annotation.Nullable;
-
 /**
  * Girlfriends Screen 注册与管理入口喵~
  *

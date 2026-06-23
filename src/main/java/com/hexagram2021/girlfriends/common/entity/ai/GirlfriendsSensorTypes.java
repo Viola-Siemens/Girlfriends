@@ -1,7 +1,9 @@
 package com.hexagram2021.girlfriends.common.entity.ai;
 
 import com.hexagram2021.girlfriends.GirlfriendsMod;
-import com.hexagram2021.girlfriends.common.entity.ai.sensor.*;
+import com.hexagram2021.girlfriends.common.entity.ai.sensor.BeehiveSensor;
+import com.hexagram2021.girlfriends.common.entity.ai.sensor.FlowerSensor;
+import com.hexagram2021.girlfriends.common.entity.ai.sensor.GirlfriendShelterSensor;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.neoforged.neoforge.registries.DeferredHolder;

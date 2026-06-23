@@ -1,5 +1,6 @@
 package com.hexagram2021.girlfriends.common.relationship;
 
+import com.google.common.collect.Sets;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -7,7 +8,6 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.resources.Identifier;
 
 import javax.annotation.Nullable;
-import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -25,13 +25,13 @@ public class PlayerCharacterRelation {
 	private Identifier characterId;
 	private float affection;
 	private boolean confirmedIntimacy;
-	private final Set<Integer> completedFixedQuests = new LinkedHashSet<>();
+	private final Set<Integer> completedFixedQuests = Sets.newLinkedHashSet();
 	private boolean claimedFinalReward;
 	private boolean homePartner;
 	private float dailyGiftGain;
 	private boolean dailyHomeGainClaimed;
 	private boolean dailyConflictTriggered;
-	private final Set<String> knownGiftPreferences = new LinkedHashSet<>();
+	private final Set<String> knownGiftPreferences = Sets.newLinkedHashSet();
 	private long lastDailyResetDay;
 
 	/**
