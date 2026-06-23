@@ -14,6 +14,7 @@ import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsActivities;
 import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsMemoryTypes;
 import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsSensorTypes;
 import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsEnvironmentAttributes;
+import com.hexagram2021.girlfriends.common.voice.GirlfriendsVoiceEvents;
 import com.hexagram2021.girlfriends.common.command.AffectionCommand;
 import com.hexagram2021.girlfriends.common.gift.GiftPreferenceManager;
 import com.hexagram2021.girlfriends.common.gift.GiftQuoteManager;
@@ -75,6 +76,7 @@ public class GirlfriendsMod {
 		GirlfriendsItems.REGISTER.register(modEventBus);
 		GirlfriendsMemoryTypes.REGISTER.register(modEventBus);
 		GirlfriendsSensorTypes.REGISTER.register(modEventBus);
+		GirlfriendsVoiceEvents.REGISTER.register(modEventBus);
 	}
 
 	private void registerServerReloadListeners(AddServerReloadListenersEvent event) {
