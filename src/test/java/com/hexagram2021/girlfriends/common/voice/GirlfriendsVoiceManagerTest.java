@@ -56,7 +56,7 @@ class GirlfriendsVoiceManagerTest {
 	@Test
 	void getVoiceReturnsNullForUnknownLocale() {
 		// 当前仅有 zh_cn locale，查询其他 locale 应返回 null 喵~
-		Map entry = GirlfriendsVoiceEvents.VOICE_MAP.get("ja_jp");
+		Map<String, DeferredHolder<SoundEvent, SoundEvent>> entry = GirlfriendsVoiceEvents.VOICE_MAP.get("ja_jp");
 		assertNull(entry, "ja_jp locale should not exist in VOICE_MAP");
 	}
 }
