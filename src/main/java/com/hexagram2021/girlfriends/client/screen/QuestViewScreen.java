@@ -6,8 +6,8 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.FormattedCharSequence;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 
 /**
@@ -22,6 +22,11 @@ public class QuestViewScreen extends Screen {
 	private final Identifier girlfriendTypeId;
 	private final QuestContentSummary quest;
 
+	/**
+	 * 构造委托查看界面
+	 * @param girlfriendTypeId 角色类型 ID
+	 * @param quest 委托内容
+	 */
 	public QuestViewScreen(Identifier girlfriendTypeId, QuestContentSummary quest) {
 		super(Component.translatable(quest.titleKey()));
 		this.girlfriendTypeId = girlfriendTypeId;

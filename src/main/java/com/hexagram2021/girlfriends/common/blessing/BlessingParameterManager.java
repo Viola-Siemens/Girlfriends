@@ -1,5 +1,6 @@
 package com.hexagram2021.girlfriends.common.blessing;
 
+import com.google.common.collect.Maps;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
@@ -15,7 +16,6 @@ import org.slf4j.Logger;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -43,7 +43,7 @@ public class BlessingParameterManager extends SimplePreparableReloadListener<Map
 	 * @param parameters 祝福参数喵~
 	 */
 	public BlessingParameterManager(Map<Identifier, JsonElement> parameters) {
-		this.parameters = Collections.unmodifiableMap(new LinkedHashMap<>(parameters));
+		this.parameters = Collections.unmodifiableMap(Maps.newLinkedHashMap(parameters));
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class BlessingParameterManager extends SimplePreparableReloadListener<Map
 
 	@Override
 	protected Map<Identifier, JsonElement> prepare(ResourceManager manager, ProfilerFiller profiler) {
-		Map<Identifier, JsonElement> prepared = new LinkedHashMap<>();
+		Map<Identifier, JsonElement> prepared = Maps.newLinkedHashMap();
 		for(Map.Entry<Identifier, Resource> entry : LISTER.listMatchingResources(manager).entrySet()) {
 			Identifier fileLocation = entry.getKey();
 			Identifier blessingTypeId = LISTER.fileToId(fileLocation);
@@ -77,6 +77,6 @@ public class BlessingParameterManager extends SimplePreparableReloadListener<Map
 
 	@Override
 	protected void apply(Map<Identifier, JsonElement> preparations, ResourceManager manager, ProfilerFiller profiler) {
-		this.parameters = Collections.unmodifiableMap(new LinkedHashMap<>(preparations));
+		this.parameters = Collections.unmodifiableMap(Maps.newLinkedHashMap(preparations));
 	}
 }

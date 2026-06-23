@@ -1,5 +1,6 @@
 package com.hexagram2021.girlfriends.common.quest;
 
+import com.google.common.collect.Maps;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
@@ -9,16 +10,14 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.profiling.ProfilerFiller;
 import org.slf4j.Logger;
-
-import net.minecraft.util.RandomSource;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -76,7 +75,7 @@ public class RandomQuestTemplateManager extends SimplePreparableReloadListener<M
 
 	@Override
 	protected Map<String, QuestDefinition> prepare(ResourceManager manager, ProfilerFiller profiler) {
-		Map<String, QuestDefinition> prepared = new LinkedHashMap<>();
+		Map<String, QuestDefinition> prepared = Maps.newLinkedHashMap();
 		for(Map.Entry<Identifier, Resource> entry : LISTER.listMatchingResources(manager).entrySet()) {
 			Identifier fileLocation = entry.getKey();
 			Identifier questLocation = LISTER.fileToId(fileLocation);
@@ -98,6 +97,6 @@ public class RandomQuestTemplateManager extends SimplePreparableReloadListener<M
 
 	@Override
 	protected void apply(Map<String, QuestDefinition> preparations, ResourceManager manager, ProfilerFiller profiler) {
-		this.definitions = Collections.unmodifiableMap(new LinkedHashMap<>(preparations));
+		this.definitions = Collections.unmodifiableMap(Maps.newLinkedHashMap(preparations));
 	}
 }

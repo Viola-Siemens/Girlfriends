@@ -8,45 +8,37 @@ import com.hexagram2021.girlfriends.common.gift.GiftPreferenceManager;
 import com.hexagram2021.girlfriends.common.gift.GiftQuoteManager;
 import com.hexagram2021.girlfriends.common.gift.GiftResult;
 import com.hexagram2021.girlfriends.common.gift.GiftService;
-import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
 import com.hexagram2021.girlfriends.common.home.BedValidator;
 import com.hexagram2021.girlfriends.common.home.HomeService;
 import com.hexagram2021.girlfriends.common.network.clientbound.ClientboundPlayVoicePacket;
 import com.hexagram2021.girlfriends.common.network.clientbound.ClientboundQuestIconPacket;
 import com.hexagram2021.girlfriends.common.network.clientbound.ClientboundSyncInteractionDataPacket;
-import com.hexagram2021.girlfriends.common.voice.GirlfriendsVoiceManager;
-import com.hexagram2021.girlfriends.common.network.serverbound.ServerboundAcceptQuestPacket;
-import com.hexagram2021.girlfriends.common.network.serverbound.ServerboundConfirmIntimacyPacket;
-import com.hexagram2021.girlfriends.common.network.serverbound.ServerboundDeliverQuestPacket;
-import com.hexagram2021.girlfriends.common.network.serverbound.ServerboundGiveGiftFromSlotPacket;
-import com.hexagram2021.girlfriends.common.network.serverbound.ServerboundGiveGiftPacket;
-import com.hexagram2021.girlfriends.common.network.serverbound.ServerboundInviteHomePacket;
-import com.hexagram2021.girlfriends.common.network.serverbound.ServerboundSetFollowModePacket;
+import com.hexagram2021.girlfriends.common.network.serverbound.*;
 import com.hexagram2021.girlfriends.common.persist.GirlfriendsWorldData;
 import com.hexagram2021.girlfriends.common.quest.FixedQuestDefinitionManager;
 import com.hexagram2021.girlfriends.common.quest.QuestService;
 import com.hexagram2021.girlfriends.common.quest.RandomQuestTemplateManager;
 import com.hexagram2021.girlfriends.common.relationship.PlayerCharacterRelation;
 import com.hexagram2021.girlfriends.common.relationship.RelationshipService;
+import com.hexagram2021.girlfriends.common.voice.GirlfriendsVoiceManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
-
-import java.util.UUID;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.world.level.block.BedBlock;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+
+import javax.annotation.Nullable;
+import java.util.UUID;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * Girlfriends 网络数据包注册入口喵~
@@ -286,7 +278,8 @@ public final class GirlfriendsNetwork {
 					String voiceKey = GirlfriendsVoiceManager.extractVoiceKey(result.quoteKey());
 					player.connection.send(new ClientboundPlayVoicePacket(
 							voiceKey,
-							entity.getX(), entity.getY(), entity.getZ()));
+							entity.getX(), entity.getY(), entity.getZ()
+					));
 				}
 			}
 		}

@@ -1,10 +1,8 @@
 package com.hexagram2021.girlfriends.common.gift;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.google.gson.*;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.Identifier;
@@ -17,8 +15,6 @@ import org.slf4j.Logger;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -57,7 +53,7 @@ public class GiftPreferenceManager extends SimplePreparableReloadListener<Map<Id
 
 	@Override
 	protected Map<Identifier, GiftPreference> prepare(ResourceManager manager, ProfilerFiller profiler) {
-		Map<Identifier, GiftPreference> prepared = new LinkedHashMap<>();
+		Map<Identifier, GiftPreference> prepared = Maps.newLinkedHashMap();
 		for(Map.Entry<Identifier, Resource> entry : LISTER.listMatchingResources(manager).entrySet()) {
 			Identifier fileLocation = entry.getKey();
 			Identifier characterTypeId = LISTER.fileToId(fileLocation);
@@ -79,7 +75,7 @@ public class GiftPreferenceManager extends SimplePreparableReloadListener<Map<Id
 
 	@Override
 	protected void apply(Map<Identifier, GiftPreference> preparations, ResourceManager manager, ProfilerFiller profiler) {
-		this.preferences = Collections.unmodifiableMap(new LinkedHashMap<>(preparations));
+		this.preferences = Collections.unmodifiableMap(Maps.newLinkedHashMap(preparations));
 	}
 
 	private static GiftPreference parsePreference(Identifier characterTypeId, JsonObject jsonObject) {
@@ -104,7 +100,7 @@ public class GiftPreferenceManager extends SimplePreparableReloadListener<Map<Id
 			throw new JsonParseException("Field '" + fieldName + "' must be an array");
 		}
 		JsonArray jsonArray = jsonElement.getAsJsonArray();
-		Set<Identifier> identifiers = new LinkedHashSet<>();
+		Set<Identifier> identifiers = Sets.newLinkedHashSet();
 		for(JsonElement element : jsonArray) {
 			if(!element.isJsonPrimitive() || !element.getAsJsonPrimitive().isString()) {
 				throw new JsonParseException("Field '" + fieldName + "' must contain only strings");

@@ -1,5 +1,6 @@
 package com.hexagram2021.girlfriends.client.screen;
 
+import com.google.common.collect.Maps;
 import com.hexagram2021.girlfriends.common.gift.GiftPreferenceLevel;
 import com.hexagram2021.girlfriends.common.network.ClientInteractionStore;
 import com.hexagram2021.girlfriends.common.network.InteractionSummary;
@@ -17,7 +18,6 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +33,7 @@ public class GiftScreen extends Screen {
 	private static final int ROWS = 4;
 
 	private final Identifier girlfriendTypeId;
-	private final Map<Integer, GiftPreferenceLevel> slotPreferenceMap = new HashMap<>();
+	private final Map<Integer, GiftPreferenceLevel> slotPreferenceMap = Maps.newHashMap();
 
 	public GiftScreen(Identifier girlfriendTypeId) {
 		super(Component.translatable("screen.girlfriends.gift"));

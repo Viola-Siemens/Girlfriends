@@ -1,11 +1,12 @@
 package com.hexagram2021.girlfriends.common.network;
 
+import com.google.common.collect.Maps;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.resources.Identifier;
 
 import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 客户端交互摘要存储，用于缓存服务端同步的交互状态喵~
@@ -13,9 +14,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author liudongyu
  */
 public final class ClientInteractionStore {
-	private static final Map<Identifier, InteractionSummary> SUMMARIES = new ConcurrentHashMap<>();
-	private static final Map<Identifier, QuestIconSummary> QUEST_ICONS = new ConcurrentHashMap<>();
-	private static final Set<Identifier> PENDING_INTERACTIONS = ConcurrentHashMap.newKeySet();
+	private static final Map<Identifier, InteractionSummary> SUMMARIES = Maps.newLinkedHashMap();
+	private static final Map<Identifier, QuestIconSummary> QUEST_ICONS = Maps.newLinkedHashMap();
+	private static final Set<Identifier> PENDING_INTERACTIONS = new ObjectOpenHashSet<>();
 
 	/**
 	 * 标记待处理的交互，用于 mobInteract 客户端侧触发界面打开喵~
