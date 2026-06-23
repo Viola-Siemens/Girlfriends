@@ -8,13 +8,17 @@
 	"objectives": [
 		{
 			"type": "item_delivery",
-			"item": {"item": "minecraft:honeycomb"},
+			"items": {
+				"item": "minecraft:honeycomb"
+			},
 			"count": 6,
 			"description_key": "quest.girlfriends.fq_momo_02.objective_0"
 		},
 		{
 			"type": "item_delivery",
-			"item": {"item": "minecraft:beehive"},
+			"items": {
+				"item": "minecraft:beehive"
+			},
 			"count": 2,
 			"description_key": "quest.girlfriends.fq_momo_02.objective_1"
 		}

@@ -11,8 +11,10 @@ import com.hexagram2021.girlfriends.common.gift.GiftService;
 import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
 import com.hexagram2021.girlfriends.common.home.BedValidator;
 import com.hexagram2021.girlfriends.common.home.HomeService;
+import com.hexagram2021.girlfriends.common.network.clientbound.ClientboundPlayVoicePacket;
 import com.hexagram2021.girlfriends.common.network.clientbound.ClientboundQuestIconPacket;
 import com.hexagram2021.girlfriends.common.network.clientbound.ClientboundSyncInteractionDataPacket;
+import com.hexagram2021.girlfriends.common.voice.GirlfriendsVoiceManager;
 import com.hexagram2021.girlfriends.common.network.serverbound.ServerboundAcceptQuestPacket;
 import com.hexagram2021.girlfriends.common.network.serverbound.ServerboundConfirmIntimacyPacket;
 import com.hexagram2021.girlfriends.common.network.serverbound.ServerboundDeliverQuestPacket;
@@ -37,7 +39,11 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.UUID;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.world.level.block.BedBlock;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -66,6 +72,22 @@ public final class GirlfriendsNetwork {
 	}
 
 	/**
+	 * 客户端侧语音播放 handler，由 {@link com.hexagram2021.girlfriends.client.GirlfriendsModClient} 注入喵~
+	 * 在专用服务端上此字段始终为 null，从而隔离客户端类引用喵~
+	 */
+	@Nullable
+	private static Consumer<ClientboundPlayVoicePacket> voiceHandler = null;
+
+	/**
+	 * 由客户端模组类调用，注入语音播放逻辑喵~
+	 *
+	 * @param handler 语音播放 handler 喵~
+	 */
+	public static void setVoiceHandler(@Nullable Consumer<ClientboundPlayVoicePacket> handler) {
+		voiceHandler = handler;
+	}
+
+	/**
 	 * 注册网络数据包喵~
 	 *
 	 * @param event 网络负载注册事件喵~
@@ -74,6 +96,7 @@ public final class GirlfriendsNetwork {
 		PayloadRegistrar registrar = event.registrar(GirlfriendsMod.MODID + ":" + PROTOCOL_VERSION);
 		registrar.playToClient(ClientboundSyncInteractionDataPacket.TYPE, ClientboundSyncInteractionDataPacket.STREAM_CODEC, GirlfriendsNetwork::handleSyncInteractionData);
 		registrar.playToClient(ClientboundQuestIconPacket.TYPE, ClientboundQuestIconPacket.STREAM_CODEC, GirlfriendsNetwork::handleQuestIcon);
+		registrar.playToClient(ClientboundPlayVoicePacket.TYPE, ClientboundPlayVoicePacket.STREAM_CODEC, GirlfriendsNetwork::handlePlayVoice);
 		registrar.playToServer(ServerboundGiveGiftPacket.TYPE, ServerboundGiveGiftPacket.STREAM_CODEC, GirlfriendsNetwork::handleGiveGift);
 		registrar.playToServer(ServerboundAcceptQuestPacket.TYPE, ServerboundAcceptQuestPacket.STREAM_CODEC, GirlfriendsNetwork::handleAcceptQuest);
 		registrar.playToServer(ServerboundSetFollowModePacket.TYPE, ServerboundSetFollowModePacket.STREAM_CODEC, GirlfriendsNetwork::handleSetFollowMode);
@@ -95,6 +118,14 @@ public final class GirlfriendsNetwork {
 
 	private static void handleQuestIcon(ClientboundQuestIconPacket packet, IPayloadContext context) {
 		context.enqueueWork(() -> ClientInteractionStore.setQuestIcon(packet.summary()));
+	}
+
+	private static void handlePlayVoice(ClientboundPlayVoicePacket packet, IPayloadContext context) {
+		Consumer<ClientboundPlayVoicePacket> handler = voiceHandler;
+		if (handler != null) {
+			// enqueueWork 在 Render Thread 上执行，满足 level.playSound 的主线程要求喵~
+			context.enqueueWork(() -> handler.accept(packet));
+		}
 	}
 
 	private static void handleGiveGift(ServerboundGiveGiftPacket packet, IPayloadContext context) {
@@ -195,7 +226,7 @@ public final class GirlfriendsNetwork {
 				Identifier dimension = respawnConfig.respawnData().dimension().identifier();
 				BedValidator bedValidator = anchor -> player.level().getBlockState(
 						new BlockPos(anchor.x(), anchor.y(), anchor.z())
-				).getBlock() instanceof net.minecraft.world.level.block.BedBlock;
+				).getBlock() instanceof BedBlock;
 				HomeService homeService = new HomeService(data, new RelationshipService(data), bedValidator);
 				if(homeService.inviteHome(player.getUUID(), packet.girlfriendTypeId(), dimension,
 						respawnPos.getX(), respawnPos.getY(), respawnPos.getZ())) {
@@ -245,6 +276,19 @@ public final class GirlfriendsNetwork {
 		// 1. 角色台词 → 聊天栏（若 quoteKey 不为 null）喵~
 		if (result.quoteKey() != null) {
 			player.sendSystemMessage(Component.translatable(result.quoteKey()));
+
+			// 1.5 角色语音 → 客户端播放（从角色实体位置发出）喵~
+			GirlfriendsWorldData data = getWorldData(player);
+			CharacterWorldState state = data.getExistingCharacterState(girlfriendTypeId);
+			if (state != null && state.isAlive() && state.getEntityUuid() != null) {
+				Entity entity = player.level().getEntity(state.getEntityUuid());
+				if (entity != null) {
+					String voiceKey = GirlfriendsVoiceManager.extractVoiceKey(result.quoteKey());
+					player.connection.send(new ClientboundPlayVoicePacket(
+							voiceKey,
+							entity.getX(), entity.getY(), entity.getZ()));
+				}
+			}
 		}
 
 		// 2. 好感度变化 → subtitle 三联包喵~

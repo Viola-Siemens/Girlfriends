@@ -8,7 +8,9 @@
 	"objectives": [
 		{
 			"type": "item_delivery",
-			"item": {"item": "minecraft:oak_log"},
+			"items": {
+				"item": "minecraft:oak_log"
+			},
 			"count": 8,
 			"description_key": "quest.girlfriends.fq_momo_10.objective_0"
 		}

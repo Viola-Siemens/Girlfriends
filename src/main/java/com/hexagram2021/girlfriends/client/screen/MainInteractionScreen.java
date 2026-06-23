@@ -19,9 +19,9 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
  * @author liudongyu
  */
 public class MainInteractionScreen extends Screen {
-	private static final int BUTTON_WIDTH = 200;
+	private static final int BUTTON_WIDTH = 120;
 	private static final int BUTTON_HEIGHT = 20;
-	private static final int CENTER_X_OFFSET = 100;
+	private static final int CENTER_X_OFFSET = 60;
 
 	private final Identifier girlfriendTypeId;
 	private final InteractionSummary summary;
@@ -43,8 +43,10 @@ public class MainInteractionScreen extends Screen {
 	@Override
 	protected void init() {
 		super.init();
+		int leftX = this.width / 20;
+		int rightX = this.width * 19 / 20 - BUTTON_WIDTH;
 		int centerX = this.width / 2 - CENTER_X_OFFSET;
-		int y = 60;
+		int y = this.height / 16;
 
 		// 查看委托 / 交付委托按钮（同位置）喵~
 		QuestContentSummary quest = this.summary.currentQuest();
@@ -56,16 +58,34 @@ public class MainInteractionScreen extends Screen {
 						ClientPacketDistributor.sendToServer(new ServerboundDeliverQuestPacket(this.girlfriendTypeId));
 						this.onClose();
 					}
-			).bounds(centerX, y, BUTTON_WIDTH, BUTTON_HEIGHT).build());
+			).bounds(leftX, y, BUTTON_WIDTH, BUTTON_HEIGHT).build());
 			deliverBtn.active = quest.questCompleted();
 		} else {
 			// 未接取 → 显示查看委托喵~
 			Button viewQuestBtn = this.addRenderableWidget(Button.builder(
 					Component.translatable("button.girlfriends.view_quest"),
 					_ -> this.minecraft.setScreen(new QuestViewScreen(this.girlfriendTypeId, quest))
-			).bounds(centerX, y, BUTTON_WIDTH, BUTTON_HEIGHT).build());
+			).bounds(leftX, y, BUTTON_WIDTH, BUTTON_HEIGHT).build());
 			viewQuestBtn.active = quest != null;
 		}
+
+		// 跟随模式切换按钮喵~
+		Component followText = Component.translatable("button.girlfriends.follow_mode",
+				Component.translatable("follow." + this.selectedFollowMode.getSerializedName()));
+		this.addRenderableWidget(Button.builder(
+				followText,
+				btn -> {
+					if(this.summary.canFollow()) {
+						this.selectedFollowMode = switch(this.selectedFollowMode) {
+							case NONE -> FollowMode.FOLLOW;
+							case FOLLOW -> FollowMode.STAY;
+							default -> FollowMode.NONE;
+						};
+						btn.setMessage(Component.translatable("button.girlfriends.follow_mode",
+								Component.translatable("follow." + this.selectedFollowMode.getSerializedName())));
+					}
+				}
+		).bounds(rightX, y, BUTTON_WIDTH, BUTTON_HEIGHT).build());
 		y += 25;
 
 		// 确立关系 / 邀请同居按钮（同位置，条件性显示）喵~
@@ -76,7 +96,7 @@ public class MainInteractionScreen extends Screen {
 						ClientPacketDistributor.sendToServer(new ServerboundConfirmIntimacyPacket(this.girlfriendTypeId));
 						this.onClose();
 					}
-			).bounds(centerX, y, BUTTON_WIDTH, BUTTON_HEIGHT).build());
+			).bounds(leftX, y, BUTTON_WIDTH, BUTTON_HEIGHT).build());
 			y += 25;
 		} else if(this.summary.canInviteHome()) {
 			this.addRenderableWidget(Button.builder(
@@ -84,42 +104,21 @@ public class MainInteractionScreen extends Screen {
 						ClientPacketDistributor.sendToServer(new ServerboundInviteHomePacket(this.girlfriendTypeId));
 						this.onClose();
 					}
-			).bounds(centerX, y, BUTTON_WIDTH, BUTTON_HEIGHT).build());
+			).bounds(leftX, y, BUTTON_WIDTH, BUTTON_HEIGHT).build());
 			y += 25;
 		}
-
-		// 跟随模式切换按钮喵~
-		Component followText = Component.translatable("button.girlfriends.follow_mode",
-				Component.translatable("follow." + this.selectedFollowMode.getSerializedName()));
-		this.addRenderableWidget(
-				Button.builder(followText, btn -> {
-							if(this.summary.canFollow()) {
-								this.selectedFollowMode = switch(this.selectedFollowMode) {
-									case NONE -> FollowMode.FOLLOW;
-									case FOLLOW -> FollowMode.STAY;
-									default -> FollowMode.NONE;
-								};
-								btn.setMessage(Component.translatable("button.girlfriends.follow_mode",
-										Component.translatable("follow." + this.selectedFollowMode.getSerializedName())));
-							}
-						})
-						.bounds(centerX, y, BUTTON_WIDTH, BUTTON_HEIGHT)
-						.build()
-		);
-		y += 25;
 
 		// 赠送礼物按钮喵~
 		this.addRenderableWidget(Button.builder(
 				Component.translatable("button.girlfriends.give_gift"),
 				_ -> this.minecraft.setScreen(new GiftScreen(this.girlfriendTypeId))
-		).bounds(centerX, y, BUTTON_WIDTH, BUTTON_HEIGHT).build());
-		y += 35;
+		).bounds(leftX, y, BUTTON_WIDTH, BUTTON_HEIGHT).build());
 
 		// 关闭按钮喵~
 		this.addRenderableWidget(Button.builder(
 				Component.translatable("button.girlfriends.close"),
 				_ -> this.onClose()
-		).bounds(centerX, y + 5, BUTTON_WIDTH, BUTTON_HEIGHT).build());
+		).bounds(centerX, this.height * 15 / 16 - BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT).build());
 	}
 
 	@Override

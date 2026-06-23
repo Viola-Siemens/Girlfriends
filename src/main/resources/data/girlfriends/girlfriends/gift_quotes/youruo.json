@@ -1,40 +1,40 @@
 {
   "favorite": {
     "minecraft:ender_pearl": [
-      "girlfriends.gift.quote.youruo.favorite.minecraft.ender_pearl.0",
-      "girlfriends.gift.quote.youruo.favorite.minecraft.ender_pearl.1",
-      "girlfriends.gift.quote.youruo.favorite.minecraft.ender_pearl.2"
+      "youruo.favorite_minecraft_ender_pearl_0",
+      "youruo.favorite_minecraft_ender_pearl_1",
+      "youruo.favorite_minecraft_ender_pearl_2"
     ]
   },
   "liked": [
-    "girlfriends.gift.quote.youruo.liked.0",
-    "girlfriends.gift.quote.youruo.liked.1",
-    "girlfriends.gift.quote.youruo.liked.2",
-    "girlfriends.gift.quote.youruo.liked.3",
-    "girlfriends.gift.quote.youruo.liked.4",
-    "girlfriends.gift.quote.youruo.liked.5",
-    "girlfriends.gift.quote.youruo.liked.6",
-    "girlfriends.gift.quote.youruo.liked.7"
+    "youruo.liked_0",
+    "youruo.liked_1",
+    "youruo.liked_2",
+    "youruo.liked_3",
+    "youruo.liked_4",
+    "youruo.liked_5",
+    "youruo.liked_6",
+    "youruo.liked_7"
   ],
   "accepted": [
-    "girlfriends.gift.quote.youruo.accepted.0",
-    "girlfriends.gift.quote.youruo.accepted.1",
-    "girlfriends.gift.quote.youruo.accepted.2",
-    "girlfriends.gift.quote.youruo.accepted.3",
-    "girlfriends.gift.quote.youruo.accepted.4",
-    "girlfriends.gift.quote.youruo.accepted.5"
+    "youruo.accepted_0",
+    "youruo.accepted_1",
+    "youruo.accepted_2",
+    "youruo.accepted_3",
+    "youruo.accepted_4",
+    "youruo.accepted_5"
   ],
   "rejected": [
-    "girlfriends.gift.quote.youruo.rejected.0",
-    "girlfriends.gift.quote.youruo.rejected.1",
-    "girlfriends.gift.quote.youruo.rejected.2",
-    "girlfriends.gift.quote.youruo.rejected.3"
+    "youruo.rejected_0",
+    "youruo.rejected_1",
+    "youruo.rejected_2",
+    "youruo.rejected_3"
   ],
   "disliked": [
-    "girlfriends.gift.quote.youruo.disliked.0",
-    "girlfriends.gift.quote.youruo.disliked.1",
-    "girlfriends.gift.quote.youruo.disliked.2",
-    "girlfriends.gift.quote.youruo.disliked.3",
-    "girlfriends.gift.quote.youruo.disliked.4"
+    "youruo.disliked_0",
+    "youruo.disliked_1",
+    "youruo.disliked_2",
+    "youruo.disliked_3",
+    "youruo.disliked_4"
   ]
 }

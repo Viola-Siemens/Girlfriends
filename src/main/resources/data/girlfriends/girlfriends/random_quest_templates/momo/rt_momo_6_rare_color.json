@@ -7,8 +7,20 @@
 	"expire_days_range": [5, 10],
 	"objectives": [
 		{
-			"type": "collect",
+			"type": "item_delivery",
+			"items": {
+				"item": "minecraft:blue_orchid",
+				"count": 2
+			},
 			"description_key": "quest.girlfriends.rt_momo_6.objective_0"
+		},
+		{
+			"type": "item_delivery",
+			"items": {
+				"item": "minecraft:sunflower",
+				"count": 2
+			},
+			"description_key": "quest.girlfriends.rt_momo_6.objective_1"
 		}
 	],
 	"rewards": {

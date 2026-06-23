@@ -77,7 +77,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | 服务 | 职责 |
 |---|---|
 | `RelationshipService` | 好感查询/变更/裁剪（0~1000）、阶段推导（数值+确认标记联合判定）、每日计数重置、角色死亡批量清空 |
-| `GiftService` | 礼物档位判定、赠礼公式 `Δ = base × √((16-dailyGain)/16)`、每日上限 15 点、偏好揭示、绑定限制 |
+| `GiftService` | 礼物档位判定、赠礼公式 `Δ = base × √((16-dailyGain)/16)`、每日上限 15 点、偏好揭示、绑定限制、通过 `GiftQuoteManager` 抽取角色台词反馈 |
 | `QuestService` | 委托槽管理（每角色唯一槽）、固定委托顺序发布、随机委托 5~10 日过期、接取/完成/过期、owner 原子校验 |
 | `BindingService` | 爱慕绑定建立、动摇期（3 游戏日）+ 挑战者转移、亲密锁定排他 |
 | `HomeService` | 家园伙伴邀请/解除、双人床校验、家园回血 + 每日好感、争执事件（每日 1 次、扣 3~5 点） |
@@ -112,11 +112,15 @@ AI 设计关键点：
 
 ### 4. Minecraft 集成层（Integration Layer）
 
-- **`GirlfriendsMod`**: 模组入口，注册自定义 Registry、EntityType、Activity、MemoryModuleType、SensorType、EnvironmentAttribute、网络包、ServerReloadListener、命令、实体事件监听
-- **`GirlfriendEntityEvents`**: 实体生命周期事件处理器 — EntityJoinLevel（标记存活、同步 UUID）、ServerTick.Post（每日维护：重置计数器、过期/刷新随机委托）、LivingDeath（标记死亡、记录死亡坐标）
-- **`GirlfriendsNetwork`**: 网络包注册与处理入口。所有 Serverbound handler 校验玩家是否可以接触到目标实体（`canReachEntity`，距离 ≤8）。不直接引用客户端类，clientbound handler 中的 UI 操作通过静态消费者注入模式委托给 `GirlfriendsModClient`。当前注册 7 个 serverbound + 2 个 clientbound 包
+- **`GirlfriendsMod`**: 模组入口，注册自定义 Registry、EntityType、Activity、MemoryModuleType、SensorType、EnvironmentAttribute、Item、Block、DataComponentType、CreativeModeTab、网络包、ServerReloadListener、命令、实体事件监听
+- **`GirlfriendEntityEvents`**: 实体生命周期事件处理器 — EntityJoinLevel（标记存活、同步 UUID）、ServerTick.Post（每日维护：重置计数器、过期/刷新随机委托）、LivingDeath（标记死亡、记录死亡坐标）、RightClickBlock（花盆+洒水壶交互阻止）
+- **`GirlfriendsNetwork`**: 网络包注册与处理入口。所有 Serverbound handler 校验玩家是否可以接触到目标实体（`canReachEntity`，距离 ≤8）。不直接引用客户端类，clientbound handler 中的 UI 操作通过静态消费者注入模式委托给 `GirlfriendsModClient`。赠礼反馈采用双通道：角色台词走聊天栏（`sendSystemMessage`），好感度变化走 action bar。当前注册 7 个 serverbound + 2 个 clientbound 包
 - **`GirlfriendsRegistries`**: 自定义注册表（`GIRLFRIEND_TYPE_REGISTRY`、`BLESSING_TYPE_REGISTRY`）
 - **`GirlfriendTypes`** / **`BlessingTypes`**: 内置类型通过 DeferredRegister 注册
+- **`GirlfriendsItems`**: 模组物品注册（手捧花 `BOUQUET`、洒水壶 `WATERING_CAN`，后者挂载 `WATER_LEVEL` 数据组件）
+- **`GirlfriendsBlocks`**: 模组方块注册（目前主要提供方块标签）
+- **`GirlfriendsDataComponentTypes`**: 物品数据组件类型注册（`WATER_LEVEL`，`Codec.INT` 持久化 + `ByteBufCodecs.INT` 网络同步）
+- **`GirlfriendsCreativeModeTabs`**: 创造模式物品栏标签页
 - **`AffectionCommand`**: `/affection get|set|add <girlfriend> <player> [value]` 调试命令，权限等级 GAMEMASTERS
 
 网络协议版本硬编码为 `"1"`，使用 NeoForge `PayloadRegistrar` 注册 play-to-client 和 play-to-server 包。
@@ -137,19 +141,33 @@ AI 设计关键点：
 
 ### 5. 表现层（Presentation Layer）
 
-- **`GirlfriendsModClient`**: 客户端入口，注册 EntityRenderer 和 ModelLayer
+- **`GirlfriendsModClient`**: 客户端入口，注册 EntityRenderer、ModelLayer（五位角色全部注册）、Screen，并通过 `GirlfriendsNetwork.setScreenOpener()` 注入主交互界面打开逻辑
 - **`ClientInteractionStore`**: 客户端交互摘要缓存（`InteractionSummary` + `QuestIconSummary`）
 - **`GirlfriendRenderer`**: 角色实体渲染器（使用 `GirlfriendModel`）
-- **`GirlfriendsModelLayers`**: 模型层定义
+- **`GirlfriendsModelLayers`**: 模型层定义（五位角色：MOMO / YUXI / MEISHU / WANYING / YOURUO）
+- **`MainInteractionScreen`**: 主交互界面（角色名、好感度模糊显示、委托入口、赠礼入口、跟随切换、亲密确认、家园邀请）
+- **`QuestViewScreen`**: 委托查看界面（任务描述、目标进度、奖励预览）
+- **`GiftScreen`**: 赠礼界面（背包槽位选择，通过 `ServerboundGiveGiftFromSlotPacket` 提交）
 
 ## 数据驱动系统
 
 以下内容通过 `SimplePreparableReloadListener` 从数据包加载。
 
 - **`GiftPreferenceManager`**: 从 `data/<ns>/girlfriends/gift_preferences/*.json` 加载角色礼物偏好（favorite/liked/accepted/disliked 四个档位 + tag 支持）
+- **`GiftQuoteManager`**: 从 `data/<ns>/girlfriends/gift_quotes/*.json` 加载角色赠礼回复台词语料，按五档位（favorite 按物品 ID 细分）提供随机 i18n key 抽取，供 `GiftService` 在赠礼时生成角色台词喵~
 - **`BlessingParameterManager`**: 从 `data/<ns>/girlfriends/blessing_parameters/*.json` 加载祝福参数
 - **`FixedQuestDefinitionManager`**: 固定委托定义加载（含 objective 解析）
 - **`RandomQuestTemplateManager`**: 随机委托模板加载
+
+## 日程与标签数据
+
+AI 日程系统通过数据包驱动，使用原版 Timeline/Schedule 体系：
+
+- `data/<ns>/timeline/<character>_schedule.json`: 单角色日程表（如 `momo_schedule.json`），定义各时刻对应的 Activity
+- `data/<ns>/tags/timeline/girlfriends_schedule.json`: 角色日程标签，标记需要加载日程的角色集合
+- `data/minecraft/tags/timeline/universal.json`: 接入原版通用 Timeline 系统
+
+物品/方块标签文件（`data/<ns>/tags/`）用于定义角色拾取物过滤、草方块转换等行为。
 
 ## 委托目标处理器（Quest Objective Handler）
 
@@ -165,7 +183,7 @@ void deserializeProgress(CompoundTag) // 反序列化进度
 ```
 
 已注册的处理器类型（在 JSON 中由 `type` 字段指定）：
-`item_delivery`、`structure_visit`、`block_stay`、`collect`、`deliver`、`build`、`accompany`、`fight`。
+`item_delivery`、`structure_visit`、`block_stay`、`build`、`accompany`、`fight`。
 
 部分处理器逻辑待后续 Story 根据 GDD 完善（标记 TODO）。
 
@@ -189,12 +207,16 @@ void deserializeProgress(CompoundTag) // 反序列化进度
 - 使用 `Identifier.fromNamespaceAndPath(GirlfriendsMod.MODID, "xxx")` 构造角色 ID
 - 固定 UUID 使用 `UUID.fromString("00000000-0000-0000-0000-00000000000X")` 确保可重现
 
+已有测试类：`GirlfriendsWorldDataTest`、`RelationshipServiceTest`、`GiftServiceTest`、`GiftQuoteManagerTest`、`QuestServiceTest`、`BindingServiceTest`、`HomeServiceTest`、`BlessingServiceTest`、`CharacterRespawnServiceTest`、`InteractionSummaryServiceTest`、`ClientInteractionStoreTest`、`ServerboundPacketSerializationTest`、`ServerboundPermissionTest`
+
 ## 开发状态
 
 - **已完成**: 底层系统架构（Story 01~09）— 持久化、关系、赠礼、委托、绑定、家园、祝福、重生、网络协议
-- **已完成**: REQ-7 角色实体与 AI — `GirlfriendEntity` 抽象基类、`MomoEntity` 完整实现（含日程 AI 和传感器）、客户端渲染器、命令系统、实体事件处理器
+- **已完成**: REQ-7 角色实体与 AI — `GirlfriendEntity` 抽象基类、`MomoEntity` 完整实现（含日程 AI 和传感器）、客户端渲染器（五位角色模型层全部注册）、命令系统、实体事件处理器、模组物品（手捧花、洒水壶+数据组件）、创造模式物品栏
+- **已完成**: REQ-7 赠礼台词系统 — `GiftQuoteManager` 语料管理器，五个角色共 133 条中英双语台词，赠礼反馈拆分为角色台词（聊天栏）+ 好感度变化（action bar）双通道
+- **已完成**: REQ-8 玩家交互界面 — `MainInteractionScreen` 主界面、`QuestViewScreen` 委托查看、`GiftScreen` 背包赠礼，4 个新增 Serverbound 包（交付委托/确立关系/邀请同居/背包送礼）
 - **进行中**: 委托目标处理器具体逻辑（部分标记 TODO，等待 GDD 细化）
-- **待实现**: 渔溪/梅疏/晚萤/幽若四个角色的实体子类及专属 AI Behavior、委托奖励发放、GUI 交互界面、角色自然生成逻辑
+- **待实现**: 渔溪/梅疏/晚萤/幽若四个角色的实体子类及专属 AI Behavior、委托奖励发放、角色自然生成逻辑
 
 ## Git 提交规范
 
@@ -207,10 +229,15 @@ scope: 需求/故事编号，如 REQ-7
 
 - `docs/v0.1.0/PRD.md`: 产品需求文档（角色内容、玩法规则、数值表）
 - `docs/v0.1.0/DR_system.md`: 底层系统技术设计（架构、持久化、服务接口、性能分析）
-- `docs/v0.1.0/GDD/`: 五位角色游戏设计文档（固定委托线、随机委托模板、偏好、终章奖励）
+- `docs/v0.1.0/GDD/`: 五位角色游戏设计文档（`00_总游戏设计文档.md`、`01_沫沫.md` ~ `05_幽若.md`）
 - `docs/v0.1.0/PLAN_story_*.md`: 各 Story 实现计划
+- `docs/v0.1.0/TEST_system.md`: 测试记录与手工验收清单
 - `docs/superpowers/specs/2026-06-07-character-entity-ai-design.md`: REQ-7 角色实体与 AI 技术规格
 - `docs/superpowers/plans/2026-06-07-character-entity-ai-plan.md`: REQ-7 实施计划
+- `docs/superpowers/specs/2026-06-15-player-interaction-ui-design.md`: REQ-8 玩家交互界面技术规格
+- `docs/superpowers/plans/2026-06-15-player-interaction-ui-plan.md`: REQ-8 实施计划
+- `docs/superpowers/specs/2026-06-20-gift-quote-system-design.md`: 礼物回复台词系统设计规格
+- `docs/superpowers/plans/2026-06-20-gift-quote-system-plan.md`: 礼物回复台词系统实施计划
 
 ## 参考项目目录
 
@@ -219,4 +246,4 @@ scope: 需求/故事编号，如 REQ-7
 
 ## 文档基线
 
-本文基于提交 `3f0b9b8`（REQ-7 角色实体接入四大系统）的内容创建。后续更新时可以以此为基准，阅读 git 变更，避免全量阅读项目内容。
+本文基于提交 `7cdf22d`（Merge pull request #3 - gift_dialogue）的内容创建。后续更新时可以以此为基准，阅读 git 变更，避免全量阅读项目内容。

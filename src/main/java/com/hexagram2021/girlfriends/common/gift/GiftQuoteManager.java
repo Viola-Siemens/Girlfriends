@@ -2,6 +2,7 @@ package com.hexagram2021.girlfriends.common.gift;
 
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -23,6 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.random.RandomGenerator;
 
 /**
@@ -35,6 +37,11 @@ public final class GiftQuoteManager extends SimplePreparableReloadListener<Map<I
 
 	private static final Logger LOGGER = LogUtils.getLogger();
 	private static final FileToIdConverter LISTER = FileToIdConverter.json("girlfriends/gift_quotes");
+
+	/**
+	 * 台词 i18n key 的前缀，JSON 中仅存储后缀部分，由 Java 代码统一拼接喵~
+	 */
+	public static final String QUOTE_KEY_PREFIX = "girlfriends.gift.quote.";
 
 	private Map<Identifier, GiftQuotes> quotesMap = Map.of();
 	private final RandomGenerator random = RandomGenerator.getDefault();
@@ -76,7 +83,7 @@ public final class GiftQuoteManager extends SimplePreparableReloadListener<Map<I
 		if (pool.isEmpty()) {
 			return Optional.empty();
 		}
-		return Optional.of(pool.get(this.random.nextInt(pool.size())));
+		return Optional.of(QUOTE_KEY_PREFIX + pool.get(this.random.nextInt(pool.size())));
 	}
 
 	/**
@@ -86,7 +93,7 @@ public final class GiftQuoteManager extends SimplePreparableReloadListener<Map<I
 	 * @return 随机台词 i18n key，未配置时返回 {@link Optional#empty()} 喵~
 	 */
 	public Optional<String> getRandomLikedQuote(Identifier girlfriendTypeId) {
-		return getRandomFromPool(girlfriendTypeId, GiftQuotes::likedQuotes);
+		return this.getRandomFromPool(girlfriendTypeId, GiftQuotes::likedQuotes);
 	}
 
 	/**
@@ -96,7 +103,7 @@ public final class GiftQuoteManager extends SimplePreparableReloadListener<Map<I
 	 * @return 随机台词 i18n key，未配置时返回 {@link Optional#empty()} 喵~
 	 */
 	public Optional<String> getRandomAcceptedQuote(Identifier girlfriendTypeId) {
-		return getRandomFromPool(girlfriendTypeId, GiftQuotes::acceptedQuotes);
+		return this.getRandomFromPool(girlfriendTypeId, GiftQuotes::acceptedQuotes);
 	}
 
 	/**
@@ -106,7 +113,7 @@ public final class GiftQuoteManager extends SimplePreparableReloadListener<Map<I
 	 * @return 随机台词 i18n key，未配置时返回 {@link Optional#empty()} 喵~
 	 */
 	public Optional<String> getRandomRejectedQuote(Identifier girlfriendTypeId) {
-		return getRandomFromPool(girlfriendTypeId, GiftQuotes::rejectedQuotes);
+		return this.getRandomFromPool(girlfriendTypeId, GiftQuotes::rejectedQuotes);
 	}
 
 	/**
@@ -116,7 +123,7 @@ public final class GiftQuoteManager extends SimplePreparableReloadListener<Map<I
 	 * @return 随机台词 i18n key，未配置时返回 {@link Optional#empty()} 喵~
 	 */
 	public Optional<String> getRandomDislikedQuote(Identifier girlfriendTypeId) {
-		return getRandomFromPool(girlfriendTypeId, GiftQuotes::dislikedQuotes);
+		return this.getRandomFromPool(girlfriendTypeId, GiftQuotes::dislikedQuotes);
 	}
 
 	@Override
@@ -147,7 +154,7 @@ public final class GiftQuoteManager extends SimplePreparableReloadListener<Map<I
 	}
 
 	private Optional<String> getRandomFromPool(Identifier girlfriendTypeId,
-											   java.util.function.Function<GiftQuotes, List<String>> poolExtractor) {
+											   Function<GiftQuotes, List<String>> poolExtractor) {
 		GiftQuotes quotes = this.quotesMap.get(girlfriendTypeId);
 		if (quotes == null) {
 			return Optional.empty();
@@ -156,7 +163,7 @@ public final class GiftQuoteManager extends SimplePreparableReloadListener<Map<I
 		if (pool.isEmpty()) {
 			return Optional.empty();
 		}
-		return Optional.of(pool.get(this.random.nextInt(pool.size())));
+		return Optional.of(QUOTE_KEY_PREFIX + pool.get(this.random.nextInt(pool.size())));
 	}
 
 	private static GiftQuotes parseQuotes(JsonObject jsonObject) {
@@ -196,7 +203,7 @@ public final class GiftQuoteManager extends SimplePreparableReloadListener<Map<I
 			throw new JsonParseException("Field '" + fieldName + "' must be a JSON array");
 		}
 		JsonArray jsonArray = element.getAsJsonArray();
-		List<String> result = new java.util.ArrayList<>(jsonArray.size());
+		List<String> result = Lists.newArrayListWithCapacity(jsonArray.size());
 		for (JsonElement elem : jsonArray) {
 			if (!elem.isJsonPrimitive() || !elem.getAsJsonPrimitive().isString()) {
 				throw new JsonParseException("Field '" + fieldName + "' must contain only strings");

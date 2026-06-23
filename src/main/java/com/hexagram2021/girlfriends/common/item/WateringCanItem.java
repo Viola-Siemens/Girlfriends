@@ -54,6 +54,7 @@ public class WateringCanItem extends Item {
 		int waterLevel = itemStack.getOrDefault(GirlfriendsDataComponentTypes.WATER_LEVEL, 0);
 		if(waterLevel > 0) {
 			if(state.hasProperty(BlockStateProperties.MOISTURE)) {
+				// 浇灌耕地
 				int moisture = state.getValue(BlockStateProperties.MOISTURE);
 				int max = BlockStateProperties.MOISTURE.getPossibleValues().stream().max(Integer::compareTo).orElse(0);
 				if (moisture < max) {
@@ -70,7 +71,28 @@ public class WateringCanItem extends Item {
 				}
 				return super.useOn(context);
 			}
+			if(state.hasProperty(BlockStateProperties.FLOWER_AMOUNT)) {
+				// 浇灌花朵
+				int flowerAmount = state.getValue(BlockStateProperties.FLOWER_AMOUNT);
+				int max = BlockStateProperties.FLOWER_AMOUNT.getPossibleValues().stream().max(Integer::compareTo).orElse(0);
+				if (flowerAmount < max) {
+					if (level.isClientSide()) {
+						addParticles(level, pos, level.getRandom(), pos.getY() + 0.9D);
+						return InteractionResult.SUCCESS;
+					}
+					if(level.getRandom().nextInt(3) == 0) {
+						level.setBlock(pos, state.setValue(BlockStateProperties.FLOWER_AMOUNT, flowerAmount + 1), Block.UPDATE_ALL);
+					}
+					itemStack.set(GirlfriendsDataComponentTypes.WATER_LEVEL, waterLevel - 1);
+					if (player != null) {
+						player.getCooldowns().addCooldown(itemStack, 20);
+					}
+					return InteractionResult.CONSUME;
+				}
+				return super.useOn(context);
+			}
 			if(state.getBlock() instanceof FlowerPotBlock potBlock && potBlock.getPotted() != Blocks.AIR) {
+				// 花盆，有概率复制
 				if (level.isClientSide()) {
 					addParticles(level, pos, level.getRandom(), pos.getY() + 0.5D);
 					return InteractionResult.SUCCESS;

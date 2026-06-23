@@ -7,7 +7,12 @@ import com.hexagram2021.girlfriends.client.renderer.GirlfriendRenderer;
 import com.hexagram2021.girlfriends.client.screen.MainInteractionScreen;
 import com.hexagram2021.girlfriends.common.entity.GirlfriendsEntities;
 import com.hexagram2021.girlfriends.common.network.GirlfriendsNetwork;
+import com.hexagram2021.girlfriends.common.network.clientbound.ClientboundPlayVoicePacket;
+import com.hexagram2021.girlfriends.common.voice.GirlfriendsVoiceManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -18,6 +23,7 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 /**
  * 模组客户端主类
@@ -46,6 +52,19 @@ public class GirlfriendsModClient {
         GirlfriendsNetwork.setScreenOpener(
                 (id, summary) -> Minecraft.getInstance().setScreen(new MainInteractionScreen(id, summary))
         );
+        // 注入语音播放 handler，将客户端侧声音播放与 common 网络代码解耦喵~
+        GirlfriendsNetwork.setVoiceHandler(packet -> {
+            DeferredHolder<SoundEvent, SoundEvent> holder =
+                    GirlfriendsVoiceManager.getVoice(packet.voiceKey());
+            if (holder != null) {
+                ClientLevel level = Minecraft.getInstance().level;
+                if (level != null) {
+                    level.playSound(null,
+                            packet.x(), packet.y(), packet.z(),
+                            holder, SoundSource.VOICE, 1.0F, 1.0F);
+                }
+            }
+        });
     }
 
     /**

@@ -1,45 +1,45 @@
 {
   "favorite": {
     "minecraft:honeycomb": [
-      "girlfriends.gift.quote.momo.favorite.minecraft.honeycomb.0",
-      "girlfriends.gift.quote.momo.favorite.minecraft.honeycomb.1",
-      "girlfriends.gift.quote.momo.favorite.minecraft.honeycomb.2"
+      "momo.favorite_minecraft_honeycomb_0",
+      "momo.favorite_minecraft_honeycomb_1",
+      "momo.favorite_minecraft_honeycomb_2"
     ],
     "girlfriends:bouquet": [
-      "girlfriends.gift.quote.momo.favorite.girlfriends.bouquet.0",
-      "girlfriends.gift.quote.momo.favorite.girlfriends.bouquet.1",
-      "girlfriends.gift.quote.momo.favorite.girlfriends.bouquet.2"
+      "momo.favorite_girlfriends_bouquet_0",
+      "momo.favorite_girlfriends_bouquet_1",
+      "momo.favorite_girlfriends_bouquet_2"
     ]
   },
   "liked": [
-    "girlfriends.gift.quote.momo.liked.0",
-    "girlfriends.gift.quote.momo.liked.1",
-    "girlfriends.gift.quote.momo.liked.2",
-    "girlfriends.gift.quote.momo.liked.3",
-    "girlfriends.gift.quote.momo.liked.4",
-    "girlfriends.gift.quote.momo.liked.5",
-    "girlfriends.gift.quote.momo.liked.6",
-    "girlfriends.gift.quote.momo.liked.7"
+    "momo.liked_0",
+    "momo.liked_1",
+    "momo.liked_2",
+    "momo.liked_3",
+    "momo.liked_4",
+    "momo.liked_5",
+    "momo.liked_6",
+    "momo.liked_7"
   ],
   "accepted": [
-    "girlfriends.gift.quote.momo.accepted.0",
-    "girlfriends.gift.quote.momo.accepted.1",
-    "girlfriends.gift.quote.momo.accepted.2",
-    "girlfriends.gift.quote.momo.accepted.3",
-    "girlfriends.gift.quote.momo.accepted.4",
-    "girlfriends.gift.quote.momo.accepted.5"
+    "momo.accepted_0",
+    "momo.accepted_1",
+    "momo.accepted_2",
+    "momo.accepted_3",
+    "momo.accepted_4",
+    "momo.accepted_5"
   ],
   "rejected": [
-    "girlfriends.gift.quote.momo.rejected.0",
-    "girlfriends.gift.quote.momo.rejected.1",
-    "girlfriends.gift.quote.momo.rejected.2",
-    "girlfriends.gift.quote.momo.rejected.3"
+    "momo.rejected_0",
+    "momo.rejected_1",
+    "momo.rejected_2",
+    "momo.rejected_3"
   ],
   "disliked": [
-    "girlfriends.gift.quote.momo.disliked.0",
-    "girlfriends.gift.quote.momo.disliked.1",
-    "girlfriends.gift.quote.momo.disliked.2",
-    "girlfriends.gift.quote.momo.disliked.3",
-    "girlfriends.gift.quote.momo.disliked.4"
+    "momo.disliked_0",
+    "momo.disliked_1",
+    "momo.disliked_2",
+    "momo.disliked_3",
+    "momo.disliked_4"
   ]
 }

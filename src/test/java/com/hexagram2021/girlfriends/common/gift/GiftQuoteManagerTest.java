@@ -6,13 +6,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class GiftQuoteManagerTest {
-	private static final Identifier MOMO_ID = Identifier.fromNamespaceAndPath("girlfriends", "momo");
-
 	@Test
 	void parseCompleteQuotesYieldsAllTiers() {
 		GiftQuoteManager.GiftQuotes quotes = new GiftQuoteManager.GiftQuotes(
@@ -53,7 +52,7 @@ class GiftQuoteManagerTest {
 	void randomQuoteCoversAllEntries() {
 		List<String> pool = List.of("a", "b", "c", "d", "e", "f", "g", "h");
 		Set<String> seen = new HashSet<>();
-		java.util.Random random = new java.util.Random(42);
+		Random random = new Random(42);
 		for (int i = 0; i < 100; i++) {
 			seen.add(pool.get(random.nextInt(pool.size())));
 		}

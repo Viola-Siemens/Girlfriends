@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#c:tulip",
+    "minecraft:allium",
+    "minecraft:dandelion",
+    "minecraft:oxeye_daisy",
+    "#girlfriends:ribbons",
+    "minecraft:white_carpet"
+  ],
+  "result": {
+    "count": 1,
+    "id": "girlfriends:bouquet"
+  }
+}

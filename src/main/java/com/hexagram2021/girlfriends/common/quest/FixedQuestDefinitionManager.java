@@ -8,11 +8,13 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.hexagram2021.girlfriends.common.relationship.AffectionStage;
 import com.mojang.logging.LogUtils;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
 import org.slf4j.Logger;
 
@@ -86,19 +88,22 @@ public class FixedQuestDefinitionManager extends SimplePreparableReloadListener<
 	}
 
 	static QuestDefinition parseDefinition(Identifier fallbackId, JsonObject jsonObject, QuestType defaultQuestType) {
-		String questId = getString(jsonObject, "quest_id").orElse(fallbackId.toString());
-		QuestType questType = getString(jsonObject, "quest_type").map(String::toUpperCase).map(QuestType::valueOf).orElse(defaultQuestType);
-		Identifier girlfriendTypeId = getString(jsonObject, "girlfriend_type_id")
-				.or(() -> getString(jsonObject, "character_id"))
-				.map(Identifier::parse)
-				.orElse(fallbackId.withPath(path -> path.contains("/") ? path.substring(0, path.indexOf('/')) : path));
-		int fixedIndex = getInt(jsonObject, "fixed_index").orElse(0);
-		AffectionStage requiredStage = getString(jsonObject, "required_stage")
-				.map(String::toUpperCase)
-				.map(AffectionStage::valueOf)
-				.orElse(AffectionStage.STRANGER);
-		QuestObjectiveGroup objectives = parseObjectives(jsonObject.getAsJsonArray("objectives"));
-		return new QuestDefinition(questId, questType, girlfriendTypeId, fixedIndex, requiredStage, objectives);
+		try {
+			String questId = GsonHelper.getAsString(jsonObject, "quest_id", fallbackId.toString());
+			QuestType questType = QuestType.valueOf(GsonHelper.getAsString(jsonObject, "quest_type", defaultQuestType.name()).toUpperCase());
+			Identifier girlfriendTypeId = Identifier.parse(GsonHelper.getAsString(
+					jsonObject, "girlfriend_type_id", GsonHelper.getAsString(
+							jsonObject, "character_id",
+							fallbackId.withPath(path -> path.contains("/") ? path.substring(0, path.indexOf('/')) : path).toString()
+					)
+			));
+			int fixedIndex = getInt(jsonObject, "fixed_index").orElse(0);
+			AffectionStage requiredStage = AffectionStage.valueOf(GsonHelper.getAsString(jsonObject, "required_stage", "STRANGER").toUpperCase());
+			QuestObjectiveGroup objectives = parseObjectives(jsonObject.getAsJsonArray("objectives"));
+			return new QuestDefinition(questId, questType, girlfriendTypeId, fixedIndex, requiredStage, objectives);
+		} catch(Exception e) {
+			throw new IllegalStateException("Failed to parse " + fallbackId, e);
+		}
 	}
 
 	static QuestObjectiveGroup parseObjectives(@Nullable JsonArray objectivesArray) {
@@ -111,21 +116,17 @@ public class FixedQuestDefinitionManager extends SimplePreparableReloadListener<
 				throw new JsonParseException("Objective entry must be a JSON object");
 			}
 			JsonObject objectiveObject = element.getAsJsonObject();
-			String type = getString(objectiveObject, "type").orElse("noop");
+			String type = GsonHelper.getAsString(objectiveObject, "type", "noop");
 			switch(type) {
 				case "item_delivery" -> objectives.add(new ItemDeliveryObjectiveHandler(
-						Identifier.parse(getString(objectiveObject, "item_id").orElse("minecraft:air")),
-						getInt(objectiveObject, "required_count").orElse(1)
+						ItemDeliveryObjectiveHandler.ItemDeliveryRecord.LIST_CODEC.parse(JsonOps.INSTANCE, objectiveObject.get("items")).getOrThrow()
 				));
 				case "structure_visit" -> objectives.add(new StructureVisitObjectiveHandler(
-						getString(objectiveObject, "structure_id").orElse("")
+						StructureVisitObjectiveHandler.StructureVisitRecord.LIST_CODEC.parse(JsonOps.INSTANCE, objectiveObject.get("structures")).getOrThrow()
 				));
 				case "block_stay" -> objectives.add(new BlockStayObjectiveHandler(
-						Identifier.parse(getString(objectiveObject, "block_id").orElse("minecraft:air")),
-						getInt(objectiveObject, "required_ticks").orElse(20)
+						BlockStayObjectiveHandler.BlockStayRecord.LIST_CODEC.parse(JsonOps.INSTANCE, objectiveObject.get("blocks")).getOrThrow()
 				));
-				case "collect" -> objectives.add(new CollectObjectiveHandler());
-				case "deliver" -> objectives.add(new DeliverObjectiveHandler());
 				case "build" -> objectives.add(new BuildObjectiveHandler());
 				case "accompany" -> objectives.add(new AccompanyObjectiveHandler());
 				case "fight" -> objectives.add(new FightObjectiveHandler());
@@ -136,17 +137,6 @@ public class FixedQuestDefinitionManager extends SimplePreparableReloadListener<
 			}
 		}
 		return objectives.isEmpty() ? QuestObjectiveGroup.empty() : new QuestObjectiveGroup(objectives);
-	}
-
-	private static Optional<String> getString(JsonObject jsonObject, String fieldName) {
-		if(!jsonObject.has(fieldName)) {
-			return Optional.empty();
-		}
-		JsonElement element = jsonObject.get(fieldName);
-		if(!element.isJsonPrimitive() || !element.getAsJsonPrimitive().isString()) {
-			throw new JsonParseException("Field '" + fieldName + "' must be a string");
-		}
-		return Optional.of(element.getAsString());
 	}
 
 	private static Optional<Integer> getInt(JsonObject jsonObject, String fieldName) {

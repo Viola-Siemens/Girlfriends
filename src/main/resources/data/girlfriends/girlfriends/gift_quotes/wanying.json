@@ -1,40 +1,40 @@
 {
   "favorite": {
     "minecraft:blaze_rod": [
-      "girlfriends.gift.quote.wanying.favorite.minecraft.blaze_rod.0",
-      "girlfriends.gift.quote.wanying.favorite.minecraft.blaze_rod.1",
-      "girlfriends.gift.quote.wanying.favorite.minecraft.blaze_rod.2"
+      "wanying.favorite_minecraft_blaze_rod_0",
+      "wanying.favorite_minecraft_blaze_rod_1",
+      "wanying.favorite_minecraft_blaze_rod_2"
     ]
   },
   "liked": [
-    "girlfriends.gift.quote.wanying.liked.0",
-    "girlfriends.gift.quote.wanying.liked.1",
-    "girlfriends.gift.quote.wanying.liked.2",
-    "girlfriends.gift.quote.wanying.liked.3",
-    "girlfriends.gift.quote.wanying.liked.4",
-    "girlfriends.gift.quote.wanying.liked.5",
-    "girlfriends.gift.quote.wanying.liked.6",
-    "girlfriends.gift.quote.wanying.liked.7"
+    "wanying.liked_0",
+    "wanying.liked_1",
+    "wanying.liked_2",
+    "wanying.liked_3",
+    "wanying.liked_4",
+    "wanying.liked_5",
+    "wanying.liked_6",
+    "wanying.liked_7"
   ],
   "accepted": [
-    "girlfriends.gift.quote.wanying.accepted.0",
-    "girlfriends.gift.quote.wanying.accepted.1",
-    "girlfriends.gift.quote.wanying.accepted.2",
-    "girlfriends.gift.quote.wanying.accepted.3",
-    "girlfriends.gift.quote.wanying.accepted.4",
-    "girlfriends.gift.quote.wanying.accepted.5"
+    "wanying.accepted_0",
+    "wanying.accepted_1",
+    "wanying.accepted_2",
+    "wanying.accepted_3",
+    "wanying.accepted_4",
+    "wanying.accepted_5"
   ],
   "rejected": [
-    "girlfriends.gift.quote.wanying.rejected.0",
-    "girlfriends.gift.quote.wanying.rejected.1",
-    "girlfriends.gift.quote.wanying.rejected.2",
-    "girlfriends.gift.quote.wanying.rejected.3"
+    "wanying.rejected_0",
+    "wanying.rejected_1",
+    "wanying.rejected_2",
+    "wanying.rejected_3"
   ],
   "disliked": [
-    "girlfriends.gift.quote.wanying.disliked.0",
-    "girlfriends.gift.quote.wanying.disliked.1",
-    "girlfriends.gift.quote.wanying.disliked.2",
-    "girlfriends.gift.quote.wanying.disliked.3",
-    "girlfriends.gift.quote.wanying.disliked.4"
+    "wanying.disliked_0",
+    "wanying.disliked_1",
+    "wanying.disliked_2",
+    "wanying.disliked_3",
+    "wanying.disliked_4"
   ]
 }
