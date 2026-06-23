@@ -10,6 +10,7 @@ import com.hexagram2021.girlfriends.common.network.GirlfriendsNetwork;
 import com.hexagram2021.girlfriends.common.voice.GirlfriendsVoiceManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.neoforged.api.distmarker.Dist;
@@ -53,14 +54,17 @@ public class GirlfriendsModClient {
         );
         // 注入语音播放 handler，将客户端侧声音播放与 common 网络代码解耦喵~
         GirlfriendsNetwork.setVoiceHandler(packet -> {
-            DeferredHolder<SoundEvent, SoundEvent> holder =
-                    GirlfriendsVoiceManager.getVoice(packet.voiceKey());
+            DeferredHolder<SoundEvent, SoundEvent> holder = GirlfriendsVoiceManager.getVoice(packet.voiceKey());
             if (holder != null) {
-                ClientLevel level = Minecraft.getInstance().level;
-                if (level != null) {
-                    level.playSound(null,
+                Minecraft mc = Minecraft.getInstance();
+                LocalPlayer player = mc.player;
+                ClientLevel level = mc.level;
+                if (player != null && level != null) {
+                    level.playSound(
+                            player,
                             packet.x(), packet.y(), packet.z(),
-                            holder, SoundSource.VOICE, 1.0F, 1.0F);
+                            holder, SoundSource.NEUTRAL, 1.0F, 1.0F
+                    );
                 }
             }
         });
@@ -81,7 +85,7 @@ public class GirlfriendsModClient {
      */
     @SubscribeEvent
     public static void onRegisterModels(EntityRenderersEvent.RegisterLayerDefinitions event) {
-    	event.registerLayerDefinition(GirlfriendsModelLayers.MOMO, GirlfriendModel::createBodyLayer);
+        event.registerLayerDefinition(GirlfriendsModelLayers.MOMO, GirlfriendModel::createBodyLayer);
         event.registerLayerDefinition(GirlfriendsModelLayers.YUXI, GirlfriendModel::createBodyLayer);
         event.registerLayerDefinition(GirlfriendsModelLayers.MEISHU, GirlfriendModel::createBodyLayer);
         event.registerLayerDefinition(GirlfriendsModelLayers.WANYING, GirlfriendModel::createBodyLayer);

@@ -278,7 +278,8 @@ public final class GirlfriendsNetwork {
 					String voiceKey = GirlfriendsVoiceManager.extractVoiceKey(result.quoteKey());
 					player.connection.send(new ClientboundPlayVoicePacket(
 							voiceKey,
-							entity.getX(), entity.getY(), entity.getZ()));
+							entity.getX(), entity.getY(), entity.getZ()
+					));
 				}
 			}
 		}
