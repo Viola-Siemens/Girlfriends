@@ -39,7 +39,7 @@ public final class GiftQuoteManager extends SimplePreparableReloadListener<Map<I
 	/**
 	 * 台词 i18n key 的前缀，JSON 中仅存储后缀部分，由 Java 代码统一拼接喵~
 	 */
-	static final String QUOTE_KEY_PREFIX = "girlfriends.gift.quote.";
+	public static final String QUOTE_KEY_PREFIX = "girlfriends.gift.quote.";
 
 	private Map<Identifier, GiftQuotes> quotesMap = Map.of();
 	private final RandomGenerator random = RandomGenerator.getDefault();
