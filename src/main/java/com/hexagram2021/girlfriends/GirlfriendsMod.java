@@ -7,6 +7,7 @@ import com.hexagram2021.girlfriends.common.character.GirlfriendTypes;
 import com.hexagram2021.girlfriends.common.character.GirlfriendsRegistries;
 import com.hexagram2021.girlfriends.common.command.AffectionCommand;
 import com.hexagram2021.girlfriends.common.components.GirlfriendsDataComponentTypes;
+import com.hexagram2021.girlfriends.common.config.GirlfriendsCommonConfig;
 import com.hexagram2021.girlfriends.common.creativemodetab.GirlfriendsCreativeModeTabs;
 import com.hexagram2021.girlfriends.common.entity.GirlfriendEntity;
 import com.hexagram2021.girlfriends.common.entity.GirlfriendsEntities;
@@ -26,6 +27,7 @@ import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
@@ -79,6 +81,8 @@ public class GirlfriendsMod {
 		GirlfriendsMemoryTypes.REGISTER.register(modEventBus);
 		GirlfriendsSensorTypes.REGISTER.register(modEventBus);
 		GirlfriendsVoiceEvents.REGISTER.register(modEventBus);
+
+		modContainer.registerConfig(ModConfig.Type.COMMON, GirlfriendsCommonConfig.CONFIG);
 	}
 
 	private void onCommonSetup(FMLCommonSetupEvent event) {
