@@ -40,18 +40,19 @@ public class QuestViewScreen extends Screen {
 
 		// 接受委托按钮喵~
 		this.addRenderableWidget(
-				Button.builder(Component.translatable("button.girlfriends.accept_quest"), btn -> {
+				Button.builder(
+						Component.translatable("button.girlfriends.accept_quest"),
+						_ -> {
 							ClientPacketDistributor.sendToServer(new ServerboundAcceptQuestPacket(this.girlfriendTypeId));
 							// 关闭当前界面和主界面喵~
 							this.minecraft.setScreen(null);
-						})
-						.bounds(centerX - BUTTON_WIDTH - 10, this.height - 50, BUTTON_WIDTH, BUTTON_HEIGHT)
-						.build()
+						}
+				).bounds(centerX - BUTTON_WIDTH - 10, this.height - 50, BUTTON_WIDTH, BUTTON_HEIGHT).build()
 		);
 
 		// 我再想想按钮喵~
 		this.addRenderableWidget(
-				Button.builder(Component.translatable("button.girlfriends.think_again"), btn -> this.onClose())
+				Button.builder(Component.translatable("button.girlfriends.think_again"), _ -> this.onClose())
 						.bounds(centerX + 10, this.height - 50, BUTTON_WIDTH, BUTTON_HEIGHT)
 						.build()
 		);
