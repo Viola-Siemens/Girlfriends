@@ -60,6 +60,10 @@
   "quest.girlfriends.type.fixed": "固定委托",
   "quest.girlfriends.type.random": "随机委托",
 
+  "message.girlfriends.quests_disabled": "服务器已禁用委托",
+  "message.girlfriends.relation_binding_disabled": "服务器已禁止绑定关系",
+  "message.girlfriends.home_invitation_disabled": "服务器已禁止家园邀请",
+
   "girlfriends.gift.quote.momo.favorite_minecraft_honeycomb_0": "<沫沫> 这是……蜜脾？谢谢你，蜜蜂们也会高兴的。",
   "girlfriends.gift.quote.momo.favorite_minecraft_honeycomb_1": "<沫沫> 你记得我喜欢这个呀……嗯，我会好好珍藏的。",
   "girlfriends.gift.quote.momo.favorite_minecraft_honeycomb_2": "<沫沫> 蜜脾的味道，总让我想起花园里最安静的午后。谢谢你。",
@@ -197,6 +201,7 @@
   "girlfriends.gift.quote.youruo.disliked_2": "<幽若> 不要把这个放在研究台附近。它会让数据产生不可逆的噪声。",
   "girlfriends.gift.quote.youruo.disliked_3": "<幽若> 也许在别的地方它有价值——但在我的实验室里，它是干扰项。",
   "girlfriends.gift.quote.youruo.disliked_4": "<幽若> 你的好意和这个物品本身的属性是两回事。好意我收到了；物品请拿走。",
+
   "girlfriends.subtitle.voice.momo.favorite": "沫沫：喜悦",
   "girlfriends.subtitle.voice.momo.liked": "沫沫：开心",
   "girlfriends.subtitle.voice.momo.accepted": "沫沫：平常",

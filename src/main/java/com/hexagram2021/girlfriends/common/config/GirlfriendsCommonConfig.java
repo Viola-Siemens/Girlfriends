@@ -11,6 +11,7 @@ public final class GirlfriendsCommonConfig {
 	public static final ModConfigSpec CONFIG;
 	public static final ModConfigSpec.BooleanValue ENABLE_RELATION_BIND;
 	public static final ModConfigSpec.BooleanValue ENABLE_QUESTS;
+	public static final ModConfigSpec.BooleanValue ENABLE_HOME_INVITATION;
 
 	private GirlfriendsCommonConfig() {
 	}
@@ -20,6 +21,7 @@ public final class GirlfriendsCommonConfig {
 		builder.push("girlfriends-common");
 		ENABLE_RELATION_BIND = builder.comment("Set to false to disable relation binding.").define("ENABLE_RELATION_BIND", true);
 		ENABLE_QUESTS = builder.comment("Set to false to disable quests.").define("ENABLE_QUESTS", true);
+		ENABLE_HOME_INVITATION = builder.comment("Set to false to disable home invitation.").define("ENABLE_HOME_INVITATION", true);
 		builder.pop();
 		CONFIG = builder.build();
 	}

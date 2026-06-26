@@ -60,6 +60,10 @@
   "quest.girlfriends.type.fixed": "Fixed Quest",
   "quest.girlfriends.type.random": "Random Quest",
 
+  "message.girlfriends.quests_disabled": "Quests are disabled in this server",
+  "message.girlfriends.relation_binding_disabled": "Relation binding is not allowed in this server",
+  "message.girlfriends.home_invitation_disabled": "Home invitation is not allowed in this server",
+
   "girlfriends.gift.quote.momo.favorite_minecraft_honeycomb_0": "<Momo> This is... honeycomb? Thank you. The bees will be happy too.",
   "girlfriends.gift.quote.momo.favorite_minecraft_honeycomb_1": "<Momo> You remembered I like this... Mm, I'll treasure it.",
   "girlfriends.gift.quote.momo.favorite_minecraft_honeycomb_2": "<Momo> The scent of honeycomb always reminds me of the quietest afternoons in the garden. Thank you.",
@@ -197,6 +201,7 @@
   "girlfriends.gift.quote.youruo.disliked_2": "<Youruo> Do not place this near the research bench. It will introduce irreversible noise into the data.",
   "girlfriends.gift.quote.youruo.disliked_3": "<Youruo> Perhaps it has value elsewhere—but in my laboratory, it is a confounding variable.",
   "girlfriends.gift.quote.youruo.disliked_4": "<Youruo> Your kindness and this item's inherent properties are two separate things. I've received the kindness; please take the item away.",
+
   "girlfriends.subtitle.voice.momo.favorite": "Momo: Delighted",
   "girlfriends.subtitle.voice.momo.liked": "Momo: Happy",
   "girlfriends.subtitle.voice.momo.accepted": "Momo: Neutral",
