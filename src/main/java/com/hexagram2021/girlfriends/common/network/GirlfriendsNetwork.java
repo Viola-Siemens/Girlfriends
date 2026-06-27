@@ -3,6 +3,7 @@ package com.hexagram2021.girlfriends.common.network;
 import com.hexagram2021.girlfriends.GirlfriendsMod;
 import com.hexagram2021.girlfriends.common.binding.BindingService;
 import com.hexagram2021.girlfriends.common.character.CharacterWorldState;
+import com.hexagram2021.girlfriends.common.config.GirlfriendsCommonConfig;
 import com.hexagram2021.girlfriends.common.entity.GirlfriendEntity;
 import com.hexagram2021.girlfriends.common.gift.GiftPreferenceManager;
 import com.hexagram2021.girlfriends.common.gift.GiftQuoteManager;
@@ -21,6 +22,7 @@ import com.hexagram2021.girlfriends.common.quest.RandomQuestTemplateManager;
 import com.hexagram2021.girlfriends.common.relationship.PlayerCharacterRelation;
 import com.hexagram2021.girlfriends.common.relationship.RelationshipService;
 import com.hexagram2021.girlfriends.common.voice.GirlfriendsVoiceManager;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
@@ -137,6 +139,10 @@ public final class GirlfriendsNetwork {
 
 	private static void handleAcceptQuest(ServerboundAcceptQuestPacket packet, IPayloadContext context) {
 		if(context.player() instanceof ServerPlayer player) {
+			if(!GirlfriendsCommonConfig.ENABLE_QUESTS.get()) {
+				player.sendSystemMessage(Component.translatable("message.girlfriends.quests_disabled").withStyle(ChatFormatting.RED));
+				return;
+			}
 			GirlfriendsWorldData data = getWorldData(player);
 			if(canReachEntity(player, data, packet.girlfriendTypeId())) {
 				new QuestService(data, new RelationshipService(data)).acceptCurrentQuest(player.getUUID(), packet.girlfriendTypeId());
@@ -195,6 +201,10 @@ public final class GirlfriendsNetwork {
 
 	private static void handleConfirmIntimacy(ServerboundConfirmIntimacyPacket packet, IPayloadContext context) {
 		if(context.player() instanceof ServerPlayer player) {
+			if(!GirlfriendsCommonConfig.ENABLE_RELATION_BIND.get()) {
+				player.sendSystemMessage(Component.translatable("message.girlfriends.relation_binding_disabled").withStyle(ChatFormatting.RED));
+				return;
+			}
 			GirlfriendsWorldData data = getWorldData(player);
 			if(canReachEntity(player, data, packet.girlfriendTypeId())) {
 				RelationshipService relationshipService = new RelationshipService(data);
@@ -207,6 +217,10 @@ public final class GirlfriendsNetwork {
 
 	private static void handleInviteHome(ServerboundInviteHomePacket packet, IPayloadContext context) {
 		if(context.player() instanceof ServerPlayer player) {
+			if(!GirlfriendsCommonConfig.ENABLE_HOME_INVITATION.get()) {
+				player.sendSystemMessage(Component.translatable("message.girlfriends.home_invitation_disabled").withStyle(ChatFormatting.RED));
+				return;
+			}
 			GirlfriendsWorldData data = getWorldData(player);
 			if(canReachEntity(player, data, packet.girlfriendTypeId())) {
 				ServerPlayer.RespawnConfig respawnConfig = player.getRespawnConfig();
