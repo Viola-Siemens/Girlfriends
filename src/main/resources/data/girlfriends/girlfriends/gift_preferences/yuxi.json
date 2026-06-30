@@ -1,0 +1,37 @@
+{
+	"favorite": [
+		"minecraft:nautilus_shell"
+	],
+	"liked_tags": [
+		"minecraft:boats",
+		"minecraft:fishes"
+	],
+	"liked_items": [
+		"minecraft:brain_coral_block",
+		"minecraft:bubble_coral_block",
+		"minecraft:fire_coral_block",
+		"minecraft:fishing_rod",
+		"minecraft:horn_coral_block",
+		"minecraft:kelp",
+		"minecraft:prismarine_crystals",
+		"minecraft:prismarine_shard",
+		"minecraft:tube_coral_block"
+	],
+	"accepted_tags": [],
+	"accepted_items": [
+		"minecraft:bread",
+		"minecraft:apple",
+		"minecraft:cooked_cod",
+		"minecraft:cooked_salmon",
+		"minecraft:feather",
+		"minecraft:paper",
+		"minecraft:string"
+	],
+	"disliked_tags": [],
+	"disliked_items": [
+		"minecraft:blaze_rod",
+		"minecraft:magma_cream",
+		"minecraft:netherrack",
+		"minecraft:rotten_flesh"
+	]
+}

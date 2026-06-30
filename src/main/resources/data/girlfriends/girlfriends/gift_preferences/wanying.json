@@ -1,0 +1,35 @@
+{
+	"favorite": [
+		"minecraft:blaze_rod"
+	],
+	"liked_tags": [],
+	"liked_items": [
+		"minecraft:netherite_scrap",
+		"minecraft:diamond_sword",
+		"minecraft:shield",
+		"minecraft:arrow",
+		"minecraft:potion",
+		"minecraft:golden_apple"
+	],
+	"accepted_tags": [],
+	"accepted_items": [
+		"minecraft:cooked_beef",
+		"minecraft:cooked_porkchop",
+		"minecraft:cooked_chicken",
+		"minecraft:cooked_mutton",
+		"minecraft:cooked_rabbit",
+		"minecraft:bread",
+		"minecraft:iron_ingot",
+		"minecraft:string",
+		"minecraft:feather",
+		"minecraft:flint"
+	],
+	"disliked_tags": [],
+	"disliked_items": [
+		"minecraft:snowball",
+		"minecraft:ice",
+		"minecraft:snow_block",
+		"minecraft:sweet_berries",
+		"minecraft:cake"
+	]
+}
