@@ -1,0 +1,18 @@
+{
+  "values": [
+    "minecraft:ender_pearl",
+    "minecraft:ender_eye",
+    "minecraft:chorus_fruit",
+    "minecraft:popped_chorus_fruit",
+    "minecraft:purpur_block",
+    "minecraft:purpur_pillar",
+    "minecraft:end_stone",
+    "minecraft:end_stone_bricks",
+    "minecraft:glass_bottle",
+    "minecraft:paper",
+    "minecraft:book",
+    "minecraft:writable_book",
+    "minecraft:observer",
+    "minecraft:end_crystal"
+  ]
+}

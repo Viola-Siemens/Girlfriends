@@ -26,4 +26,12 @@ public class GirlfriendModel extends PlayerModel {
 	public static LayerDefinition createBodyLayer() {
 		return LayerDefinition.create(PlayerModel.createMesh(CubeDeformation.NONE, true), 64, 64);
 	}
+
+	/**
+	 * 创建小个子角色模型层
+	 * @return 角色模型层
+	 */
+	public static LayerDefinition createShortBodyLayer() {
+		return LayerDefinition.create(PlayerModel.createMesh(new CubeDeformation(-0.05F, -0.1F, -0.05F), true), 64, 64);
+	}
 }

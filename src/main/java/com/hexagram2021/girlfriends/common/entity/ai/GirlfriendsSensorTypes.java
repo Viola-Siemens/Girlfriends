@@ -1,9 +1,7 @@
 package com.hexagram2021.girlfriends.common.entity.ai;
 
 import com.hexagram2021.girlfriends.GirlfriendsMod;
-import com.hexagram2021.girlfriends.common.entity.ai.sensor.BeehiveSensor;
-import com.hexagram2021.girlfriends.common.entity.ai.sensor.FlowerSensor;
-import com.hexagram2021.girlfriends.common.entity.ai.sensor.GirlfriendShelterSensor;
+import com.hexagram2021.girlfriends.common.entity.ai.sensor.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -29,6 +27,18 @@ public final class GirlfriendsSensorTypes {
 	/** 蜂箱位置传感器 */
 	public static final DeferredHolder<SensorType<?>, SensorType<BeehiveSensor>> BEEHIVE_SENSOR =
 			REGISTER.register("beehive_sensor", () -> new SensorType<>(BeehiveSensor::new));
+
+	/** 水域位置传感器 — 渔溪专属 */
+	public static final DeferredHolder<SensorType<?>, SensorType<WaterSensor>> WATER_SENSOR =
+			REGISTER.register("water_sensor", () -> new SensorType<>(WaterSensor::new));
+
+	/** 矿石位置传感器 — 梅疏专属 */
+	public static final DeferredHolder<SensorType<?>, SensorType<OreSensor>> ORE_SENSOR =
+			REGISTER.register("ore_sensor", () -> new SensorType<>(OreSensor::new));
+
+	/** 敌对生物传感器 — 晚萤专属 */
+	public static final DeferredHolder<SensorType<?>, SensorType<HostileSensor>> HOSTILE_SENSOR =
+			REGISTER.register("hostile_sensor", () -> new SensorType<>(HostileSensor::new));
 
 	private GirlfriendsSensorTypes() {
 	}

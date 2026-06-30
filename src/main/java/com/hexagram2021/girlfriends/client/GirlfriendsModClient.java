@@ -88,7 +88,7 @@ public class GirlfriendsModClient {
         event.registerLayerDefinition(GirlfriendsModelLayers.MOMO, GirlfriendModel::createBodyLayer);
         event.registerLayerDefinition(GirlfriendsModelLayers.YUXI, GirlfriendModel::createBodyLayer);
         event.registerLayerDefinition(GirlfriendsModelLayers.MEISHU, GirlfriendModel::createBodyLayer);
-        event.registerLayerDefinition(GirlfriendsModelLayers.WANYING, GirlfriendModel::createBodyLayer);
+        event.registerLayerDefinition(GirlfriendsModelLayers.WANYING, GirlfriendModel::createShortBodyLayer);
         event.registerLayerDefinition(GirlfriendsModelLayers.YOURUO, GirlfriendModel::createBodyLayer);
     }
 
@@ -102,6 +102,22 @@ public class GirlfriendsModClient {
         event.registerEntityRenderer(
                 GirlfriendsEntities.MOMO.get(),
                 ctx -> new GirlfriendRenderer(ctx, GirlfriendsModelLayers.MOMO, "momo")
+        );
+        event.registerEntityRenderer(
+                GirlfriendsEntities.YUXI.get(),
+                ctx -> new GirlfriendRenderer(ctx, GirlfriendsModelLayers.YUXI, "yuxi")
+        );
+        event.registerEntityRenderer(
+                GirlfriendsEntities.MEISHU.get(),
+                ctx -> new GirlfriendRenderer(ctx, GirlfriendsModelLayers.MEISHU, "meishu")
+        );
+        event.registerEntityRenderer(
+                GirlfriendsEntities.WANYING.get(),
+                ctx -> new GirlfriendRenderer(ctx, GirlfriendsModelLayers.WANYING, "wanying")
+        );
+        event.registerEntityRenderer(
+                GirlfriendsEntities.YOURUO.get(),
+                ctx -> new GirlfriendRenderer(ctx, GirlfriendsModelLayers.YOURUO, "youruo")
         );
     }
 }

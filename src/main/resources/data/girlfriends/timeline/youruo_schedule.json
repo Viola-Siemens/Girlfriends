@@ -1,0 +1,30 @@
+{
+  "clock": "minecraft:overworld",
+  "period_ticks": 24000,
+  "tracks": {
+    "girlfriends:gameplay/youruo_activity": {
+      "keyframes": [
+        {
+          "ticks": 0,
+          "value": "girlfriends:morning"
+        },
+        {
+          "ticks": 2000,
+          "value": "girlfriends:day_work"
+        },
+        {
+          "ticks": 6000,
+          "value": "girlfriends:afternoon"
+        },
+        {
+          "ticks": 11000,
+          "value": "girlfriends:sunset"
+        },
+        {
+          "ticks": 13000,
+          "value": "girlfriends:night_rest"
+        }
+      ]
+    }
+  }
+}

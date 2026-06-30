@@ -29,6 +29,42 @@ public final class GirlfriendsEntities {
 					.updateInterval(3)
 					.build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(GirlfriendsMod.MODID, "momo"))));
 
+	/** 渔溪实体类型喵~ */
+	public static final DeferredHolder<EntityType<?>, EntityType<YuxiEntity>> YUXI =
+			REGISTER.register("yuxi", () -> EntityType.Builder
+					.of(YuxiEntity::new, MobCategory.MISC)
+					.sized(0.6f, 1.8f)
+					.clientTrackingRange(48)
+					.updateInterval(3)
+					.build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(GirlfriendsMod.MODID, "yuxi"))));
+
+	/** 梅疏实体类型喵~ */
+	public static final DeferredHolder<EntityType<?>, EntityType<MeishuEntity>> MEISHU =
+			REGISTER.register("meishu", () -> EntityType.Builder
+					.of(MeishuEntity::new, MobCategory.MISC)
+					.sized(0.6f, 1.8f)
+					.clientTrackingRange(48)
+					.updateInterval(3)
+					.build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(GirlfriendsMod.MODID, "meishu"))));
+
+	/** 晚萤实体类型喵~ */
+	public static final DeferredHolder<EntityType<?>, EntityType<WanyingEntity>> WANYING =
+			REGISTER.register("wanying", () -> EntityType.Builder
+					.of(WanyingEntity::new, MobCategory.MISC)
+					.sized(0.6f, 1.8f)
+					.clientTrackingRange(48)
+					.updateInterval(3)
+					.build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(GirlfriendsMod.MODID, "wanying"))));
+
+	/** 幽若实体类型喵~ */
+	public static final DeferredHolder<EntityType<?>, EntityType<YouruoEntity>> YOURUO =
+			REGISTER.register("youruo", () -> EntityType.Builder
+					.of(YouruoEntity::new, MobCategory.MISC)
+					.sized(0.6f, 1.8f)
+					.clientTrackingRange(48)
+					.updateInterval(3)
+					.build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(GirlfriendsMod.MODID, "youruo"))));
+
 	private GirlfriendsEntities() {
 	}
 }

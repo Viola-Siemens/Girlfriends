@@ -1,0 +1,17 @@
+{
+  "values": [
+    "#minecraft:fishes",
+    "minecraft:fishing_rod",
+    "minecraft:nautilus_shell",
+    "minecraft:heart_of_the_sea",
+    "minecraft:kelp",
+    "minecraft:seagrass",
+    "minecraft:prismarine_crystals",
+    "minecraft:prismarine_shard",
+    "minecraft:water_bucket",
+    "minecraft:pufferfish_bucket",
+    "minecraft:salmon_bucket",
+    "minecraft:cod_bucket",
+    "minecraft:tropical_fish_bucket"
+  ]
+}

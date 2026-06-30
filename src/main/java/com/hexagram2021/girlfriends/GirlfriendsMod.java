@@ -104,6 +104,10 @@ public class GirlfriendsMod {
 
 	private void registerEntityAttributes(EntityAttributeCreationEvent event) {
 		event.put(GirlfriendsEntities.MOMO.get(), GirlfriendEntity.createAttributes().build());
+		event.put(GirlfriendsEntities.YUXI.get(), GirlfriendEntity.createAttributes().build());
+		event.put(GirlfriendsEntities.MEISHU.get(), GirlfriendEntity.createAttributes().build());
+		event.put(GirlfriendsEntities.WANYING.get(), GirlfriendEntity.createAttributes().build());
+		event.put(GirlfriendsEntities.YOURUO.get(), GirlfriendEntity.createAttributes().build());
 	}
 
 	/**
