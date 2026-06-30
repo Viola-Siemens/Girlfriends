@@ -1,0 +1,21 @@
+{
+  "values": [
+    "#minecraft:coal_ores",
+    "#minecraft:copper_ores",
+    "#minecraft:diamond_ores",
+    "#minecraft:emerald_ores",
+    "#minecraft:gold_ores",
+    "#minecraft:iron_ores",
+    "#minecraft:lapis_ores",
+    "#minecraft:redstone_ores",
+    "minecraft:raw_iron",
+    "minecraft:raw_copper",
+    "minecraft:raw_gold",
+    "minecraft:iron_ingot",
+    "minecraft:copper_ingot",
+    "minecraft:gold_ingot",
+    "minecraft:diamond",
+    "minecraft:iron_pickaxe",
+    "minecraft:stone_pickaxe"
+  ]
+}

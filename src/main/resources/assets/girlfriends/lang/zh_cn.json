@@ -60,6 +60,10 @@
   "quest.girlfriends.type.fixed": "固定委托",
   "quest.girlfriends.type.random": "随机委托",
 
+  "message.girlfriends.quests_disabled": "服务器已禁用委托",
+  "message.girlfriends.relation_binding_disabled": "服务器已禁止绑定关系",
+  "message.girlfriends.home_invitation_disabled": "服务器已禁止家园邀请",
+
   "girlfriends.gift.quote.momo.favorite_minecraft_honeycomb_0": "<沫沫> 这是……蜜脾？谢谢你，蜜蜂们也会高兴的。",
   "girlfriends.gift.quote.momo.favorite_minecraft_honeycomb_1": "<沫沫> 你记得我喜欢这个呀……嗯，我会好好珍藏的。",
   "girlfriends.gift.quote.momo.favorite_minecraft_honeycomb_2": "<沫沫> 蜜脾的味道，总让我想起花园里最安静的午后。谢谢你。",
@@ -90,7 +94,7 @@
   "girlfriends.gift.quote.momo.disliked_3": "<沫沫> 也许你不了解，但花园不需要枯萎和腐烂的东西。",
   "girlfriends.gift.quote.momo.disliked_4": "<沫沫> 请收回去。腐烂的气息会让蜜蜂迷路的。",
 
-  "girlfriends.gift.quote.yuxi.favorite_minecraft_nautilus_shell_0": "<渔溪> 又一个鹦鹉螺壳……它听过的那片海，和我听过的，是不是同一片？",
+  "girlfriends.gift.quote.yuxi.favorite_minecraft_nautilus_shell_0": "<渔溪> 又一个鹦鹉螺壳……它听过的那片海，和我听过的，是不是同一片呢？",
   "girlfriends.gift.quote.yuxi.favorite_minecraft_nautilus_shell_1": "<渔溪> 谢谢你。我会把它放在灯塔的窗台上，让它继续听潮声。",
   "girlfriends.gift.quote.yuxi.favorite_minecraft_nautilus_shell_2": "<渔溪> 这个壳上的纹路很完整。你是在很远的地方找到的吗？",
   "girlfriends.gift.quote.yuxi.liked_0": "<渔溪> 嗯，这个很好。谢谢你。",
@@ -98,13 +102,13 @@
   "girlfriends.gift.quote.yuxi.liked_2": "<渔溪> 在海上的话，这种最实用了。收下了。",
   "girlfriends.gift.quote.yuxi.liked_3": "<渔溪> 潮水退下去的时候，会在沙滩上留下好东西。你挑的这个也是。",
   "girlfriends.gift.quote.yuxi.liked_4": "<渔溪> 谢谢。下次出海的时候带上吧。",
-  "girlfriends.gift.quote.yuxi.liked_5": "<渔溪> 不用很多话。你给的，我收下就是了。",
+  "girlfriends.gift.quote.yuxi.liked_5": "<渔溪> 你的心意，潮水会帮我记住的。",
   "girlfriends.gift.quote.yuxi.liked_6": "<渔溪> 嗯，放进船舱里了。",
   "girlfriends.gift.quote.yuxi.liked_7": "<渔溪> 有些东西不用挑很久，一眼就知道是好东西。就像这个。",
   "girlfriends.gift.quote.yuxi.accepted_0": "<渔溪> 谢谢。我收下了。",
   "girlfriends.gift.quote.yuxi.accepted_1": "<渔溪> 嗯，也许航行的时候用得着。",
   "girlfriends.gift.quote.yuxi.accepted_2": "<渔溪> 行。放在码头的箱子里了。",
-  "girlfriends.gift.quote.yuxi.accepted_3": "<渔溪> 你的心意，潮水会帮我记住的。",
+  "girlfriends.gift.quote.yuxi.accepted_3": "<渔溪> 不必多言。既然是你给的，我当然会收下了。",
   "girlfriends.gift.quote.yuxi.accepted_4": "<渔溪> 谢谢你。岸上的东西，有时候也和海里的差不多有趣。",
   "girlfriends.gift.quote.yuxi.accepted_5": "<渔溪> 收下了。虽然我不太爱说话，但你的心意我都明白。",
   "girlfriends.gift.quote.yuxi.rejected_0": "<渔溪> 这个……放在船上不知道能做什么。",
@@ -197,6 +201,7 @@
   "girlfriends.gift.quote.youruo.disliked_2": "<幽若> 不要把这个放在研究台附近。它会让数据产生不可逆的噪声。",
   "girlfriends.gift.quote.youruo.disliked_3": "<幽若> 也许在别的地方它有价值——但在我的实验室里，它是干扰项。",
   "girlfriends.gift.quote.youruo.disliked_4": "<幽若> 你的好意和这个物品本身的属性是两回事。好意我收到了；物品请拿走。",
+
   "girlfriends.subtitle.voice.momo.favorite": "沫沫：喜悦",
   "girlfriends.subtitle.voice.momo.liked": "沫沫：开心",
   "girlfriends.subtitle.voice.momo.accepted": "沫沫：平常",

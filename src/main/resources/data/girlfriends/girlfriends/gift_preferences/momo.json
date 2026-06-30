@@ -16,10 +16,10 @@
 	"accepted_tags": [],
 	"accepted_items": [
 		"minecraft:apple",
-		"minecraft:sweet_berries",
-		"minecraft:oak_log",
 		"minecraft:cake",
 		"minecraft:grass_block",
+		"minecraft:oak_log",
+		"minecraft:sweet_berries",
 		"minecraft:wheat",
 		"minecraft:wheat_seeds"
 	],
@@ -27,8 +27,9 @@
 		"minecraft:skulls"
 	],
 	"disliked_items": [
+		"minecraft:bone",
+		"minecraft:dead_bush",
 		"minecraft:rotten_flesh",
-		"minecraft:spider_eye",
-		"minecraft:bone"
+		"minecraft:spider_eye"
 	]
 }

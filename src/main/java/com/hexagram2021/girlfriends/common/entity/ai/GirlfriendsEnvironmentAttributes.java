@@ -26,6 +26,42 @@ public class GirlfriendsEnvironmentAttributes {
 							.build()
 			);
 
+	/** 渔溪日程喵~ */
+	public static final DeferredHolder<EnvironmentAttribute<?>, EnvironmentAttribute<Activity>> YUXI_ACTIVITY =
+			REGISTER.register(
+					"gameplay/yuxi_activity",
+					() -> EnvironmentAttribute.builder(AttributeTypes.ACTIVITY)
+							.defaultValue(GirlfriendsActivities.MORNING.get())
+							.build()
+			);
+
+	/** 梅疏日程喵~ */
+	public static final DeferredHolder<EnvironmentAttribute<?>, EnvironmentAttribute<Activity>> MEISHU_ACTIVITY =
+			REGISTER.register(
+					"gameplay/meishu_activity",
+					() -> EnvironmentAttribute.builder(AttributeTypes.ACTIVITY)
+							.defaultValue(GirlfriendsActivities.MORNING.get())
+							.build()
+			);
+
+	/** 晚萤日程喵~ */
+	public static final DeferredHolder<EnvironmentAttribute<?>, EnvironmentAttribute<Activity>> WANYING_ACTIVITY =
+			REGISTER.register(
+					"gameplay/wanying_activity",
+					() -> EnvironmentAttribute.builder(AttributeTypes.ACTIVITY)
+							.defaultValue(GirlfriendsActivities.MORNING.get())
+							.build()
+			);
+
+	/** 幽若日程喵~ */
+	public static final DeferredHolder<EnvironmentAttribute<?>, EnvironmentAttribute<Activity>> YOURUO_ACTIVITY =
+			REGISTER.register(
+					"gameplay/youruo_activity",
+					() -> EnvironmentAttribute.builder(AttributeTypes.ACTIVITY)
+							.defaultValue(GirlfriendsActivities.MORNING.get())
+							.build()
+			);
+
 	private GirlfriendsEnvironmentAttributes() {
 	}
 }

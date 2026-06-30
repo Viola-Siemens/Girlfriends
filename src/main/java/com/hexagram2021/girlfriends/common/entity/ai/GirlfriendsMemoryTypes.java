@@ -50,7 +50,7 @@ public final class GirlfriendsMemoryTypes {
 
 	/** 附近可挖掘矿石 (BlockPos) — 梅疏专属 喵~ */
 	public static final DeferredHolder<MemoryModuleType<?>, MemoryModuleType<BlockPos>> NEARBY_ORE =
-			REGISTER.register("nearby_ore", () -> new MemoryModuleType<>(Optional.empty()));
+			REGISTER.register("nearby_ore", () -> new MemoryModuleType<>(Optional.of(BlockPos.CODEC)));
 
 	/** 末影珍珠瞬移目标 (BlockPos) — 幽若专属 喵~ */
 	public static final DeferredHolder<MemoryModuleType<?>, MemoryModuleType<BlockPos>> PEARL_TARGET =
