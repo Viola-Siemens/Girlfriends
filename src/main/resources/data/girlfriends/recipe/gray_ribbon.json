@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:gray_dye",
+    "minecraft:string",
+    "minecraft:string",
+    "minecraft:string"
+  ],
+  "result": {
+    "count": 1,
+    "id": "girlfriends:gray_ribbon"
+  }
+}

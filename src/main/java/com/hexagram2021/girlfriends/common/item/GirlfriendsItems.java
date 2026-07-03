@@ -36,7 +36,11 @@ public final class GirlfriendsItems {
 
 	public static final List<DeferredItem<?>> ALL_ITEMS = List.of(
 			BOUQUET,
-			WATERING_CAN
+			WATERING_CAN,
+			GRAY_RIBBON,
+			LIGHT_GRAY_RIBBON,
+			PINK_RIBBON,
+			WHITE_RIBBON
 	);
 
 	private GirlfriendsItems() {
