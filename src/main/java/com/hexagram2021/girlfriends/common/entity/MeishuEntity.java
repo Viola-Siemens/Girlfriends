@@ -87,13 +87,15 @@ public class MeishuEntity extends GirlfriendEntity {
 					// 清晨：检查矿道安全喵~
 					morning.add(
 							Pair.of(1, (BehaviorControl<GirlfriendEntity>)(Object) GoToTargetLocation.create(GirlfriendsMemoryTypes.NEARBY_ORE.get(), 4, 0.5F)),
+							Pair.of(2, MineNearbyOre.create(2.0D)),
 							Pair.of(49, (BehaviorControl<GirlfriendEntity>)(Object) UpdateActivityFromSchedule.create())
 					);
 
 					// 上午：采矿喵~
 					dayWork.add(
 							Pair.of(1, (BehaviorControl<GirlfriendEntity>)(Object) GoToTargetLocation.create(GirlfriendsMemoryTypes.NEARBY_ORE.get(), 2, 0.5F)),
-							Pair.of(2, (BehaviorControl<GirlfriendEntity>)(Object) new RandomLookAround(UniformInt.of(150, 300), 30.0F, -10.0F, 0.0F)),
+							Pair.of(2, MineNearbyOre.create(2.0D)),
+							Pair.of(3, (BehaviorControl<GirlfriendEntity>)(Object) new RandomLookAround(UniformInt.of(150, 300), 30.0F, -10.0F, 0.0F)),
 							Pair.of(49, (BehaviorControl<GirlfriendEntity>)(Object) UpdateActivityFromSchedule.create())
 					);
 
@@ -117,7 +119,8 @@ public class MeishuEntity extends GirlfriendEntity {
 
 					// 跟随行为
 					follow.add(
-							Pair.of(1, StayCloseToIntimatePlayer.create(3, 16, 1.0F))
+							Pair.of(1, StayCloseToIntimatePlayer.create(3, 16, 1.0F)),
+							Pair.of(1, MineNearbyOre.create(2.0D))
 					);
 
 					activities.add(ActivityData.create(Activity.CORE, core.build()));
