@@ -3,7 +3,6 @@ package com.hexagram2021.girlfriends.common.entity;
 import com.hexagram2021.girlfriends.common.blessing.FollowMode;
 import com.hexagram2021.girlfriends.common.character.CharacterWorldState;
 import com.hexagram2021.girlfriends.common.character.GirlfriendType;
-import com.hexagram2021.girlfriends.common.character.GirlfriendsRegistries;
 import com.hexagram2021.girlfriends.common.network.ClientInteractionStore;
 import com.hexagram2021.girlfriends.common.network.InteractionSummaryService;
 import com.hexagram2021.girlfriends.common.network.clientbound.ClientboundSyncInteractionDataPacket;
@@ -40,7 +39,6 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
 import javax.annotation.Nullable;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -88,12 +86,7 @@ public abstract class GirlfriendEntity extends PathfinderMob implements Inventor
 	 *
 	 * @return 角色类型，若注册表缺失则返回 null 喵~
 	 */
-	public Optional<GirlfriendType> getGirlfriendType() {
-		return this.registryAccess()
-				.lookupOrThrow(GirlfriendsRegistries.GIRLFRIEND_TYPE)
-				.get(this.getGirlfriendTypeId())
-				.map(Holder.Reference::value);
-	}
+	public abstract Holder<GirlfriendType> getGirlfriendType();
 
 	@Override
 	public boolean removeWhenFarAway(double distSqr) {
@@ -204,27 +197,28 @@ public abstract class GirlfriendEntity extends PathfinderMob implements Inventor
 		}
 		if (player instanceof ServerPlayer serverPlayer) {
 			ServerLevel level = (ServerLevel)this.level();
-			GirlfriendsWorldData data = level.getServer().overworld()
-					.getDataStorage().computeIfAbsent(GirlfriendsWorldData.TYPE);
+			GirlfriendsWorldData data = level.getServer().overworld().getDataStorage().computeIfAbsent(GirlfriendsWorldData.TYPE);
 			// 先同步实体状态到世界数据
 			this.syncToWorldState(data);
 			// 构建并发送交互摘要
-			RelationshipService relationshipService = new RelationshipService(data);
-			QuestService questService = new QuestService(
-					data,
-					relationshipService,
-					id -> FixedQuestDefinitionManager.INSTANCE.getDefinition(id).orElse(null),
-					id -> RandomQuestTemplateManager.INSTANCE.getRandomDefinitionForType(id, level.getRandom()),
-					randomSource -> 5 + randomSource.nextInt(6)
-			);
-			InteractionSummaryService summaryService = new InteractionSummaryService(data, relationshipService, questService);
-			serverPlayer.connection.send(
-					new ClientboundSyncInteractionDataPacket(
-							summaryService.build(player.getUUID(), this.getGirlfriendTypeId())
-					)
-			);
+			InteractionSummaryService summaryService = this.getInteractionSummaryService(data, level);
+			serverPlayer.connection.send(new ClientboundSyncInteractionDataPacket(
+					summaryService.build(player.getUUID(), this.getGirlfriendTypeId())
+			));
 		}
 		return InteractionResult.SUCCESS;
+	}
+
+	private InteractionSummaryService getInteractionSummaryService(GirlfriendsWorldData data, ServerLevel level) {
+		RelationshipService relationshipService = new RelationshipService(data);
+		QuestService questService = new QuestService(
+				data,
+				relationshipService,
+				id -> FixedQuestDefinitionManager.INSTANCE.getDefinition(id).orElse(null),
+				id -> RandomQuestTemplateManager.INSTANCE.getRandomDefinitionForType(id, level.getRandom()),
+				randomSource -> 5 + randomSource.nextInt(6)
+		);
+		return new InteractionSummaryService(data, relationshipService, questService);
 	}
 
 	/**
@@ -263,19 +257,19 @@ public abstract class GirlfriendEntity extends PathfinderMob implements Inventor
 		((Brain<GirlfriendEntity>) this.getBrain()).tick(level, this);
 		profiler.pop();
 
+		// 随机恢复 1 点生命值
 		this.healCooldown -= 1;
 		if(this.healCooldown <= 0) {
 			if(this.getHealth() < this.getMaxHealth()) {
 				this.heal(1.0F);
 			}
-			this.healCooldown = 4 * SharedConstants.TICKS_PER_SECOND + this.getRandom().nextInt(SharedConstants.TICKS_PER_SECOND);
+			this.healCooldown = this.getNextHealCooldown();
 		}
 
 		// 每 200 tick（10 秒）同步实体状态到世界数据喵~
 		this.worldStateSyncCooldown -= 1;
 		if (this.worldStateSyncCooldown <= 0) {
-			GirlfriendsWorldData data = level.getServer().overworld()
-					.getDataStorage().computeIfAbsent(GirlfriendsWorldData.TYPE);
+			GirlfriendsWorldData data = level.getServer().overworld().getDataStorage().computeIfAbsent(GirlfriendsWorldData.TYPE);
 			this.syncToWorldState(data);
 			this.worldStateSyncCooldown = 200 + this.getRandom().nextInt(40);
 		}
@@ -337,5 +331,10 @@ public abstract class GirlfriendEntity extends PathfinderMob implements Inventor
 		input.read("Brain", Brain.Packed.CODEC).ifPresent(packed -> this.brain = this.makeBrain(packed));
 
 		this.readInventoryFromTag(input);
+	}
+
+	protected int getNextHealCooldown() {
+		// 默认每 4~5 秒回复一点生命值
+		return 4 * SharedConstants.TICKS_PER_SECOND + this.getRandom().nextInt(SharedConstants.TICKS_PER_SECOND);
 	}
 }
