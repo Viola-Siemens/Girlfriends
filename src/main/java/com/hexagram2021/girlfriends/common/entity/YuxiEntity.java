@@ -1,6 +1,7 @@
 package com.hexagram2021.girlfriends.common.entity;
 
 import com.google.common.collect.ImmutableList;
+import com.hexagram2021.girlfriends.common.character.GirlfriendType;
 import com.hexagram2021.girlfriends.common.character.GirlfriendTypes;
 import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsActivities;
 import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsEnvironmentAttributes;
@@ -9,6 +10,7 @@ import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsSensorTypes;
 import com.hexagram2021.girlfriends.common.entity.ai.behavior.*;
 import com.hexagram2021.girlfriends.common.item.GirlfriendsItemTags;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -46,6 +48,11 @@ public class YuxiEntity extends GirlfriendEntity {
 	@Override
 	public Identifier getGirlfriendTypeId() {
 		return GirlfriendTypes.YUXI_ID;
+	}
+
+	@Override
+	public Holder<GirlfriendType> getGirlfriendType() {
+		return GirlfriendTypes.YUXI;
 	}
 
 	@Override
