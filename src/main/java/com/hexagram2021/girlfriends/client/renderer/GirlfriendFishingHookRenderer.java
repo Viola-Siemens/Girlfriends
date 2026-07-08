@@ -69,6 +69,11 @@ public class GirlfriendFishingHookRenderer extends EntityRenderer<GirlfriendFish
 		float xa = (float) state.lineOriginOffset.x;
 		float ya = (float) state.lineOriginOffset.y;
 		float za = (float) state.lineOriginOffset.z;
+		if(state.lineOriginOffset.equals(Vec3.ZERO)) {
+			poseStack.popPose();
+			super.submit(state, poseStack, submitNodeCollector, camera);
+			return;
+		}
 		submitNodeCollector.submitCustomGeometry(poseStack, RenderTypes.lines(), (pose, buffer) -> {
 			for(int i = 0; i < 16; i++) {
 				float a0 = (float) i / 16.0F;

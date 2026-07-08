@@ -4,7 +4,6 @@ import com.hexagram2021.girlfriends.common.entity.GirlfriendEntity;
 import com.hexagram2021.girlfriends.common.entity.GirlfriendFishingHook;
 import com.hexagram2021.girlfriends.common.entity.GirlfriendsEntities;
 import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsMemoryTypes;
-import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleContainer;
