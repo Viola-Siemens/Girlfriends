@@ -9,8 +9,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
@@ -32,7 +30,6 @@ import net.neoforged.neoforge.common.ItemAbilities;
 import net.minecraft.world.InteractionHand;
 import org.jspecify.annotations.Nullable;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -49,12 +46,10 @@ public class GirlfriendFishingHook extends Projectile {
 	private static final EntityDataAccessor<Boolean> DATA_BITING =
 			SynchedEntityData.defineId(GirlfriendFishingHook.class, EntityDataSerializers.BOOLEAN);
 
-	private final RandomSource syncronizedRandom = RandomSource.create();
 	private State state = State.FLYING;
 	private int timeUntilLured;
 	private int timeUntilHooked;
 	private int nibble;
-	private int outOfWaterTime;
 	private int life;
 
 	/**
@@ -125,7 +120,6 @@ public class GirlfriendFishingHook extends Projectile {
 
 	@Override
 	public void tick() {
-		this.syncronizedRandom.setSeed(this.getUUID().getLeastSignificantBits() ^ this.level().getGameTime());
 		super.tick();
 
 		LivingEntity owner = this.getLivingOwner();
@@ -173,10 +167,7 @@ public class GirlfriendFishingHook extends Projectile {
 			this.setDeltaMovement(movement.x * 0.9, movement.y - force * this.random.nextFloat() * 0.2, movement.z * 0.9);
 
 			if(inWater) {
-				this.outOfWaterTime = Math.max(0, this.outOfWaterTime - 1);
 				this.catchingFish(blockPos);
-			} else {
-				this.outOfWaterTime = Math.min(10, this.outOfWaterTime + 1);
 			}
 		}
 
