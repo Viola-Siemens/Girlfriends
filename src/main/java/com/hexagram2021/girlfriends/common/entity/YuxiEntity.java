@@ -100,7 +100,8 @@ public class YuxiEntity extends GirlfriendEntity {
 					// 上午：垂钓喵~
 					dayWork.add(
 							Pair.of(1, (BehaviorControl<GirlfriendEntity>)(Object) GoToTargetLocation.create(GirlfriendsMemoryTypes.NEAREST_WATER.get(), 4, 0.5F)),
-							Pair.of(2, (BehaviorControl<GirlfriendEntity>)(Object) new RandomLookAround(UniformInt.of(150, 300), 30.0F, -10.0F, 0.0F)),
+							Pair.of(2, new FishNearbyWater()),
+							Pair.of(3, (BehaviorControl<GirlfriendEntity>)(Object) new RandomLookAround(UniformInt.of(150, 300), 30.0F, -10.0F, 0.0F)),
 							Pair.of(49, (BehaviorControl<GirlfriendEntity>)(Object) UpdateActivityFromSchedule.create())
 					);
 
