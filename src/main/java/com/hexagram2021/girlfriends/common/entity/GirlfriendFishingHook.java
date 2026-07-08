@@ -262,7 +262,6 @@ public class GirlfriendFishingHook extends Projectile {
 	public void retrieve(ItemStack rod) {
 		LivingEntity owner = this.getLivingOwner();
 		if(this.level().isClientSide() || owner == null) {
-			this.discard();
 			return;
 		}
 		if(this.nibble > 0) {
