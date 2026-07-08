@@ -9,10 +9,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ExperienceOrb;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
@@ -41,7 +38,17 @@ import java.util.List;
  * @author liudongyu
  */
 public class GirlfriendFishingHook extends Projectile {
-	private enum State { FLYING, BOBBING }
+	/**
+	 * 鱼钩状态喵~
+	 *
+	 * @author liudongyu
+	 */
+	private enum State {
+		/** 抛出，未入水 */
+		FLYING,
+		/** 入水，上下摆动 */
+		BOBBING
+	}
 
 	private static final EntityDataAccessor<Boolean> DATA_BITING =
 			SynchedEntityData.defineId(GirlfriendFishingHook.class, EntityDataSerializers.BOOLEAN);
@@ -179,7 +186,6 @@ public class GirlfriendFishingHook extends Projectile {
 	/**
 	 * 核心钓鱼逻辑 — 参照原版 catchingFish 实现喵~
 	 */
-	@SuppressWarnings("resource")
 	private void catchingFish(BlockPos blockPos) {
 		ServerLevel serverLevel = (ServerLevel) this.level();
 		int fishingSpeed = 1;
@@ -264,11 +270,10 @@ public class GirlfriendFishingHook extends Projectile {
 					.withParameter(LootContextParams.ORIGIN, this.position())
 					.withParameter(LootContextParams.TOOL, rod)
 					.withParameter(LootContextParams.THIS_ENTITY, this)
-					.withParameter(LootContextParams.ATTACKING_ENTITY, this.getOwner())
+					.withOptionalParameter(LootContextParams.ATTACKING_ENTITY, this.getOwner())
 					.withLuck(0)
 					.create(LootContextParamSets.FISHING);
-			LootTable lootTable = this.level().getServer()
-					.reloadableRegistries().getLootTable(BuiltInLootTables.FISHING);
+			LootTable lootTable = this.level().getServer().reloadableRegistries().getLootTable(BuiltInLootTables.FISHING);
 			List<ItemStack> items = lootTable.getRandomItems(params);
 
 			for(ItemStack itemStack : items) {

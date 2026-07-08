@@ -9,7 +9,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.ai.behavior.Behavior;
-import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.ItemAbilities;
@@ -32,6 +31,9 @@ public class FishNearbyWater extends Behavior<GirlfriendEntity> {
 	private @Nullable GirlfriendFishingHook activeHook;
 	private long nextCastAvailableTick;
 
+	/**
+	 * 构造垂钓行为
+	 */
 	public FishNearbyWater() {
 		super(Map.of(GirlfriendsMemoryTypes.NEAREST_WATER.get(), MemoryStatus.VALUE_PRESENT), MAX_FISHING_TIME);
 	}
@@ -71,10 +73,7 @@ public class FishNearbyWater extends Behavior<GirlfriendEntity> {
 			return false;
 		}
 		// 主手必须仍有钓竿喵~
-		if(!entity.getMainHandItem().canPerformAction(ItemAbilities.FISHING_ROD_CAST)) {
-			return false;
-		}
-		return true;
+		return entity.getMainHandItem().canPerformAction(ItemAbilities.FISHING_ROD_CAST);
 	}
 
 	@Override
