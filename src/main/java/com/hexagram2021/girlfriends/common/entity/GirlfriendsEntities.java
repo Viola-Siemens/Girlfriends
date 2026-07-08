@@ -1,6 +1,7 @@
 package com.hexagram2021.girlfriends.common.entity;
 
 import com.hexagram2021.girlfriends.GirlfriendsMod;
+import com.hexagram2021.girlfriends.common.entity.GirlfriendFishingHook;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -46,6 +47,16 @@ public final class GirlfriendsEntities {
 					.clientTrackingRange(48)
 					.updateInterval(3)
 					.build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(GirlfriendsMod.MODID, "meishu"))));
+
+	/** 渔溪钓竿浮标实体类型喵~ */
+	public static final DeferredHolder<EntityType<?>, EntityType<GirlfriendFishingHook>> GIRLFRIEND_FISHING_HOOK =
+			REGISTER.register("girlfriend_fishing_hook", () -> EntityType.Builder
+					.of(GirlfriendFishingHook::new, MobCategory.MISC)
+					.sized(0.25f, 0.25f)
+					.clientTrackingRange(64)
+					.updateInterval(1)
+					.build(ResourceKey.create(Registries.ENTITY_TYPE,
+							Identifier.fromNamespaceAndPath(GirlfriendsMod.MODID, "girlfriend_fishing_hook"))));
 
 	/** 晚萤实体类型喵~ */
 	public static final DeferredHolder<EntityType<?>, EntityType<WanyingEntity>> WANYING =
