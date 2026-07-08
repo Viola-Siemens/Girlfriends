@@ -58,9 +58,11 @@ public class FishNearbyWater extends Behavior<GirlfriendEntity> {
 		this.equipFishingRod(entity);
 		// 生成浮标实体喵~
 		GirlfriendFishingHook hook = GirlfriendsEntities.GIRLFRIEND_FISHING_HOOK.get().create(level, EntitySpawnReason.MOB_SUMMONED);
-		hook.setupFishing(entity);
-		level.addFreshEntity(hook);
-		this.activeHook = hook;
+		if(hook != null) {
+			hook.setupFishing(entity);
+			level.addFreshEntity(hook);
+			this.activeHook = hook;
+		}
 	}
 
 	@Override
