@@ -3,6 +3,7 @@ package com.hexagram2021.girlfriends.client;
 import com.hexagram2021.girlfriends.GirlfriendsMod;
 import com.hexagram2021.girlfriends.client.model.GirlfriendModel;
 import com.hexagram2021.girlfriends.client.model.GirlfriendsModelLayers;
+import com.hexagram2021.girlfriends.client.renderer.GirlfriendFishingHookRenderer;
 import com.hexagram2021.girlfriends.client.renderer.GirlfriendRenderer;
 import com.hexagram2021.girlfriends.client.screen.MainInteractionScreen;
 import com.hexagram2021.girlfriends.common.entity.GirlfriendsEntities;
@@ -118,6 +119,10 @@ public class GirlfriendsModClient {
         event.registerEntityRenderer(
                 GirlfriendsEntities.YOURUO.get(),
                 ctx -> new GirlfriendRenderer(ctx, GirlfriendsModelLayers.YOURUO, "youruo")
+        );
+        event.registerEntityRenderer(
+                GirlfriendsEntities.GIRLFRIEND_FISHING_HOOK.get(),
+                GirlfriendFishingHookRenderer::new
         );
     }
 }
