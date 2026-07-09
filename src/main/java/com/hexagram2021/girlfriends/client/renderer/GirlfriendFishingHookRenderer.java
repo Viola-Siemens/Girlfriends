@@ -14,15 +14,12 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 /**
  * 自定义浮标渲染器 — 参照原版 FishingHookRenderer 实现喵~
  *
  * @author liudongyu
  */
-@OnlyIn(Dist.CLIENT)
 public class GirlfriendFishingHookRenderer extends EntityRenderer<GirlfriendFishingHook, FishingHookRenderState> {
 	private static final Identifier TEXTURE_LOCATION = Identifier.withDefaultNamespace("textures/entity/fishing/fishing_hook.png");
 
@@ -76,8 +73,8 @@ public class GirlfriendFishingHookRenderer extends EntityRenderer<GirlfriendFish
 		}
 		submitNodeCollector.submitCustomGeometry(poseStack, RenderTypes.lines(), (pose, buffer) -> {
 			for(int i = 0; i < 16; i++) {
-				float a0 = (float) i / 16.0F;
-				float a1 = (float) (i + 1) / 16.0F;
+				float a0 = i / 16.0F;
+				float a1 = (i + 1) / 16.0F;
 				this.lineVertex(xa, ya, za, buffer, pose, a0, a1);
 				this.lineVertex(xa, ya, za, buffer, pose, a1, a0);
 			}
