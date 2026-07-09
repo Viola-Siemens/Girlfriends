@@ -3,6 +3,7 @@ package com.hexagram2021.girlfriends.client.renderer;
 import com.hexagram2021.girlfriends.common.entity.GirlfriendFishingHook;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -56,10 +57,10 @@ public class GirlfriendFishingHookRenderer extends EntityRenderer<GirlfriendFish
 		poseStack.scale(0.5F, 0.5F, 0.5F);
 		poseStack.mulPose(camera.orientation);
 		submitNodeCollector.submitCustomGeometry(poseStack, RenderTypes.entityCutoutCull(TEXTURE_LOCATION), (pose, buffer) -> {
-			this.vertex(buffer, pose, 0.0F, 0, 0, 1);
-			this.vertex(buffer, pose, 1.0F, 0, 1, 1);
-			this.vertex(buffer, pose, 1.0F, 1, 1, 0);
-			this.vertex(buffer, pose, 0.0F, 1, 0, 0);
+			this.vertex(buffer, pose, state.lightCoords, 0.0F, 0, 0, 1);
+			this.vertex(buffer, pose, state.lightCoords, 1.0F, 0, 1, 1);
+			this.vertex(buffer, pose, state.lightCoords, 1.0F, 1, 1, 0);
+			this.vertex(buffer, pose, state.lightCoords, 0.0F, 1, 0, 0);
 		});
 		poseStack.popPose();
 
@@ -71,27 +72,29 @@ public class GirlfriendFishingHookRenderer extends EntityRenderer<GirlfriendFish
 			super.submit(state, poseStack, submitNodeCollector, camera);
 			return;
 		}
+		float width = Minecraft.getInstance().gameRenderer.getGameRenderState().windowRenderState.appropriateLineWidth;
 		submitNodeCollector.submitCustomGeometry(poseStack, RenderTypes.lines(), (pose, buffer) -> {
 			for(int i = 0; i < 16; i++) {
 				float a0 = i / 16.0F;
 				float a1 = (i + 1) / 16.0F;
-				this.lineVertex(xa, ya, za, buffer, pose, a0, a1);
-				this.lineVertex(xa, ya, za, buffer, pose, a1, a0);
+				this.lineVertex(xa, ya, za, buffer, pose, a0, a1, width);
+				this.lineVertex(xa, ya, za, buffer, pose, a1, a0, width);
 			}
 		});
 		poseStack.popPose();
 		super.submit(state, poseStack, submitNodeCollector, camera);
 	}
 
-	private void vertex(VertexConsumer buffer, PoseStack.Pose pose, float x, int y, int u, int v) {
+	private void vertex(VertexConsumer buffer, PoseStack.Pose pose, int lightCoords, float x, int y, int u, int v) {
 		buffer.addVertex(pose, x - 0.5F, y - 0.5F, 0.0F)
 				.setColor(-1)
 				.setUv(u, v)
+				.setLight(lightCoords)
 				.setOverlay(OverlayTexture.NO_OVERLAY)
 				.setNormal(pose, 0.0F, 1.0F, 0.0F);
 	}
 
-	private void lineVertex(float xa, float ya, float za, VertexConsumer buffer, PoseStack.Pose pose, float aa, float nexta) {
+	private void lineVertex(float xa, float ya, float za, VertexConsumer buffer, PoseStack.Pose pose, float aa, float nexta, float width) {
 		float x = xa * aa;
 		float y = ya * (aa * aa + aa) * 0.5F + 0.25F;
 		float z = za * aa;
@@ -102,6 +105,6 @@ public class GirlfriendFishingHookRenderer extends EntityRenderer<GirlfriendFish
 		nx /= length;
 		ny /= length;
 		nz /= length;
-		buffer.addVertex(pose, x, y, z).setColor(-16777216).setNormal(pose, nx, ny, nz);
+		buffer.addVertex(pose, x, y, z).setColor(-16777216).setNormal(pose, nx, ny, nz).setLineWidth(width);
 	}
 }
