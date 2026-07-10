@@ -1,6 +1,7 @@
 package com.hexagram2021.girlfriends.common.entity.ai.sensor;
 
 import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsMemoryTypes;
+import net.minecraft.SharedConstants;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.tags.FluidTags;
@@ -15,7 +16,7 @@ public class WaterSensor extends GirlfriendBlockSensor {
 	 * 构造水域传感器
 	 */
 	public WaterSensor() {
-		super(GirlfriendsMemoryTypes.NEAREST_WATER.get(), 12);
+		super(GirlfriendsMemoryTypes.NEAREST_WATER.get(), 12, 30L * SharedConstants.TICKS_PER_SECOND, 30L * SharedConstants.TICKS_PER_SECOND);
 	}
 
 	@Override

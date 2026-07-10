@@ -26,7 +26,7 @@ import java.util.Map;
 public class FishNearbyWater extends Behavior<GirlfriendEntity> {
 	private static final int MAX_FISHING_TIME = 1200;
 	private static final int COOLDOWN_TICKS = 100;
-	private static final double MAX_DISTANCE_TO_WATER = 8.0;
+	private static final double MAX_DISTANCE_TO_WATER = 8.0D;
 
 	private @Nullable GirlfriendFishingHook activeHook;
 	private long nextCastAvailableTick;

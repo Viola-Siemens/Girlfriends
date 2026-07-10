@@ -96,9 +96,9 @@ public class GirlfriendFishingHook extends Projectile {
 		Vec3 direction = new Vec3(-ySin, Mth.clamp(-(xSin / xCos), -5.0F, 5.0F), -yCos);
 		double length = direction.length();
 		direction = direction.multiply(
-				0.6 / length + this.random.triangle(0.5, 0.0103365),
-				0.6 / length + this.random.triangle(0.5, 0.0103365),
-				0.6 / length + this.random.triangle(0.5, 0.0103365)
+				0.5D / length + this.random.triangle(0.5, 0.0103365),
+				0.5D / length + this.random.triangle(0.5, 0.0103365),
+				0.5D / length + this.random.triangle(0.5, 0.0103365)
 		);
 		this.setDeltaMovement(direction);
 		this.setYRot((float) (Mth.atan2(direction.x, direction.z) * 180.0F / (float) Math.PI));
