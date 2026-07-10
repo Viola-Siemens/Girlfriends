@@ -262,6 +262,7 @@ public class GirlfriendFishingHook extends Projectile {
 	public void retrieve(ItemStack rod) {
 		LivingEntity owner = this.getLivingOwner();
 		if(this.level().isClientSide() || owner == null) {
+			this.discard();
 			return;
 		}
 		if(this.nibble > 0) {
@@ -282,9 +283,6 @@ public class GirlfriendFishingHook extends Projectile {
 				double dz = owner.getZ() - this.getZ();
 				itemEntity.setDeltaMovement(dx * 0.1, dy * 0.1 + Math.sqrt(Math.sqrt(dx * dx + dy * dy + dz * dz)) * 0.08, dz * 0.1);
 				this.level().addFreshEntity(itemEntity);
-				this.level()
-						.addFreshEntity(new ExperienceOrb(this.level(), owner.getX(), owner.getY() + 0.5, owner.getZ() + 0.5,
-								this.random.nextInt(6) + 1));
 			}
 
 			rod.hurtAndBreak(1, owner, InteractionHand.MAIN_HAND.asEquipmentSlot());
