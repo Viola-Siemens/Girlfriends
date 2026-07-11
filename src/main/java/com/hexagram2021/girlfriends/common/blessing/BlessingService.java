@@ -110,7 +110,7 @@ public class BlessingService {
 	 * @return 祝福类型 ID 喵~
 	 */
 	public Optional<Identifier> getBlessingTypeId(Identifier girlfriendTypeId) {
-		return this.girlfriendTypeResolver.apply(girlfriendTypeId).map(GirlfriendType::getBlessingTypeId);
+		return this.girlfriendTypeResolver.apply(girlfriendTypeId).map(GirlfriendType::blessingTypeId);
 	}
 
 	/**

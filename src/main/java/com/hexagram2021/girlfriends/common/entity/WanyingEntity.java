@@ -1,6 +1,7 @@
 package com.hexagram2021.girlfriends.common.entity;
 
 import com.google.common.collect.ImmutableList;
+import com.hexagram2021.girlfriends.common.character.GirlfriendType;
 import com.hexagram2021.girlfriends.common.character.GirlfriendTypes;
 import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsActivities;
 import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsEnvironmentAttributes;
@@ -8,12 +9,14 @@ import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsSensorTypes;
 import com.hexagram2021.girlfriends.common.entity.ai.behavior.*;
 import com.hexagram2021.girlfriends.common.item.GirlfriendsItemTags;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.entity.ai.ActivityData;
 import net.minecraft.world.entity.ai.Brain;
@@ -22,6 +25,7 @@ import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.schedule.Activity;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,13 +46,18 @@ public class WanyingEntity extends GirlfriendEntity {
 	 * @param entityType 实体类型
 	 * @param level 世界
 	 */
-	public WanyingEntity(EntityType<? extends PathfinderMob> entityType, net.minecraft.world.level.Level level) {
+	public WanyingEntity(EntityType<? extends PathfinderMob> entityType, Level level) {
 		super(entityType, level);
 	}
 
 	@Override
 	public Identifier getGirlfriendTypeId() {
 		return GirlfriendTypes.WANYING_ID;
+	}
+
+	@Override
+	public Holder<GirlfriendType> getGirlfriendType() {
+		return GirlfriendTypes.WANYING;
 	}
 
 	@Override
@@ -107,7 +116,7 @@ public class WanyingEntity extends GirlfriendEntity {
 									Pair.of(SetEntityLookTarget.create(EntityType.BLAZE, 8.0F), 2),
 									Pair.of(SetEntityLookTarget.create(EntityType.WITHER_SKELETON, 8.0F), 2),
 									Pair.of(SetEntityLookTarget.create(mob -> mob.is(GirlfriendEntityTags.GIRLFRIENDS), 8.0F), 4),
-									Pair.of(SetEntityLookTarget.create(mob -> mob instanceof net.minecraft.world.entity.player.Player player && girlfriend.isInterestedIn(player), 8.0F), 4)
+									Pair.of(SetEntityLookTarget.create(mob -> mob instanceof Player player && girlfriend.isInterestedIn(player), 8.0F), 4)
 							))),
 							Pair.of(7, (BehaviorControl<GirlfriendEntity>)(Object) new DoNothing(30, 60))
 					);
@@ -176,5 +185,11 @@ public class WanyingEntity extends GirlfriendEntity {
 		brain.setSchedule(GirlfriendsEnvironmentAttributes.WANYING_ACTIVITY.get());
 
 		brain.updateActivityFromSchedule(this.level().environmentAttributes(), this.level().getGameTime(), this.position());
+	}
+
+	@Override
+	protected int getNextHealCooldown() {
+		// CD 是默认值的一半
+		return super.getNextHealCooldown() / 2;
 	}
 }

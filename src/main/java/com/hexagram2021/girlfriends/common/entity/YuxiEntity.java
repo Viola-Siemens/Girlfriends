@@ -1,6 +1,7 @@
 package com.hexagram2021.girlfriends.common.entity;
 
 import com.google.common.collect.ImmutableList;
+import com.hexagram2021.girlfriends.common.character.GirlfriendType;
 import com.hexagram2021.girlfriends.common.character.GirlfriendTypes;
 import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsActivities;
 import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsEnvironmentAttributes;
@@ -9,6 +10,7 @@ import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsSensorTypes;
 import com.hexagram2021.girlfriends.common.entity.ai.behavior.*;
 import com.hexagram2021.girlfriends.common.item.GirlfriendsItemTags;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -46,6 +48,11 @@ public class YuxiEntity extends GirlfriendEntity {
 	@Override
 	public Identifier getGirlfriendTypeId() {
 		return GirlfriendTypes.YUXI_ID;
+	}
+
+	@Override
+	public Holder<GirlfriendType> getGirlfriendType() {
+		return GirlfriendTypes.YUXI;
 	}
 
 	@Override
@@ -93,7 +100,8 @@ public class YuxiEntity extends GirlfriendEntity {
 					// 上午：垂钓喵~
 					dayWork.add(
 							Pair.of(1, (BehaviorControl<GirlfriendEntity>)(Object) GoToTargetLocation.create(GirlfriendsMemoryTypes.NEAREST_WATER.get(), 4, 0.5F)),
-							Pair.of(2, (BehaviorControl<GirlfriendEntity>)(Object) new RandomLookAround(UniformInt.of(150, 300), 30.0F, -10.0F, 0.0F)),
+							Pair.of(2, new FishNearbyWater()),
+							Pair.of(3, (BehaviorControl<GirlfriendEntity>)(Object) new RandomLookAround(UniformInt.of(150, 300), 30.0F, -10.0F, 0.0F)),
 							Pair.of(49, (BehaviorControl<GirlfriendEntity>)(Object) UpdateActivityFromSchedule.create())
 					);
 
