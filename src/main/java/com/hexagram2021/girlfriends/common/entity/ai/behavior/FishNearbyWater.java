@@ -101,6 +101,9 @@ public class FishNearbyWater extends Behavior<GirlfriendEntity> {
 	 * 检查背包是否含有钓竿喵~
 	 */
 	private boolean hasFishingRod(GirlfriendEntity entity) {
+		if(entity.getMainHandItem().canPerformAction(ItemAbilities.FISHING_ROD_CAST)) {
+			return true;
+		}
 		SimpleContainer inventory = entity.getInventory();
 		for(int slot = 0; slot < inventory.getContainerSize(); ++slot) {
 			ItemStack stack = inventory.getItem(slot);
