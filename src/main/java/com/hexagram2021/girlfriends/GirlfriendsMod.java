@@ -1,5 +1,6 @@
 package com.hexagram2021.girlfriends;
 
+import com.hexagram2021.girlfriends.common.blessing.GirlfriendsMobEffects;
 import com.hexagram2021.girlfriends.common.block.GirlfriendsBlocks;
 import com.hexagram2021.girlfriends.common.character.GirlfriendTypes;
 import com.hexagram2021.girlfriends.common.character.GirlfriendsRegistries;
@@ -13,7 +14,7 @@ import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsActivities;
 import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsEnvironmentAttributes;
 import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsMemoryTypes;
 import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsSensorTypes;
-import com.hexagram2021.girlfriends.common.entity.event.GirlfriendEntityEvents;
+import com.hexagram2021.girlfriends.common.event.GirlfriendGameEvents;
 import com.hexagram2021.girlfriends.common.gift.GiftPreferenceManager;
 import com.hexagram2021.girlfriends.common.gift.GiftQuoteManager;
 import com.hexagram2021.girlfriends.common.item.GirlfriendsItems;
@@ -60,9 +61,12 @@ public class GirlfriendsMod {
 		modEventBus.addListener(this::registerEntityAttributes);
 		NeoForge.EVENT_BUS.addListener(this::registerServerReloadListeners);
 		NeoForge.EVENT_BUS.addListener(this::registerCommands);
-		GirlfriendEntityEvents events = new GirlfriendEntityEvents();
+		GirlfriendGameEvents events = new GirlfriendGameEvents();
+		NeoForge.EVENT_BUS.addListener(events::onBlockDrop);
 		NeoForge.EVENT_BUS.addListener(events::onEntityDie);
 		NeoForge.EVENT_BUS.addListener(events::onEntityJoinWorld);
+		NeoForge.EVENT_BUS.addListener(events::onItemFished);
+		NeoForge.EVENT_BUS.addListener(events::onLivingDamagePre);
 		NeoForge.EVENT_BUS.addListener(events::onRightClickBlock);
 		NeoForge.EVENT_BUS.addListener(events::onServerTick);
 
@@ -75,6 +79,7 @@ public class GirlfriendsMod {
 		GirlfriendsEnvironmentAttributes.REGISTER.register(modEventBus);
 		GirlfriendsItems.REGISTER.register(modEventBus);
 		GirlfriendsMemoryTypes.REGISTER.register(modEventBus);
+		GirlfriendsMobEffects.REGISTER.register(modEventBus);
 		GirlfriendsSensorTypes.REGISTER.register(modEventBus);
 		GirlfriendsVoiceEvents.REGISTER.register(modEventBus);
 

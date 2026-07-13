@@ -1,7 +1,6 @@
 package com.hexagram2021.girlfriends.common.entity;
 
 import com.hexagram2021.girlfriends.GirlfriendsMod;
-import com.hexagram2021.girlfriends.common.entity.GirlfriendFishingHook;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;

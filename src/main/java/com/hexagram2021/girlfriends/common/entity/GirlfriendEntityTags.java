@@ -17,6 +17,11 @@ public final class GirlfriendEntityTags {
 			Identifier.fromNamespaceAndPath(GirlfriendsMod.MODID, "girlfriends")
 	);
 
+	public static final TagKey<EntityType<?>> NATURE_FORGIVING_MOBS = TagKey.create(
+			Registries.ENTITY_TYPE,
+			Identifier.fromNamespaceAndPath(GirlfriendsMod.MODID, "nature_forgiving_mobs")
+	);
+
 	private GirlfriendEntityTags() {
 	}
 }

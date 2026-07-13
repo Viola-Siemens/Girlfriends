@@ -1,5 +1,6 @@
-package com.hexagram2021.girlfriends.common.entity.event;
+package com.hexagram2021.girlfriends.common.event;
 
+import com.hexagram2021.girlfriends.common.blessing.GirlfriendsMobEffects;
 import com.hexagram2021.girlfriends.common.character.CharacterWorldState;
 import com.hexagram2021.girlfriends.common.entity.GirlfriendEntity;
 import com.hexagram2021.girlfriends.common.item.GirlfriendsItems;
@@ -13,11 +14,17 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.TriState;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.player.ItemFishedEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.level.BlockDropsEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 import java.util.Map;
@@ -29,7 +36,7 @@ import java.util.Map;
  *
  * @author liudongyu
  */
-public final class GirlfriendEntityEvents {
+public final class GirlfriendGameEvents {
 	private long lastProcessedDay = -1L;
 
 	/**
@@ -131,6 +138,57 @@ public final class GirlfriendEntityEvents {
 		if(event.getLevel().getBlockState(event.getHitVec().getBlockPos()).getBlock() instanceof FlowerPotBlock &&
 				event.getItemStack().is(GirlfriendsItems.WATERING_CAN)) {
 			event.setUseBlock(TriState.FALSE);
+		}
+	}
+
+	/**
+	 * 受击事件
+	 *
+	 * @param event 受击事件
+	 */
+	@SubscribeEvent
+	public void onLivingDamagePre(LivingDamageEvent.Pre event) {
+		LivingEntity livingEntity = event.getEntity();
+		if(livingEntity.hasEffect(GirlfriendsMobEffects.FLAME_GUARDIAN)) {
+			event.setNewDamage(event.getNewDamage() * 0.75F);
+		}
+	}
+
+	/**
+	 * 挖掘方块掉落事件
+	 *
+	 * @param event 挖掘方块掉落事件
+	 */
+	@SubscribeEvent
+	public void onBlockDrop(BlockDropsEvent event) {
+		if(event.getBreaker() instanceof LivingEntity livingEntity && livingEntity.hasEffect(GirlfriendsMobEffects.BOUNTY_OF_EARTH)) {
+			event.getDrops().forEach(drop -> {
+				// 50% 几率不变，50% 几率将原来的 n 个物品增加到 [n, 2n]，区间内概率均等。
+				// 最终期望为 1.25n
+				if(livingEntity.getRandom().nextBoolean()) {
+					ItemStack itemStack = drop.getItem();
+					itemStack.setCount(itemStack.getCount() + livingEntity.getRandom().nextInt(itemStack.getCount() + 1));
+				}
+			});
+		}
+	}
+
+	/**
+	 * 钓鱼事件
+	 *
+	 * @param event 钓鱼事件
+	 */
+	@SubscribeEvent
+	public void onItemFished(ItemFishedEvent event) {
+		Player player = event.getEntity();
+		if(player.hasEffect(GirlfriendsMobEffects.TIDE_COMPANION)) {
+			event.getDrops().forEach(drop -> {
+				// 50% 几率不变，50% 几率将原来的 n 个物品增加到 [n, 2n]，区间内概率均等。
+				// 最终期望为 1.25n
+				if(player.getRandom().nextBoolean()) {
+					drop.setCount(drop.getCount() + player.getRandom().nextInt(drop.getCount() + 1));
+				}
+			});
 		}
 	}
 
