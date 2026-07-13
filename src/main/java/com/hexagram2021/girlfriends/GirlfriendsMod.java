@@ -1,7 +1,5 @@
 package com.hexagram2021.girlfriends;
 
-import com.hexagram2021.girlfriends.common.blessing.BlessingParameterManager;
-import com.hexagram2021.girlfriends.common.blessing.BlessingTypes;
 import com.hexagram2021.girlfriends.common.block.GirlfriendsBlocks;
 import com.hexagram2021.girlfriends.common.character.GirlfriendTypes;
 import com.hexagram2021.girlfriends.common.character.GirlfriendsRegistries;
@@ -44,7 +42,6 @@ import net.neoforged.neoforge.registries.NewRegistryEvent;
 public class GirlfriendsMod {
 	public static final String MODID = "girlfriends";
 
-	private static final Identifier BLESSING_PARAMETER_MANAGER_ID = Identifier.fromNamespaceAndPath(MODID, "blessing_parameters");
 	private static final Identifier GIFT_PREFERENCE_MANAGER_ID = Identifier.fromNamespaceAndPath(MODID, "gift_preferences");
 	private static final Identifier FIXED_QUEST_DEFINITION_MANAGER_ID = Identifier.fromNamespaceAndPath(MODID, "fixed_quest_definitions");
 	private static final Identifier RANDOM_QUEST_TEMPLATE_MANAGER_ID = Identifier.fromNamespaceAndPath(MODID, "random_quest_templates");
@@ -69,7 +66,6 @@ public class GirlfriendsMod {
 		NeoForge.EVENT_BUS.addListener(events::onRightClickBlock);
 		NeoForge.EVENT_BUS.addListener(events::onServerTick);
 
-		BlessingTypes.REGISTER.register(modEventBus);
 		GirlfriendTypes.REGISTER.register(modEventBus);
 		GirlfriendsActivities.REGISTER.register(modEventBus);
 		GirlfriendsBlocks.REGISTER.register(modEventBus);
@@ -90,7 +86,6 @@ public class GirlfriendsMod {
 	}
 
 	private void registerServerReloadListeners(AddServerReloadListenersEvent event) {
-		event.addListener(BLESSING_PARAMETER_MANAGER_ID, BlessingParameterManager.INSTANCE);
 		event.addListener(GIFT_PREFERENCE_MANAGER_ID, GiftPreferenceManager.INSTANCE);
 		event.addListener(FIXED_QUEST_DEFINITION_MANAGER_ID, FixedQuestDefinitionManager.INSTANCE);
 		event.addListener(RANDOM_QUEST_TEMPLATE_MANAGER_ID, RandomQuestTemplateManager.INSTANCE);
@@ -99,7 +94,6 @@ public class GirlfriendsMod {
 
 	private void registerRegistries(NewRegistryEvent event) {
 		event.register(GirlfriendsRegistries.GIRLFRIEND_TYPE_REGISTRY);
-		event.register(GirlfriendsRegistries.BLESSING_TYPE_REGISTRY);
 	}
 
 	private void registerEntityAttributes(EntityAttributeCreationEvent event) {
