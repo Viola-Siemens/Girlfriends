@@ -46,9 +46,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - **Minecraft 版本**: 26.1.2（NeoForge 26.1.2.71）
 - **Java 版本**: Java 25（toolchain）
-- **构建工具**: Gradle + NeoForge ModDev Plugin 2.0.141
+- **构建工具**: Gradle + NeoForge ModDev Plugin 2.0.141 + MixinExtras
 - **测试框架**: JUnit Jupiter 5.13.4
 - **映射**: Mojang official mappings
+- **三方依赖**: TetrachordLib 26.1+1.0.3（提供 KD 树、线段树等数据结构）
 
 ## 架构分层
 
@@ -81,7 +82,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | `QuestService` | 委托槽管理（每角色唯一槽）、固定委托顺序发布、随机委托 5~10 日过期、接取/完成/过期、owner 原子校验 |
 | `BindingService` | 爱慕绑定建立、动摇期（3 游戏日）+ 挑战者转移、亲密锁定排他 |
 | `HomeService` | 家园伙伴邀请/解除、双人床校验、家园回血 + 每日好感、争执事件（每日 1 次、扣 3~5 点） |
-| `BlessingService` | 祝福生效条件校验（亲密+跟随+同维度+距离≤32）、祝福参数读取、效果判定 |
+| `BlessingService` | 祝福生效条件校验（亲密+跟随+同维度+距离≤32），为玩家施加对应的 MobEffect 状态效果 |
 | `CharacterRespawnService` | 死亡集中清理（关系/委托/绑定/家园全清 + 终章奖励保留）、最近庇护所查找、待重生状态 |
 
 所有 Service 构造方法支持注入外部依赖（如 `Function<Identifier, Optional<GirlfriendType>>`），便于单元测试中使用模拟实现。
@@ -93,16 +94,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **实体架构**:
 - `GirlfriendEntity`（抽象基类，extends `PathfinderMob` implements `InventoryCarrier`）— 统一管理跟随模式、爱慕玩家 UUID、18 格背包、自动回血、定时同步到 WorldState、Brain 刷新
 - 子类覆写 `getGirlfriendTypeId()` 返回角色类型 ID，并提供差异化 Brain Provider 及 Behavior 注册
-- 目前实现：`MomoEntity`（沫沫），其余四位角色待后续 Story 实现
+- 五位角色实体已全部实现：`MomoEntity`（沫沫）、`YuxiEntity`（渔溪）、`MeishuEntity`（梅疏）、`WanyingEntity`（晚萤）、`YouruoEntity`（幽若）
 
 **AI 子系统**（使用原版 Brain/Schedule 体系）:
 - `GirlfriendsActivities` — 六个自定义 Activity：`MORNING`、`DAY_WORK`、`AFTERNOON`、`SUNSET`、`NIGHT_REST`、`FOLLOW`，通过 DeferredRegister 注册到原版 Activity 注册表
 - `GirlfriendsMemoryTypes` — 自定义 MemoryModuleType：庇护所位置、家园床点、花朵/蜂箱/水域/矿石位置（各角色专属）、骨粉产出标记等
-- `GirlfriendsSensorTypes` — 自定义 SensorType：`ShelterSensor`、`FlowerSensor`、`BeehiveSensor`
+- `GirlfriendsSensorTypes` — 自定义 SensorType（7 个）：`ShelterSensor`、`FlowerSensor`、`BeehiveSensor`、`OreSensor`、`HostileSensor`、`WaterSensor`，以及通用基类 `GirlfriendBlockSensor`
 - `GirlfriendsEnvironmentAttributes` — 环境属性（如沫沫日程表），驱动 AI 按游戏时刻自动切换 Activity
 - `GirlfriendCommonAiPackages` — 所有角色共用的 Core Activity 行为（跟随判定、睡眠、日程更新等）
 - 通用 Behavior：`StayCloseToIntimatePlayer`（跟随贴近）、`GirlfriendCalmDown`（恐慌冷却）、`GirlfriendPanicTrigger`（恐慌触发）、`RunOneLoop`（循环执行行为列表）、`BackToShelter`（返回庇护所）、`ShelterBoundRandomStroll`（庇护所附近漫步）
 - 沫沫专属 Behavior：`PlantAndHarvestFlower`（种花/采花）、`ProduceBoneMeal`（生产骨粉）
+- 渔溪专属 Behavior：`FishNearbyWater`（水边垂钓，含自定义 `GirlfriendFishingHook` 实体和渲染器）
+- 梅疏专属 Behavior：`MineNearbyOre`（就近挖矿）
+- 幽若专属 Behavior：`ShortRangeTeleport`（短程瞬移）
 
 AI 设计关键点：
 - 使用原版 `Brain.provider()` + `ActivityData` + `Schedule` 体系，不自行造轮子
@@ -112,16 +116,32 @@ AI 设计关键点：
 
 ### 4. Minecraft 集成层（Integration Layer）
 
-- **`GirlfriendsMod`**: 模组入口，注册自定义 Registry、EntityType、Activity、MemoryModuleType、SensorType、EnvironmentAttribute、Item、Block、DataComponentType、CreativeModeTab、网络包、ServerReloadListener、命令、实体事件监听
-- **`GirlfriendEntityEvents`**: 实体生命周期事件处理器 — EntityJoinLevel（标记存活、同步 UUID）、ServerTick.Post（每日维护：重置计数器、过期/刷新随机委托）、LivingDeath（标记死亡、记录死亡坐标）、RightClickBlock（花盆+洒水壶交互阻止）
-- **`GirlfriendsNetwork`**: 网络包注册与处理入口。所有 Serverbound handler 校验玩家是否可以接触到目标实体（`canReachEntity`，距离 ≤8）。不直接引用客户端类，clientbound handler 中的 UI 操作通过静态消费者注入模式委托给 `GirlfriendsModClient`。赠礼反馈采用双通道：角色台词走聊天栏（`sendSystemMessage`），好感度变化走 action bar。当前注册 7 个 serverbound + 2 个 clientbound 包
+- **`GirlfriendsMod`**: 模组入口，注册自定义 Registry、EntityType、Activity、MemoryModuleType、SensorType、MobEffect、EnvironmentAttribute、Item、Block、DataComponentType、CreativeModeTab、SoundEvent（语音）、网络包、ServerReloadListener、命令、实体事件监听、Mixin 配置
+- **`GirlfriendGameEvents`**: 游戏事件处理器 — EntityJoinLevel（标记存活、同步 UUID）、ServerTick.Post（每日维护：重置计数器、过期/刷新随机委托）、LivingDeath（标记死亡、记录死亡坐标）、RightClickBlock（花盆+洒水壶交互阻止）、LivingDamage.Pre（烈焰守护减伤）、BlockDrops（大地馈赠双倍掉落）、ItemFished（潮汐同行双倍渔获）
+- **`GirlfriendsNetwork`**: 网络包注册与处理入口。所有 Serverbound handler 校验玩家是否可以接触到目标实体（`canReachEntity`，距离 ≤8）。不直接引用客户端类，clientbound handler 中的 UI 操作通过静态消费者注入模式委托给 `GirlfriendsModClient`。赠礼反馈采用双通道：角色语音走聊天栏（`ClientboundPlayVoicePacket` 触发客户端播放 SoundEvent），好感度变化走 action bar。当前注册 7 个 serverbound + 3 个 clientbound 包
 - **`GirlfriendsRegistries`**: 自定义注册表（`GIRLFRIEND_TYPE_REGISTRY`、`BLESSING_TYPE_REGISTRY`）
 - **`GirlfriendTypes`** / **`BlessingTypes`**: 内置类型通过 DeferredRegister 注册
+- **`GirlfriendsMobEffects`**: 五位角色各自对应的 MobEffect 状态效果（`FORGIVENESS_OF_NATURE` 沫沫/`TIDE_COMPANION` 渔溪/`BOUNTY_OF_EARTH` 梅疏/`FLAME_GUARDIAN` 晚萤/`VOID_ECHO` 幽若），均继承 `GirlfriendsBlessingEffect`。效果的实际逻辑通过 Mixin 注入和事件订阅实现，而非 Effect 自身 tick
+- **`GirlfriendsVoiceEvents`**: 角色语音 SoundEvent 注册表，提供 `locale → voiceKey → DeferredHolder<SoundEvent>` 两级索引。五位角色共百余条语音，覆盖 gift quote 五个档位（favorite/liked/accepted/rejected/disliked）
+- **`GirlfriendsVoiceManager`**: 语音查找工具类，封装 locale 路由与 VOICE_MAP 查询，提供 `extractVoiceKey()` 从 i18n key 提取 voiceKey
+- **`GirlfriendEntityTags`**: 实体标签定义（`GIRLFRIENDS` 标记所有女友实体、`NATURE_FORGIVING_MOBS` 标记受自然宽恕影响的生物）
 - **`GirlfriendsItems`**: 模组物品注册（手捧花 `BOUQUET`、洒水壶 `WATERING_CAN`，后者挂载 `WATER_LEVEL` 数据组件）
 - **`GirlfriendsBlocks`**: 模组方块注册（目前主要提供方块标签）
 - **`GirlfriendsDataComponentTypes`**: 物品数据组件类型注册（`WATER_LEVEL`，`Codec.INT` 持久化 + `ByteBufCodecs.INT` 网络同步）
 - **`GirlfriendsCreativeModeTabs`**: 创造模式物品栏标签页
 - **`AffectionCommand`**: `/affection get|set|add <girlfriend> <player> [value]` 调试命令，权限等级 GAMEMASTERS
+- **`GirlfriendsCommonConfig`**: 模组通用配置（`ENABLE_RELATION_BIND`、`ENABLE_QUESTS`、`ENABLE_HOME_INVITATION`）
+- **`NetworkCodecs`**: 网络包共享编码器（如 `writeGirlfriendType`/`readGirlfriendType` 等注册表值编解码辅助方法）
+
+**Mixin 注入系统**：通过 Mixin 将祝福效果注入原版逻辑，位于 `com.hexagram2021.girlfriends.mixin` 包。使用 MixinExtras 而非裸 Mixin 注解以实现更安全的方法修改。
+
+| Mixin 类 | 目标 | 祝福效果 |
+|---|---|---|
+| `LivingEntityMixin` | `LivingEntity.canAttack()` | 自然宽恕：持有该效果的玩家不会被 `#nature_forgiving_mobs` 标签中的生物攻击 |
+| `EnderPearlItemMixin` | `EnderpearlItem.use()` | 虚空回响：持有该效果的玩家使用末影珍珠有 75% 几率不消耗物品 |
+| `AbstractBoatMixin` | `AbstractBoat.controlBoat()` | 潮汐同行：持有该效果的玩家划船加速度 ×1.5 |
+
+烈焰守护（减伤 25%）和大地馈赠（50% 几率掉落翻倍）通过 `GirlfriendGameEvents` 订阅 `LivingDamageEvent.Pre` 和 `BlockDropsEvent` 实现，不需要 Mixin。
 
 网络协议版本硬编码为 `"1"`，使用 NeoForge `PayloadRegistrar` 注册 play-to-client 和 play-to-server 包。
 
@@ -138,6 +158,7 @@ AI 设计关键点：
 | C→S | `ServerboundGiveGiftFromSlotPacket` | 玩家从指定背包槽位向角色赠礼 |
 | S→C | `ClientboundSyncInteractionDataPacket` | 同步交互摘要到客户端（handler 通过注入打开 Screen） |
 | S→C | `ClientboundQuestIconPacket` | 同步委托图标状态 |
+| S→C | `ClientboundPlayVoicePacket` | 触发客户端播放角色语音 SoundEvent |
 
 ### 5. 表现层（Presentation Layer）
 
@@ -148,6 +169,8 @@ AI 设计关键点：
 - **`MainInteractionScreen`**: 主交互界面（角色名、好感度模糊显示、委托入口、赠礼入口、跟随切换、亲密确认、家园邀请）
 - **`QuestViewScreen`**: 委托查看界面（任务描述、目标进度、奖励预览）
 - **`GiftScreen`**: 赠礼界面（背包槽位选择，通过 `ServerboundGiveGiftFromSlotPacket` 提交）
+- **`GirlfriendsScreens`**: 客户端界面入口，提供 `openMainInteractionScreen()` 静态方法
+- **`GirlfriendFishingHookRenderer`**: 渔溪钓鱼钩实体自定义渲染器
 
 ## 数据驱动系统
 
@@ -155,7 +178,6 @@ AI 设计关键点：
 
 - **`GiftPreferenceManager`**: 从 `data/<ns>/girlfriends/gift_preferences/*.json` 加载角色礼物偏好（favorite/liked/accepted/disliked 四个档位 + tag 支持）
 - **`GiftQuoteManager`**: 从 `data/<ns>/girlfriends/gift_quotes/*.json` 加载角色赠礼回复台词语料，按五档位（favorite 按物品 ID 细分）提供随机 i18n key 抽取，供 `GiftService` 在赠礼时生成角色台词喵~
-- **`BlessingParameterManager`**: 从 `data/<ns>/girlfriends/blessing_parameters/*.json` 加载祝福参数
 - **`FixedQuestDefinitionManager`**: 固定委托定义加载（含 objective 解析）
 - **`RandomQuestTemplateManager`**: 随机委托模板加载
 
@@ -207,16 +229,19 @@ void deserializeProgress(CompoundTag) // 反序列化进度
 - 使用 `Identifier.fromNamespaceAndPath(GirlfriendsMod.MODID, "xxx")` 构造角色 ID
 - 固定 UUID 使用 `UUID.fromString("00000000-0000-0000-0000-00000000000X")` 确保可重现
 
-已有测试类：`GirlfriendsWorldDataTest`、`RelationshipServiceTest`、`GiftServiceTest`、`GiftQuoteManagerTest`、`QuestServiceTest`、`BindingServiceTest`、`HomeServiceTest`、`BlessingServiceTest`、`CharacterRespawnServiceTest`、`InteractionSummaryServiceTest`、`ClientInteractionStoreTest`、`ServerboundPacketSerializationTest`、`ServerboundPermissionTest`
+已有测试类：`GirlfriendsWorldDataTest`、`RelationshipServiceTest`、`GiftServiceTest`、`GiftQuoteManagerTest`、`QuestServiceTest`、`BindingServiceTest`、`HomeServiceTest`、`CharacterRespawnServiceTest`、`InteractionSummaryServiceTest`、`ClientInteractionStoreTest`、`ServerboundPacketSerializationTest`、`ServerboundPermissionTest`、`GirlfriendsVoiceManagerTest`、`GirlfriendsVoiceEventsTest`
 
 ## 开发状态
 
-- **已完成**: 底层系统架构（Story 01~09）— 持久化、关系、赠礼、委托、绑定、家园、祝福、重生、网络协议
-- **已完成**: REQ-7 角色实体与 AI — `GirlfriendEntity` 抽象基类、`MomoEntity` 完整实现（含日程 AI 和传感器）、客户端渲染器（五位角色模型层全部注册）、命令系统、实体事件处理器、模组物品（手捧花、洒水壶+数据组件）、创造模式物品栏
-- **已完成**: REQ-7 赠礼台词系统 — `GiftQuoteManager` 语料管理器，五个角色共 133 条中英双语台词，赠礼反馈拆分为角色台词（聊天栏）+ 好感度变化（action bar）双通道
+- **已完成**: 底层系统架构（Story 01~09）— 持久化、关系、赠礼、委托、绑定、家园、重生、网络协议
+- **已完成**: REQ-7 角色实体与 AI — `GirlfriendEntity` 抽象基类、五位角色实体全部实现（`MomoEntity`/`YuxiEntity`/`MeishuEntity`/`WanyingEntity`/`YouruoEntity`）、各自专属 Schedule/AI Behavior/Sensor、客户端渲染器（五位角色模型层全部注册）、命令系统、游戏事件处理器、模组物品（手捧花、洒水壶、四种丝带）、创造模式物品栏
+- **已完成**: REQ-7 祝福效果重构 — 从独立的 `BlessingService` 迁移到 Minecraft 原生 `MobEffect` 体系，五种专属祝福效果通过 Mixin 注入和事件订阅应用到游戏中（自然宽恕/潮汐同行/大地馈赠/烈焰守护/虚空回响）
+- **已完成**: REQ-7 赠礼台词与语音系统 — `GiftQuoteManager` 语料管理器，五个角色共 133 条中英双语台词；`GirlfriendsVoiceEvents` 语音 SoundEvent 注册表 + `GirlfriendsVoiceManager` 语音路由；赠礼反馈拆分为角色语音（`ClientboundPlayVoicePacket` 触发）+ 好感度变化（action bar）双通道
 - **已完成**: REQ-8 玩家交互界面 — `MainInteractionScreen` 主界面、`QuestViewScreen` 委托查看、`GiftScreen` 背包赠礼，4 个新增 Serverbound 包（交付委托/确立关系/邀请同居/背包送礼）
+- **已完成**: 模组配置系统 — `GirlfriendsCommonConfig` 提供 RELATION_BIND / QUESTS / HOME_INVITATION 三个功能开关
+- **已完成**: Mixin 注入系统 — 3 个 Mixin 类实现祝福效果对原版逻辑的注入（`LivingEntityMixin`/`EnderPearlItemMixin`/`AbstractBoatMixin`）
 - **进行中**: 委托目标处理器具体逻辑（部分标记 TODO，等待 GDD 细化）
-- **待实现**: 渔溪/梅疏/晚萤/幽若四个角色的实体子类及专属 AI Behavior、委托奖励发放、角色自然生成逻辑
+- **待实现**: 委托奖励发放、角色自然生成逻辑
 
 ## Git 提交规范
 
@@ -246,4 +271,4 @@ scope: 需求/故事编号，如 REQ-7
 
 ## 文档基线
 
-本文基于提交 `7cdf22d`（Merge pull request #3 - gift_dialogue）的内容创建。后续更新时可以以此为基准，阅读 git 变更，避免全量阅读项目内容。
+本文基于提交 `4e440f1`（refactor(REQ-7): 使用状态效果重构 blessing 系统）的内容创建。后续更新时可以以此为基准，阅读 git 变更，避免全量阅读项目内容。
