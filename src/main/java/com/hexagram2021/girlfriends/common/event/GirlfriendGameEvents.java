@@ -19,6 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
@@ -161,7 +162,8 @@ public final class GirlfriendGameEvents {
 	 */
 	@SubscribeEvent
 	public void onBlockDrop(BlockDropsEvent event) {
-		if(event.getBreaker() instanceof LivingEntity livingEntity && livingEntity.hasEffect(GirlfriendsMobEffects.BOUNTY_OF_EARTH)) {
+		if(event.getBreaker() instanceof LivingEntity livingEntity && livingEntity.hasEffect(GirlfriendsMobEffects.BOUNTY_OF_EARTH) &&
+				event.getState().is(Tags.Blocks.ORES)) {
 			event.getDrops().forEach(drop -> {
 				// 50% 几率不变，50% 几率将原来的 n 个物品增加到 [n, 2n]，区间内概率均等。
 				// 最终期望为 1.25n

@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin {
 	@ModifyReturnValue(method = "canAttack", at = @At(value = "RETURN"))
-	private boolean girlfriends$tryIgnorePlayerWithEffect(boolean original, @Local(argsOnly = true, name = "target") LivingEntity target) {
+	private boolean girlfriends$tryIgnorePlayerWithEffect(boolean original, @Local(argsOnly = true) LivingEntity target) {
 		LivingEntity self = (LivingEntity)(Object)this;
 		if(self.typeHolder().is(GirlfriendEntityTags.NATURE_FORGIVING_MOBS) &&
 				target instanceof Player player && player.hasEffect(GirlfriendsMobEffects.FORGIVENESS_OF_NATURE)) {
