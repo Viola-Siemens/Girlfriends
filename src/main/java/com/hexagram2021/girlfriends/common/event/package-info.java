@@ -5,4 +5,4 @@
  *
  * @author liudongyu
  */
-package com.hexagram2021.girlfriends.common.entity.event;
+package com.hexagram2021.girlfriends.common.event;
