@@ -1,31 +1,31 @@
 {
-	"favorite": [
-		"minecraft:ender_pearl"
-	],
-	"liked_tags": [],
-	"liked_items": [
-		"minecraft:chorus_fruit",
-		"minecraft:ender_eye",
-		"minecraft:ender_chest",
-		"minecraft:shulker_shell",
-		"minecraft:purpur_block",
-		"minecraft:purpur_pillar",
-		"minecraft:writable_book"
-	],
-	"accepted_tags": [],
-	"accepted_items": [
-		"minecraft:glass",
-		"minecraft:glass_bottle",
-		"minecraft:glowstone_dust",
-		"minecraft:ink_sac",
-		"minecraft:paper",
-		"minecraft:lantern",
-		"minecraft:rotten_flesh",
-		"minecraft:spider_eye"
-	],
-	"disliked_tags": [],
-	"disliked_items": [
-		"minecraft:dirt",
-		"minecraft:gravel"
-	]
+  "favorite": [
+    "minecraft:ender_eye",
+    "minecraft:ender_pearl"
+  ],
+  "liked_tags": [],
+  "liked_items": [
+    "minecraft:chorus_fruit",
+    "minecraft:ender_chest",
+    "minecraft:purpur_block",
+    "minecraft:purpur_pillar",
+    "minecraft:shulker_shell",
+    "minecraft:writable_book"
+  ],
+  "accepted_tags": [],
+  "accepted_items": [
+    "minecraft:glass",
+    "minecraft:glass_bottle",
+    "minecraft:glowstone_dust",
+    "minecraft:ink_sac",
+    "minecraft:lantern",
+    "minecraft:paper",
+    "minecraft:rotten_flesh",
+    "minecraft:spider_eye"
+  ],
+  "disliked_tags": [],
+  "disliked_items": [
+    "minecraft:dirt",
+    "minecraft:gravel"
+  ]
 }

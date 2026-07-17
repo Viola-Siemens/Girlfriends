@@ -1,6 +1,7 @@
 package com.hexagram2021.girlfriends.common.entity;
 
 import com.google.common.collect.ImmutableList;
+import com.hexagram2021.girlfriends.common.blessing.GirlfriendsMobEffects;
 import com.hexagram2021.girlfriends.common.character.GirlfriendType;
 import com.hexagram2021.girlfriends.common.character.GirlfriendTypes;
 import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsActivities;
@@ -14,6 +15,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.item.ItemStack;
@@ -58,6 +60,11 @@ public class MeishuEntity extends GirlfriendEntity {
 	@Override
 	public boolean wantsToPickUp(ServerLevel level, ItemStack itemStack) {
 		return itemStack.is(GirlfriendsItemTags.MEISHU_PICKS_UP);
+	}
+
+	@Override
+	public Holder<MobEffect> getBlessingEffect() {
+		return GirlfriendsMobEffects.BOUNTY_OF_EARTH;
 	}
 
 	@SuppressWarnings("unchecked")

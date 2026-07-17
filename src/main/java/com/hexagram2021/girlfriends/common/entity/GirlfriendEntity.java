@@ -2,7 +2,6 @@ package com.hexagram2021.girlfriends.common.entity;
 
 import com.hexagram2021.girlfriends.common.blessing.FollowMode;
 import com.hexagram2021.girlfriends.common.character.CharacterWorldState;
-import com.hexagram2021.girlfriends.common.character.GirlfriendType;
 import com.hexagram2021.girlfriends.common.network.ClientInteractionStore;
 import com.hexagram2021.girlfriends.common.network.InteractionSummaryService;
 import com.hexagram2021.girlfriends.common.network.clientbound.ClientboundSyncInteractionDataPacket;
@@ -12,7 +11,6 @@ import com.hexagram2021.girlfriends.common.quest.QuestService;
 import com.hexagram2021.girlfriends.common.quest.RandomQuestTemplateManager;
 import com.hexagram2021.girlfriends.common.relationship.RelationshipService;
 import net.minecraft.SharedConstants;
-import net.minecraft.core.Holder;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -25,6 +23,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
@@ -51,7 +50,7 @@ import java.util.UUID;
  * @author liudongyu
  */
 @SuppressWarnings("java:S2160")
-public abstract class GirlfriendEntity extends PathfinderMob implements InventoryCarrier {
+public abstract class GirlfriendEntity extends PathfinderMob implements InventoryCarrier, IRomanceable {
 	private static final EntityDataAccessor<Integer> DATA_FOLLOW_MODE =
 			SynchedEntityData.defineId(GirlfriendEntity.class, EntityDataSerializers.INT);
 
@@ -74,51 +73,23 @@ public abstract class GirlfriendEntity extends PathfinderMob implements Inventor
 		this.setCanPickUpLoot(true);
 	}
 
-	/**
-	 * 获取该实体的角色类型 ID 喵~
-	 *
-	 * @return 角色类型注册表 key 喵~
-	 */
-	public abstract Identifier getGirlfriendTypeId();
-
-	/**
-	 * 解析角色类型对象喵~
-	 *
-	 * @return 角色类型，若注册表缺失则返回 null 喵~
-	 */
-	public abstract Holder<GirlfriendType> getGirlfriendType();
-
 	@Override
 	public boolean removeWhenFarAway(double distSqr) {
 		return false;
 	}
 
-	/**
-	 * 获取当前跟随模式喵~
-	 *
-	 * @return 跟随模式喵~
-	 */
+	@Override
 	public FollowMode getFollowMode() {
 		int id = this.entityData.get(DATA_FOLLOW_MODE);
 		return FollowMode.fromId(id);
 	}
 
-	/**
-	 * 设置跟随模式喵~
-	 *
-	 * @param mode 新的跟随模式喵~
-	 */
+	@Override
 	public void setFollowMode(FollowMode mode) {
 		this.entityData.set(DATA_FOLLOW_MODE, mode.ordinal());
 	}
 
-	/**
-	 * 获取跟随玩家<br/>
-	 * 角色只有可能跟随爱慕的玩家
-	 *
-	 * @return 跟随玩家，非跟随状态、非玩家、不同维度时返回 null
-	 */
-	@Nullable
+	@Override @Nullable
 	public Player getFollowedPlayer() {
 		if(this.likedPlayerUuid != null &&
 				this.getFollowMode().isStayOrFollow() &&
@@ -128,13 +99,7 @@ public abstract class GirlfriendEntity extends PathfinderMob implements Inventor
 		return null;
 	}
 
-	/**
-	 * 判断是否对指定玩家感兴趣<br/>
-	 * 仅当与该玩家确认关系，或未与任何玩家确认关系时，返回 true
-	 *
-	 * @param player 玩家
-	 * @return 是否对指定玩家感兴趣
-	 */
+	@Override
 	public boolean isInterestedIn(Player player) {
 		if(this.likedPlayerUuid == null) {
 			return true;
@@ -142,34 +107,18 @@ public abstract class GirlfriendEntity extends PathfinderMob implements Inventor
 		return this.likedPlayerUuid.equals(player.getUUID());
 	}
 
-	/**
-	 * 设置当前爱慕玩家 UUID 喵~
-	 *
-	 * @param playerUuid 玩家 UUID，null 表示清除喵~
-	 */
+	@Override
 	public void setLikedPlayerUuid(@Nullable UUID playerUuid) {
 		this.likedPlayerUuid = playerUuid;
 	}
 
-	/**
-	 * 将实体运行时状态同步到持久化世界数据喵~
-	 * <br/>
-	 * 将 entityUuid、followMode、followTargetUuid 写入 CharacterWorldState 喵~
-	 *
-	 * @param data 世界数据喵~
-	 */
+	@Override
 	public void syncToWorldState(GirlfriendsWorldData data) {
 		Identifier girlfriendTypeId = this.getGirlfriendTypeId();
 		data.updateCharacter(girlfriendTypeId, state -> state.setEntityUuid(this.getUUID()));
 	}
 
-	/**
-	 * 从持久化世界数据同步到实体运行时状态喵~
-	 * <p>
-	 * 读取 CharacterWorldState 的 followMode、followTargetUuid 并应用到实体喵~
-	 *
-	 * @param data 世界数据喵~
-	 */
+	@Override
 	public void syncFromWorldState(GirlfriendsWorldData data) {
 		Identifier girlfriendTypeId = this.getGirlfriendTypeId();
 		CharacterWorldState state = data.getExistingCharacterState(girlfriendTypeId);
@@ -201,7 +150,7 @@ public abstract class GirlfriendEntity extends PathfinderMob implements Inventor
 			// 先同步实体状态到世界数据
 			this.syncToWorldState(data);
 			// 构建并发送交互摘要
-			InteractionSummaryService summaryService = this.getInteractionSummaryService(data, level);
+			InteractionSummaryService summaryService = getInteractionSummaryService(data, level);
 			serverPlayer.connection.send(new ClientboundSyncInteractionDataPacket(
 					summaryService.build(player.getUUID(), this.getGirlfriendTypeId())
 			));
@@ -209,7 +158,7 @@ public abstract class GirlfriendEntity extends PathfinderMob implements Inventor
 		return InteractionResult.SUCCESS;
 	}
 
-	private InteractionSummaryService getInteractionSummaryService(GirlfriendsWorldData data, ServerLevel level) {
+	private static InteractionSummaryService getInteractionSummaryService(GirlfriendsWorldData data, ServerLevel level) {
 		RelationshipService relationshipService = new RelationshipService(data);
 		QuestService questService = new QuestService(
 				data,
@@ -272,6 +221,12 @@ public abstract class GirlfriendEntity extends PathfinderMob implements Inventor
 			GirlfriendsWorldData data = level.getServer().overworld().getDataStorage().computeIfAbsent(GirlfriendsWorldData.TYPE);
 			this.syncToWorldState(data);
 			this.worldStateSyncCooldown = 200 + this.getRandom().nextInt(40);
+		}
+
+		// 祝佑
+		Player player = this.getFollowedPlayer();
+		if(player != null) {
+			player.addEffect(new MobEffectInstance(this.getBlessingEffect(), SharedConstants.TICKS_PER_SECOND), this);
 		}
 
 		super.customServerAiStep(level);

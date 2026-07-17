@@ -1,35 +1,35 @@
 {
-	"favorite": [
-		"minecraft:honeycomb",
-		"girlfriends:bouquet"
-	],
-	"liked_tags": [
-		"minecraft:flowers"
-	],
-	"liked_items": [
-		"minecraft:honey_bottle",
-		"minecraft:beehive",
-		"minecraft:bee_nest",
-		"minecraft:bone_meal",
-		"minecraft:composter"
-	],
-	"accepted_tags": [],
-	"accepted_items": [
-		"minecraft:apple",
-		"minecraft:cake",
-		"minecraft:grass_block",
-		"minecraft:oak_log",
-		"minecraft:sweet_berries",
-		"minecraft:wheat",
-		"minecraft:wheat_seeds"
-	],
-	"disliked_tags": [
-		"minecraft:skulls"
-	],
-	"disliked_items": [
-		"minecraft:bone",
-		"minecraft:dead_bush",
-		"minecraft:rotten_flesh",
-		"minecraft:spider_eye"
-	]
+  "favorite": [
+    "minecraft:honeycomb",
+    "girlfriends:bouquet"
+  ],
+  "liked_tags": [
+    "minecraft:flowers"
+  ],
+  "liked_items": [
+    "minecraft:beehive",
+    "minecraft:bee_nest",
+    "minecraft:bone_meal",
+    "minecraft:composter",
+    "minecraft:honey_bottle"
+  ],
+  "accepted_tags": [],
+  "accepted_items": [
+    "minecraft:apple",
+    "minecraft:cake",
+    "minecraft:grass_block",
+    "minecraft:oak_log",
+    "minecraft:sweet_berries",
+    "minecraft:wheat",
+    "minecraft:wheat_seeds"
+  ],
+  "disliked_tags": [
+    "minecraft:skulls"
+  ],
+  "disliked_items": [
+    "minecraft:bone",
+    "minecraft:dead_bush",
+    "minecraft:rotten_flesh",
+    "minecraft:spider_eye"
+  ]
 }

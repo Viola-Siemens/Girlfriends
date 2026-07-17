@@ -35,7 +35,7 @@ public final class GirlfriendsMobEffects {
 	public static final DeferredHolder<MobEffect, GirlfriendsBlessingEffect> FLAME_GUARDIAN = REGISTER.register(
 			"flame_guardian", () -> (GirlfriendsBlessingEffect) new GirlfriendsBlessingEffect(
 					MobEffectCategory.BENEFICIAL,
-					0xCC2502
+					0xcc2502
 			).addAttributeModifier(
 					Attributes.ATTACK_DAMAGE,
 					Identifier.withDefaultNamespace("effect.girlfriends.flame_guardian"),
@@ -44,7 +44,7 @@ public final class GirlfriendsMobEffects {
 	);
 	/** 虚空回响：幽若专属祝佑效果 */
 	public static final DeferredHolder<MobEffect, GirlfriendsBlessingEffect> VOID_ECHO = REGISTER.register(
-			"void_echo", () -> new GirlfriendsBlessingEffect(MobEffectCategory.BENEFICIAL, 0xCC2502)
+			"void_echo", () -> new GirlfriendsBlessingEffect(MobEffectCategory.BENEFICIAL, 0x8652c9)
 	);
 
 	private GirlfriendsMobEffects() {
