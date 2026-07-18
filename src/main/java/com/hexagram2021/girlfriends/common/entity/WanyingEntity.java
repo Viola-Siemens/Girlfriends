@@ -1,6 +1,7 @@
 package com.hexagram2021.girlfriends.common.entity;
 
 import com.google.common.collect.ImmutableList;
+import com.hexagram2021.girlfriends.common.blessing.GirlfriendsMobEffects;
 import com.hexagram2021.girlfriends.common.character.GirlfriendType;
 import com.hexagram2021.girlfriends.common.character.GirlfriendTypes;
 import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsActivities;
@@ -13,6 +14,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
@@ -63,6 +65,11 @@ public class WanyingEntity extends GirlfriendEntity {
 	@Override
 	public boolean wantsToPickUp(ServerLevel level, ItemStack itemStack) {
 		return itemStack.is(GirlfriendsItemTags.WANYING_PICKS_UP);
+	}
+
+	@Override
+	public Holder<MobEffect> getBlessingEffect() {
+		return GirlfriendsMobEffects.FLAME_GUARDIAN;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -131,39 +138,41 @@ public class WanyingEntity extends GirlfriendEntity {
 					// 清晨：巡逻喵~
 					morning.add(
 							Pair.of(3, ShelterBoundRandomStroll.create(0.5F)),
-							Pair.of(49, (BehaviorControl<GirlfriendEntity>)(Object) UpdateActivityFromSchedule.create())
+							Pair.of(49, GirlfriendUpdateActivityFromSchedule.create())
 					);
 
 					// 上午：战斗训练喵~
 					dayWork.add(
 							Pair.of(1, (BehaviorControl<GirlfriendEntity>)(Object) MeleeAttack.create(20)),
 							Pair.of(3, ShelterBoundRandomStroll.create(0.5F)),
-							Pair.of(49, (BehaviorControl<GirlfriendEntity>)(Object) UpdateActivityFromSchedule.create())
+							Pair.of(49, GirlfriendUpdateActivityFromSchedule.create())
 					);
 
 					// 下午：清剿敌对生物喵~
 					afternoon.add(
 							Pair.of(1, (BehaviorControl<GirlfriendEntity>)(Object) MeleeAttack.create(20)),
 							Pair.of(3, ShelterBoundRandomStroll.create(0.6F)),
-							Pair.of(49, (BehaviorControl<GirlfriendEntity>)(Object) UpdateActivityFromSchedule.create())
+							Pair.of(49, GirlfriendUpdateActivityFromSchedule.create())
 					);
 
 					// 傍晚：守望喵~
 					sunset.add(
 							Pair.of(1, (BehaviorControl<GirlfriendEntity>)(Object) new RandomLookAround(UniformInt.of(150, 250), 30.0F, -10.0F, 0.0F)),
 							Pair.of(3, BackToShelter.create(2, 48, 0.4F)),
-							Pair.of(49, (BehaviorControl<GirlfriendEntity>)(Object) UpdateActivityFromSchedule.create())
+							Pair.of(49, GirlfriendUpdateActivityFromSchedule.create())
 					);
 
 					// 夜晚：保养武器喵~
 					nightRest.add(
-							Pair.of(49, (BehaviorControl<GirlfriendEntity>)(Object) UpdateActivityFromSchedule.create())
+							Pair.of(49, GirlfriendUpdateActivityFromSchedule.create())
 					);
 
 					// 跟随行为
 					follow.add(
-							Pair.of(1, StayCloseToIntimatePlayer.create(3, 16, 1.0F)),
-							Pair.of(1, (BehaviorControl<GirlfriendEntity>)(Object) MeleeAttack.create(20))
+							Pair.of(1, StayCloseToIntimatePlayer.create(3, 16, 0.8F)),
+							Pair.of(1, (BehaviorControl<GirlfriendEntity>)(Object) MeleeAttack.create(20)),
+							Pair.of(6, (BehaviorControl<GirlfriendEntity>)(Object) RandomStroll.stroll(0.4F)),
+							Pair.of(49, GirlfriendUpdateActivityFromSchedule.create())
 					);
 
 					activities.add(ActivityData.create(Activity.CORE, core.build()));

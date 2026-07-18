@@ -4,6 +4,11 @@
       "youruo.favorite_minecraft_ender_pearl_0",
       "youruo.favorite_minecraft_ender_pearl_1",
       "youruo.favorite_minecraft_ender_pearl_2"
+    ],
+    "minecraft:ender_eye": [
+      "youruo.favorite_minecraft_ender_eye_0",
+      "youruo.favorite_minecraft_ender_eye_1",
+      "youruo.favorite_minecraft_ender_eye_2"
     ]
   },
   "liked": [

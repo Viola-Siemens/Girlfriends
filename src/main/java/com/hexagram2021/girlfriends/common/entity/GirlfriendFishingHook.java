@@ -1,5 +1,6 @@
 package com.hexagram2021.girlfriends.common.entity;
 
+import net.minecraft.SharedConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -54,6 +55,7 @@ public class GirlfriendFishingHook extends Projectile {
 			SynchedEntityData.defineId(GirlfriendFishingHook.class, EntityDataSerializers.BOOLEAN);
 
 	private State state = State.FLYING;
+	private int timeAfterCast;
 	private int timeUntilLured;
 	private int timeUntilHooked;
 	private int nibble;
@@ -87,11 +89,11 @@ public class GirlfriendFishingHook extends Projectile {
 
 		float yRot = owner.getYRot();
 		float xRot = owner.getXRot();
-		float yRotRad = -yRot * (float) (Math.PI / 180.0) - (float) Math.PI;
+		float yRotRad = -yRot * Mth.DEG_TO_RAD - (float) Math.PI;
 		float ySin = Mth.sin(yRotRad);
 		float yCos = Mth.cos(yRotRad);
-		float xCos = -Mth.cos(-xRot * (float) (Math.PI / 180.0));
-		float xSin = Mth.sin(-xRot * (float) (Math.PI / 180.0));
+		float xCos = -Mth.cos(-xRot * Mth.DEG_TO_RAD);
+		float xSin = Mth.sin(-xRot * Mth.DEG_TO_RAD);
 		this.snapTo(this.getX() - ySin * 0.3, this.getY(), this.getZ() - yCos * 0.3, yRot, xRot);
 		Vec3 direction = new Vec3(-ySin, Mth.clamp(-(xSin / xCos), -5.0F, 5.0F), -yCos);
 		double length = direction.length();
@@ -101,10 +103,11 @@ public class GirlfriendFishingHook extends Projectile {
 				0.5D / length + this.random.triangle(0.5, 0.0103365)
 		);
 		this.setDeltaMovement(direction);
-		this.setYRot((float) (Mth.atan2(direction.x, direction.z) * 180.0F / (float) Math.PI));
-		this.setXRot((float) (Mth.atan2(direction.y, direction.horizontalDistance()) * 180.0F / (float) Math.PI));
+		this.setYRot((float) (Mth.atan2(direction.x, direction.z) * Mth.RAD_TO_DEG));
+		this.setXRot((float) (Mth.atan2(direction.y, direction.horizontalDistance()) * Mth.RAD_TO_DEG));
 		this.yRotO = this.getYRot();
 		this.xRotO = this.getXRot();
+		this.timeAfterCast = 0;
 	}
 
 	/**
@@ -128,6 +131,8 @@ public class GirlfriendFishingHook extends Projectile {
 	@Override
 	public void tick() {
 		super.tick();
+
+		this.timeAfterCast += 1;
 
 		LivingEntity owner = this.getLivingOwner();
 		if(owner == null || !this.shouldKeepFishing(owner)) {
@@ -158,6 +163,10 @@ public class GirlfriendFishingHook extends Projectile {
 				this.state = State.BOBBING;
 				this.timeUntilLured = Mth.nextInt(this.random, 100, 600);
 			} else {
+				if(this.timeAfterCast > SharedConstants.TICKS_PER_SECOND * 6) {
+					this.discard();
+					return;
+				}
 				this.setDeltaMovement(this.getDeltaMovement().add(0.0, -0.03, 0.0));
 			}
 		} else {
@@ -207,7 +216,7 @@ public class GirlfriendFishingHook extends Projectile {
 		} else if(this.timeUntilHooked > 0) {
 			this.timeUntilHooked -= fishingSpeed;
 			if(this.timeUntilHooked > 0) {
-				float angle = Mth.nextFloat(this.random, 0.0F, 360.0F) * (float) (Math.PI / 180.0);
+				float angle = Mth.nextFloat(this.random, 0.0F, 360.0F) * Mth.DEG_TO_RAD;
 				float angleSin = Mth.sin(angle);
 				float angleCos = Mth.cos(angle);
 				double fishX = this.getX() + angleSin * this.timeUntilHooked * 0.1F;
@@ -236,7 +245,7 @@ public class GirlfriendFishingHook extends Projectile {
 			this.timeUntilLured -= fishingSpeed;
 			if(this.random.nextFloat() < 0.15F) {
 				// 溅水粒子喵~
-				float angle = Mth.nextFloat(this.random, 0.0F, 360.0F) * (float) (Math.PI / 180.0);
+				float angle = Mth.nextFloat(this.random, 0.0F, 360.0F) * Mth.DEG_TO_RAD;
 				float dist = Mth.nextFloat(this.random, 25.0F, 60.0F);
 				double fishX = this.getX() + Mth.sin(angle) * dist * 0.1;
 				double fishY = Mth.floor(this.getY()) + 1.0;
@@ -285,7 +294,9 @@ public class GirlfriendFishingHook extends Projectile {
 				this.level().addFreshEntity(itemEntity);
 			}
 
-			rod.hurtAndBreak(1, owner, InteractionHand.MAIN_HAND.asEquipmentSlot());
+			if(this.random.nextInt(16) == 0) {
+				rod.hurtAndBreak(1, owner, InteractionHand.MAIN_HAND.asEquipmentSlot());
+			}
 		}
 		this.discard();
 	}

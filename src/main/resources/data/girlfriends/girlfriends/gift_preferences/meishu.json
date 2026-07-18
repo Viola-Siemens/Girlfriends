@@ -1,33 +1,34 @@
 {
-	"favorite": [
-		"minecraft:iron_ingot"
-	],
-	"liked_tags": [
-		"minecraft:iron_ores",
-		"minecraft:anvil"
-	],
-	"liked_items": [
-		"minecraft:gold_ingot",
-		"minecraft:diamond",
-		"minecraft:emerald",
-		"minecraft:netherite_scrap",
-		"minecraft:furnace"
-	],
-	"accepted_tags": [
-		"minecraft:logs",
-		"minecraft:pickaxes"
-	],
-	"accepted_items": [
-		"minecraft:bread",
-		"minecraft:coal",
-		"minecraft:torch"
-	],
-	"disliked_tags": [
-		"minecraft:dyes",
-		"minecraft:flowers"
-	],
-	"disliked_items": [
-		"minecraft:painting",
-		"minecraft:flower_pot"
-	]
+  "favorite": [
+    "minecraft:iron_ingot",
+    "minecraft:netherite_ingot"
+  ],
+  "liked_tags": [
+    "minecraft:iron_ores",
+    "minecraft:anvil"
+  ],
+  "liked_items": [
+    "minecraft:diamond",
+    "minecraft:emerald",
+    "minecraft:furnace",
+    "minecraft:gold_ingot",
+    "minecraft:netherite_scrap"
+  ],
+  "accepted_tags": [
+    "minecraft:logs",
+    "minecraft:pickaxes"
+  ],
+  "accepted_items": [
+    "minecraft:bread",
+    "minecraft:coal",
+    "minecraft:torch"
+  ],
+  "disliked_tags": [
+    "minecraft:dyes",
+    "minecraft:flowers"
+  ],
+  "disliked_items": [
+    "minecraft:flower_pot",
+    "minecraft:painting"
+  ]
 }

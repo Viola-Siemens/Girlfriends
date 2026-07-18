@@ -2,8 +2,8 @@ package com.hexagram2021.girlfriends.common.entity.ai.behavior;
 
 import com.hexagram2021.girlfriends.common.blessing.FollowMode;
 import com.hexagram2021.girlfriends.common.entity.GirlfriendEntity;
-import net.minecraft.world.entity.ai.behavior.BehaviorControl;
 import net.minecraft.world.entity.ai.behavior.EntityTracker;
+import net.minecraft.world.entity.ai.behavior.OneShot;
 import net.minecraft.world.entity.ai.behavior.PositionTracker;
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -23,7 +23,7 @@ public final class StayCloseToIntimatePlayer {
 	 * @param speedModifier 速度
 	 * @return 跟随行为
 	 */
-	public static BehaviorControl<GirlfriendEntity> create(int closeEnough, int tooFar, float speedModifier) {
+	public static OneShot<GirlfriendEntity> create(int closeEnough, int tooFar, float speedModifier) {
 		return BehaviorBuilder.create(instance -> instance.group(
 				instance.registered(MemoryModuleType.LOOK_TARGET), instance.registered(MemoryModuleType.WALK_TARGET)
 		).apply(instance, (lookTarget, walkTarget) -> (level, body, timestamp) -> {
@@ -35,7 +35,8 @@ public final class StayCloseToIntimatePlayer {
 				return false;
 			}
 			PositionTracker positionTracker = new EntityTracker(followed, true, true);
-			if (body.position().closerThan(positionTracker.currentPosition(), tooFar)) {
+			if (!body.position().closerThan(positionTracker.currentPosition(), tooFar) ||
+					body.position().closerThan(positionTracker.currentPosition(), closeEnough)) {
 				return false;
 			} else {
 				lookTarget.set(positionTracker);

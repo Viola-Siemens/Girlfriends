@@ -1,6 +1,7 @@
 package com.hexagram2021.girlfriends.common.entity;
 
 import com.google.common.collect.ImmutableList;
+import com.hexagram2021.girlfriends.common.blessing.GirlfriendsMobEffects;
 import com.hexagram2021.girlfriends.common.character.GirlfriendType;
 import com.hexagram2021.girlfriends.common.character.GirlfriendTypes;
 import com.hexagram2021.girlfriends.common.entity.ai.GirlfriendsActivities;
@@ -14,6 +15,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.item.ItemStack;
@@ -60,6 +62,11 @@ public class YuxiEntity extends GirlfriendEntity {
 		return itemStack.is(GirlfriendsItemTags.YUXI_PICKS_UP);
 	}
 
+	@Override
+	public Holder<MobEffect> getBlessingEffect() {
+		return GirlfriendsMobEffects.TIDE_COMPANION;
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	protected Brain.Provider<GirlfriendEntity> getBrainProvider() {
@@ -94,7 +101,7 @@ public class YuxiEntity extends GirlfriendEntity {
 					// 清晨：检查码头/岸边喵~
 					morning.add(
 							Pair.of(1, (BehaviorControl<GirlfriendEntity>)(Object) GoToTargetLocation.create(GirlfriendsMemoryTypes.NEAREST_WATER.get(), 4, 0.5F)),
-							Pair.of(49, (BehaviorControl<GirlfriendEntity>)(Object) UpdateActivityFromSchedule.create())
+							Pair.of(49, GirlfriendUpdateActivityFromSchedule.create())
 					);
 
 					// 上午：垂钓喵~
@@ -102,31 +109,33 @@ public class YuxiEntity extends GirlfriendEntity {
 							Pair.of(1, (BehaviorControl<GirlfriendEntity>)(Object) GoToTargetLocation.create(GirlfriendsMemoryTypes.NEAREST_WATER.get(), 4, 0.5F)),
 							Pair.of(2, new FishNearbyWater()),
 							Pair.of(3, (BehaviorControl<GirlfriendEntity>)(Object) new RandomLookAround(UniformInt.of(150, 300), 30.0F, -10.0F, 0.0F)),
-							Pair.of(49, (BehaviorControl<GirlfriendEntity>)(Object) UpdateActivityFromSchedule.create())
+							Pair.of(49, GirlfriendUpdateActivityFromSchedule.create())
 					);
 
 					// 下午：整理渔获、绘制海图喵~
 					afternoon.add(
 							Pair.of(1, (BehaviorControl<GirlfriendEntity>)(Object) new RandomLookAround(UniformInt.of(150, 250), 30.0F, -10.0F, 0.0F)),
 							Pair.of(3, ShelterBoundRandomStroll.create(0.4F)),
-							Pair.of(49, (BehaviorControl<GirlfriendEntity>)(Object) UpdateActivityFromSchedule.create())
+							Pair.of(49, GirlfriendUpdateActivityFromSchedule.create())
 					);
 
 					// 傍晚：看日落喵~
 					sunset.add(
 							Pair.of(1, (BehaviorControl<GirlfriendEntity>)(Object) GoToTargetLocation.create(GirlfriendsMemoryTypes.NEAREST_WATER.get(), 4, 0.5F)),
 							Pair.of(3, BackToShelter.create(2, 48, 0.4F)),
-							Pair.of(49, (BehaviorControl<GirlfriendEntity>)(Object) UpdateActivityFromSchedule.create())
+							Pair.of(49, GirlfriendUpdateActivityFromSchedule.create())
 					);
 
 					// 夜晚：看海图喵~
 					nightRest.add(
-							Pair.of(49, (BehaviorControl<GirlfriendEntity>)(Object) UpdateActivityFromSchedule.create())
+							Pair.of(49, GirlfriendUpdateActivityFromSchedule.create())
 					);
 
 					// 跟随行为
 					follow.add(
-							Pair.of(1, StayCloseToIntimatePlayer.create(3, 16, 1.0F))
+							Pair.of(1, StayCloseToIntimatePlayer.create(3, 16, 0.8F)),
+							Pair.of(6, (BehaviorControl<GirlfriendEntity>)(Object) RandomStroll.stroll(0.4F)),
+							Pair.of(49, GirlfriendUpdateActivityFromSchedule.create())
 					);
 
 					activities.add(ActivityData.create(Activity.CORE, core.build()));

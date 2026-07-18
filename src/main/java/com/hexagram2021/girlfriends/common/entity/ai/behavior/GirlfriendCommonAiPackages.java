@@ -31,6 +31,7 @@ public final class GirlfriendCommonAiPackages {
 		builder.add(
 				Pair.of(0, new Swim(0.8F)),
 				Pair.of(0, (BehaviorControl<GirlfriendEntity>)(Object) InteractWithDoor.create()),
+				Pair.of(0, new GirlfriendFollowTrigger()),
 				Pair.of(0, new GirlfriendPanicTrigger()),
 				Pair.of(1, (BehaviorControl<GirlfriendEntity>)(Object) new LookAtTargetSink(45, 90)),
 				Pair.of(1, BackToShelter.create(16, 48, 0.4F)),

@@ -4,6 +4,11 @@
       "meishu.favorite_minecraft_iron_ingot_0",
       "meishu.favorite_minecraft_iron_ingot_1",
       "meishu.favorite_minecraft_iron_ingot_2"
+    ],
+    "minecraft:netherite_ingot": [
+      "meishu.favorite_minecraft_netherite_ingot_0",
+      "meishu.favorite_minecraft_netherite_ingot_1",
+      "meishu.favorite_minecraft_netherite_ingot_2"
     ]
   },
   "liked": [
