@@ -264,7 +264,7 @@ public abstract class GirlfriendEntity extends PathfinderMob implements Inventor
 	@Override
 	protected void defineSynchedData(SynchedEntityData.Builder builder) {
 		super.defineSynchedData(builder);
-		builder.define(DATA_FOLLOW_MODE, FollowMode.STAY.ordinal());
+		builder.define(DATA_FOLLOW_MODE, FollowMode.NONE.ordinal());
 	}
 
 	@Override

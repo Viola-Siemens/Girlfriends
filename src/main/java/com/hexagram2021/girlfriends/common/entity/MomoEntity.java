@@ -121,7 +121,7 @@ public class MomoEntity extends GirlfriendEntity {
 
 					// 工作行为
 					morning.add(
-							Pair.of(49, (BehaviorControl<GirlfriendEntity>)(Object) UpdateActivityFromSchedule.create())
+							Pair.of(49, GirlfriendUpdateActivityFromSchedule.create())
 					);
 					dayWork.add(
 							Pair.of(1, ProduceBoneMeal.create()),
@@ -130,26 +130,28 @@ public class MomoEntity extends GirlfriendEntity {
 									GoToTargetLocation.create(GirlfriendsMemoryTypes.NEAREST_BEEHIVE.get(), 3, 0.5F),
 									GoToTargetLocation.create(GirlfriendsMemoryTypes.NEARBY_FLOWER.get(), 2, 0.5F)
 							), 10 * SharedConstants.TICKS_PER_SECOND, 2 * SharedConstants.TICKS_PER_SECOND)),
-							Pair.of(49, (BehaviorControl<GirlfriendEntity>)(Object) UpdateActivityFromSchedule.create())
+							Pair.of(49, GirlfriendUpdateActivityFromSchedule.create())
 					);
 					afternoon.add(
 							Pair.of(1, ProduceBoneMeal.create()),
 							Pair.of(1, (BehaviorControl<GirlfriendEntity>)(Object) new RandomLookAround(UniformInt.of(150, 250), 30.0F, -10.0F, 0.0F)),
 							Pair.of(3, ShelterBoundRandomStroll.create(0.4F)),
-							Pair.of(49, (BehaviorControl<GirlfriendEntity>)(Object) UpdateActivityFromSchedule.create())
+							Pair.of(49, GirlfriendUpdateActivityFromSchedule.create())
 					);
 					sunset.add(
 							Pair.of(3, BackToShelter.create(2, 48, 0.4F)),
-							Pair.of(49, (BehaviorControl<GirlfriendEntity>)(Object) UpdateActivityFromSchedule.create())
+							Pair.of(49, GirlfriendUpdateActivityFromSchedule.create())
 					);
 					nightRest.add(
-							Pair.of(49, (BehaviorControl<GirlfriendEntity>)(Object) UpdateActivityFromSchedule.create())
+							Pair.of(49, GirlfriendUpdateActivityFromSchedule.create())
 					);
 
 					// 跟随行为
 					follow.add(
-							Pair.of(1, StayCloseToIntimatePlayer.create(3, 16, 1.0F)),
-							Pair.of(1, (BehaviorControl<GirlfriendEntity>)(Object) PlantAndHarvestFlower.create(4, 2.0D))
+							Pair.of(1, StayCloseToIntimatePlayer.create(3, 16, 0.8F)),
+							Pair.of(1, (BehaviorControl<GirlfriendEntity>)(Object) PlantAndHarvestFlower.create(4, 2.0D)),
+							Pair.of(6, (BehaviorControl<GirlfriendEntity>)(Object) RandomStroll.stroll(0.4F)),
+							Pair.of(49, GirlfriendUpdateActivityFromSchedule.create())
 					);
 
 					activities.add(ActivityData.create(Activity.CORE, core.build()));

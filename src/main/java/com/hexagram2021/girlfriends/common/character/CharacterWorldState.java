@@ -43,7 +43,7 @@ public class CharacterWorldState {
 	private CharacterBindingState binding = new CharacterBindingState();
 	@Nullable
 	private UUID followTargetUuid;
-	private FollowMode followMode = FollowMode.STAY;
+	private FollowMode followMode = FollowMode.NONE;
 	private final List<ShelterRecord> discoveredShelters = Lists.newArrayList();
 
 	/**
@@ -360,7 +360,7 @@ public class CharacterWorldState {
 		}
 		state.binding = CharacterBindingState.deserializeNBT(tag.getCompoundOrEmpty("binding"));
 		tag.getString("follow_target_uuid").ifPresent(value -> state.followTargetUuid = parseUuidOrNull(value));
-		state.followMode = tag.getString("follow_mode").map(CharacterWorldState::parseFollowModeOrStay).orElse(FollowMode.STAY);
+		state.followMode = tag.getString("follow_mode").map(CharacterWorldState::parseFollowModeOrStay).orElse(FollowMode.NONE);
 		ListTag shelters = tag.getListOrEmpty("discovered_shelters");
 		for (Tag shelter : shelters) {
 			if (shelter instanceof CompoundTag shelterTag) {

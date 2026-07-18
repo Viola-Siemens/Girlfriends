@@ -223,6 +223,27 @@
     ],
     "subtitle": "girlfriends.subtitle.voice.yuxi.favorite"
   },
+  "gift.quote.zh_cn.yuxi.favorite_minecraft_heart_of_the_sea_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/favorite_minecraft_heart_of_the_sea_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.favorite"
+  },
+  "gift.quote.zh_cn.yuxi.favorite_minecraft_heart_of_the_sea_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/favorite_minecraft_heart_of_the_sea_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.favorite"
+  },
+  "gift.quote.zh_cn.yuxi.favorite_minecraft_heart_of_the_sea_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/yuxi/favorite_minecraft_heart_of_the_sea_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.yuxi.favorite"
+  },
   "gift.quote.zh_cn.yuxi.liked_0": {
     "category": "entity",
     "sounds": [
@@ -402,6 +423,27 @@
     "category": "entity",
     "sounds": [
       "girlfriends:zh_cn/meishu/favorite_minecraft_iron_ingot_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.favorite"
+  },
+  "gift.quote.zh_cn.meishu.favorite_minecraft_netherite_ingot_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/favorite_minecraft_netherite_ingot_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.favorite"
+  },
+  "gift.quote.zh_cn.meishu.favorite_minecraft_netherite_ingot_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/favorite_minecraft_netherite_ingot_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.meishu.favorite"
+  },
+  "gift.quote.zh_cn.meishu.favorite_minecraft_netherite_ingot_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/meishu/favorite_minecraft_netherite_ingot_2"
     ],
     "subtitle": "girlfriends.subtitle.voice.meishu.favorite"
   },
@@ -587,6 +629,27 @@
     ],
     "subtitle": "girlfriends.subtitle.voice.wanying.favorite"
   },
+  "gift.quote.zh_cn.wanying.favorite_minecraft_breeze_rod_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/favorite_minecraft_breeze_rod_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.favorite"
+  },
+  "gift.quote.zh_cn.wanying.favorite_minecraft_breeze_rod_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/favorite_minecraft_breeze_rod_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.favorite"
+  },
+  "gift.quote.zh_cn.wanying.favorite_minecraft_breeze_rod_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/wanying/favorite_minecraft_breeze_rod_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.wanying.favorite"
+  },
   "gift.quote.zh_cn.wanying.liked_0": {
     "category": "entity",
     "sounds": [
@@ -766,6 +829,27 @@
     "category": "entity",
     "sounds": [
       "girlfriends:zh_cn/youruo/favorite_minecraft_ender_pearl_2"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.favorite"
+  },
+  "gift.quote.zh_cn.youruo.favorite_minecraft_ender_eye_0": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/favorite_minecraft_ender_eye_0"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.favorite"
+  },
+  "gift.quote.zh_cn.youruo.favorite_minecraft_ender_eye_1": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/favorite_minecraft_ender_eye_1"
+    ],
+    "subtitle": "girlfriends.subtitle.voice.youruo.favorite"
+  },
+  "gift.quote.zh_cn.youruo.favorite_minecraft_ender_eye_2": {
+    "category": "entity",
+    "sounds": [
+      "girlfriends:zh_cn/youruo/favorite_minecraft_ender_eye_2"
     ],
     "subtitle": "girlfriends.subtitle.voice.youruo.favorite"
   },

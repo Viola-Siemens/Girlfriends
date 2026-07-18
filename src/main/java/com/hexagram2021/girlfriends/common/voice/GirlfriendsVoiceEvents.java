@@ -105,6 +105,12 @@ public final class GirlfriendsVoiceEvents {
 			registerGiftQuote(ZH_CN, "yuxi.favorite_minecraft_nautilus_shell_1");
 	public static final DeferredHolder<SoundEvent, SoundEvent> YUXI_FAVORITE_MINECRAFT_NAUTILUS_SHELL_2 =
 			registerGiftQuote(ZH_CN, "yuxi.favorite_minecraft_nautilus_shell_2");
+	public static final DeferredHolder<SoundEvent, SoundEvent> YUXI_FAVORITE_MINECRAFT_HEART_OF_THE_SEA_0 =
+			registerGiftQuote(ZH_CN, "yuxi.favorite_minecraft_heart_of_the_sea_0");
+	public static final DeferredHolder<SoundEvent, SoundEvent> YUXI_FAVORITE_MINECRAFT_HEART_OF_THE_SEA_1 =
+			registerGiftQuote(ZH_CN, "yuxi.favorite_minecraft_heart_of_the_sea_1");
+	public static final DeferredHolder<SoundEvent, SoundEvent> YUXI_FAVORITE_MINECRAFT_HEART_OF_THE_SEA_2 =
+			registerGiftQuote(ZH_CN, "yuxi.favorite_minecraft_heart_of_the_sea_2");
 	// endregion
 
 	// region 渔溪 (yuxi) — liked 喵~
@@ -172,6 +178,12 @@ public final class GirlfriendsVoiceEvents {
 			registerGiftQuote(ZH_CN, "meishu.favorite_minecraft_iron_ingot_1");
 	public static final DeferredHolder<SoundEvent, SoundEvent> MEISHU_FAVORITE_MINECRAFT_IRON_INGOT_2 =
 			registerGiftQuote(ZH_CN, "meishu.favorite_minecraft_iron_ingot_2");
+	public static final DeferredHolder<SoundEvent, SoundEvent> MEISHU_FAVORITE_MINECRAFT_NETHERITE_INGOT_0 =
+			registerGiftQuote(ZH_CN, "meishu.favorite_minecraft_netherite_ingot_0");
+	public static final DeferredHolder<SoundEvent, SoundEvent> MEISHU_FAVORITE_MINECRAFT_NETHERITE_INGOT_1 =
+			registerGiftQuote(ZH_CN, "meishu.favorite_minecraft_netherite_ingot_1");
+	public static final DeferredHolder<SoundEvent, SoundEvent> MEISHU_FAVORITE_MINECRAFT_NETHERITE_INGOT_2 =
+			registerGiftQuote(ZH_CN, "meishu.favorite_minecraft_netherite_ingot_2");
 	// endregion
 
 	// region 梅疏 (meishu) — liked 喵~
@@ -239,6 +251,12 @@ public final class GirlfriendsVoiceEvents {
 			registerGiftQuote(ZH_CN, "wanying.favorite_minecraft_blaze_rod_1");
 	public static final DeferredHolder<SoundEvent, SoundEvent> WANYING_FAVORITE_MINECRAFT_BLAZE_ROD_2 =
 			registerGiftQuote(ZH_CN, "wanying.favorite_minecraft_blaze_rod_2");
+	public static final DeferredHolder<SoundEvent, SoundEvent> WANYING_FAVORITE_MINECRAFT_BREEZE_ROD_0 =
+			registerGiftQuote(ZH_CN, "wanying.favorite_minecraft_breeze_rod_0");
+	public static final DeferredHolder<SoundEvent, SoundEvent> WANYING_FAVORITE_MINECRAFT_BREEZE_ROD_1 =
+			registerGiftQuote(ZH_CN, "wanying.favorite_minecraft_breeze_rod_1");
+	public static final DeferredHolder<SoundEvent, SoundEvent> WANYING_FAVORITE_MINECRAFT_BREEZE_ROD_2 =
+			registerGiftQuote(ZH_CN, "wanying.favorite_minecraft_breeze_rod_2");
 	// endregion
 
 	// region 晚萤 (wanying) — liked 喵~
@@ -306,6 +324,12 @@ public final class GirlfriendsVoiceEvents {
 			registerGiftQuote(ZH_CN, "youruo.favorite_minecraft_ender_pearl_1");
 	public static final DeferredHolder<SoundEvent, SoundEvent> YOURUO_FAVORITE_MINECRAFT_ENDER_PEARL_2 =
 			registerGiftQuote(ZH_CN, "youruo.favorite_minecraft_ender_pearl_2");
+	public static final DeferredHolder<SoundEvent, SoundEvent> YOURUO_FAVORITE_MINECRAFT_ENDER_EYE_0 =
+			registerGiftQuote(ZH_CN, "youruo.favorite_minecraft_ender_eye_0");
+	public static final DeferredHolder<SoundEvent, SoundEvent> YOURUO_FAVORITE_MINECRAFT_ENDER_EYE_1 =
+			registerGiftQuote(ZH_CN, "youruo.favorite_minecraft_ender_eye_1");
+	public static final DeferredHolder<SoundEvent, SoundEvent> YOURUO_FAVORITE_MINECRAFT_ENDER_EYE_2 =
+			registerGiftQuote(ZH_CN, "youruo.favorite_minecraft_ender_eye_2");
 	// endregion
 
 	// region 幽若 (youruo) — liked 喵~
