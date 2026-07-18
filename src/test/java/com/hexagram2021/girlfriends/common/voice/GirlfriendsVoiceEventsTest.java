@@ -28,7 +28,7 @@ class GirlfriendsVoiceEventsTest {
 		assertTrue(voiceMap.containsKey("zh_cn"), "VOICE_MAP should contain zh_cn locale");
 		Map<String, DeferredHolder<SoundEvent, SoundEvent>> zhCnMap = voiceMap.get("zh_cn");
 		assertNotNull(zhCnMap);
-		assertEquals(133, zhCnMap.size(), "zh_cn should have 133 voice entries (5 chars × 5 categories)");
+		assertEquals(145, zhCnMap.size(), "zh_cn should have 145 voice entries (5 chars × 5 categories)");
 
 		// 验证五位角色各档位均有点位存在喵~
 		assertTrue(zhCnMap.containsKey("momo.favorite_girlfriends_bouquet_0"));
