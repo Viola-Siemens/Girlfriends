@@ -11,9 +11,11 @@ import com.hexagram2021.girlfriends.common.entity.ai.behavior.*;
 import com.hexagram2021.girlfriends.common.item.GirlfriendsItemTags;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -27,10 +29,11 @@ import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.schedule.Activity;
+import net.minecraft.world.item.component.AttackRange;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * 晚萤实体喵~
@@ -72,12 +75,30 @@ public class WanyingEntity extends GirlfriendEntity {
 		return GirlfriendsMobEffects.FLAME_GUARDIAN;
 	}
 
+	@Override
+	public boolean isWithinMeleeAttackRange(LivingEntity target) {
+		AttackRange attackRange = this.getActiveItem().get(DataComponents.ATTACK_RANGE);
+		double maxRange;
+		double minRange;
+		if (attackRange == null) {
+			maxRange = 1.05D;
+			minRange = 0.0D;
+		} else {
+			maxRange = attackRange.effectiveMaxRange(this) * 1.25D;
+			minRange = attackRange.effectiveMinRange(this);
+		}
+
+		AABB hitbox = target.getHitbox();
+		return this.getAttackBoundingBox(maxRange).intersects(hitbox) && (minRange <= 0.0D || !this.getAttackBoundingBox(minRange).intersects(hitbox));
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	protected Brain.Provider<GirlfriendEntity> getBrainProvider() {
 		return Brain.provider(
 				List.of(
 						SensorType.HURT_BY,
+						SensorType.NEAREST_LIVING_ENTITIES,
 						GirlfriendsSensorTypes.SHELTER_SENSOR.get(),
 						GirlfriendsSensorTypes.HOSTILE_SENSOR.get()
 				), girlfriend -> {
@@ -98,27 +119,24 @@ public class WanyingEntity extends GirlfriendEntity {
 							Pair.of(0, (BehaviorControl<GirlfriendEntity>)(Object) InteractWithDoor.create()),
 							// 战斗触发器：受伤恐慌，发现敌对生物则攻击喵~
 							Pair.of(0, (BehaviorControl<GirlfriendEntity>)(Object) BehaviorBuilder.create(i -> i.group(
-									i.registered(MemoryModuleType.HURT_BY),
-									i.registered(MemoryModuleType.NEAREST_HOSTILE)
-							).apply(i, (hurtBy, nearestHostile) -> (level, body, timestamp) -> {
-								if (i.tryGet(hurtBy).isPresent()) {
-									// 受伤 → 触发恐慌
-									body.getBrain().setActiveActivityIfPossible(Activity.PANIC);
+									i.present(MemoryModuleType.HURT_BY)
+							).apply(i, hurtBy -> (_, body, _) -> {
+								DamageSource hurtByDamageSource = i.get(hurtBy);
+								// 反击
+								if(hurtByDamageSource.getEntity() instanceof LivingEntity attacker &&
+										attacker.is(GirlfriendEntityTags.WANYING_ATTACKS)) {
+									body.getBrain().setMemory(MemoryModuleType.ATTACK_TARGET, attacker);
 									return true;
 								}
-								Optional<LivingEntity> hostile = i.tryGet(nearestHostile);
-								if (hostile.isPresent() && hostile.get().isAlive()) {
-									// 发现敌对生物 → 设置攻击目标
-									body.getBrain().setMemory(MemoryModuleType.ATTACK_TARGET, hostile.get());
-									body.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
-									return true;
-								}
-								return false;
+								// 受伤 → 触发恐慌
+								body.getBrain().setActiveActivityIfPossible(Activity.PANIC);
+								return true;
 							}))),
 							Pair.of(1, (BehaviorControl<GirlfriendEntity>)(Object) new LookAtTargetSink(45, 90)),
 							Pair.of(1, BackToShelter.create(16, 48, 0.4F)),
-							Pair.of(2, (BehaviorControl<GirlfriendEntity>)(Object) new MoveToTargetSink(80, 120)),
+							Pair.of(2, (BehaviorControl<GirlfriendEntity>)(Object) SetWalkTargetFromAttackTargetIfTargetOutOfReach.create(1.0F)),
 							Pair.of(2, (BehaviorControl<GirlfriendEntity>)(Object) MeleeAttack.create(20)),
+							Pair.of(3, (BehaviorControl<GirlfriendEntity>)(Object) new MoveToTargetSink(80, 120)),
 							Pair.of(6, new RunOne<>(List.of(
 									Pair.of(SetEntityLookTarget.create(EntityType.BLAZE, 8.0F), 2),
 									Pair.of(SetEntityLookTarget.create(EntityType.WITHER_SKELETON, 8.0F), 2),
@@ -130,7 +148,7 @@ public class WanyingEntity extends GirlfriendEntity {
 
 					// 恐慌行为：只对受伤逃跑喵~
 					panic.add(
-							Pair.of(0, GirlfriendCalmDown.create()),
+							Pair.of(0, GirlfriendCalmDown.createWanying()),
 							Pair.of(1, (BehaviorControl<GirlfriendEntity>)(Object) SetWalkTargetAwayFrom.entity(MemoryModuleType.HURT_BY_ENTITY, 0.8F, 6, false)),
 							Pair.of(2, ShelterBoundRandomStroll.create(0.8F))
 					);

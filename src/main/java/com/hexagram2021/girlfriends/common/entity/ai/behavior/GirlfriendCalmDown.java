@@ -28,6 +28,23 @@ public final class GirlfriendCalmDown {
 		}));
 	}
 
+	/**
+	 * 创建晚萤冷静行为工厂函数
+	 * @return 女友冷静行为
+	 */
+	public static BehaviorControl<GirlfriendEntity> createWanying() {
+		return BehaviorBuilder.create(i -> i.group(i.registered(MemoryModuleType.HURT_BY), i.registered(MemoryModuleType.HURT_BY_ENTITY)).apply(i, (hurtBy, hurtByEntity) -> (level, body, _) -> {
+			boolean feelScared = i.tryGet(hurtBy).isPresent() || i.tryGet(hurtByEntity).filter(entity -> entity.distanceToSqr(body) <= 64.0F).isPresent();
+			if (!feelScared) {
+				hurtBy.erase();
+				hurtByEntity.erase();
+				body.getBrain().updateActivityFromSchedule(level.environmentAttributes(), level.getGameTime(), body.position());
+			}
+
+			return true;
+		}));
+	}
+
 	private GirlfriendCalmDown() {
 	}
 }
