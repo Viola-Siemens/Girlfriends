@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  */
 @Mixin(AbstractBoat.class)
 public class AbstractBoatMixin {
-	@Inject(method = "controlBoat", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/vehicle/boat/AbstractBoat;setDeltaMovement(Lnet/minecraft/world/phys/Vec3;)V", shift = At.Shift.BEFORE))
+	@Inject(method = "controlBoat", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/vehicle/boat/AbstractBoat;getDeltaMovement()Lnet/minecraft/world/phys/Vec3;", shift = At.Shift.BEFORE))
 	private void girlfriends$wrapAcceleration(CallbackInfo ci, @Local(name = "acceleration") LocalFloatRef acceleration) {
 		AbstractBoat self = (AbstractBoat)(Object)this;
 		LivingEntity livingEntity = self.getControllingPassenger();
