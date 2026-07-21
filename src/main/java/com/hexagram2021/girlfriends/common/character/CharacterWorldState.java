@@ -360,7 +360,7 @@ public class CharacterWorldState {
 		}
 		state.binding = CharacterBindingState.deserializeNBT(tag.getCompoundOrEmpty("binding"));
 		tag.getString("follow_target_uuid").ifPresent(value -> state.followTargetUuid = parseUuidOrNull(value));
-		state.followMode = tag.getString("follow_mode").map(CharacterWorldState::parseFollowModeOrStay).orElse(FollowMode.NONE);
+		state.followMode = tag.getString("follow_mode").map(CharacterWorldState::parseFollowModeOrNone).orElse(FollowMode.NONE);
 		ListTag shelters = tag.getListOrEmpty("discovered_shelters");
 		for (Tag shelter : shelters) {
 			if (shelter instanceof CompoundTag shelterTag) {
@@ -388,11 +388,11 @@ public class CharacterWorldState {
 		}
 	}
 
-	private static FollowMode parseFollowModeOrStay(String value) {
+	private static FollowMode parseFollowModeOrNone(String value) {
 		try {
 			return FollowMode.valueOf(value);
 		} catch(IllegalArgumentException _) {
-			return FollowMode.STAY;
+			return FollowMode.NONE;
 		}
 	}
 }
