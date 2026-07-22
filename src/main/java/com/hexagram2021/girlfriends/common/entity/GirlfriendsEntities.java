@@ -4,6 +4,7 @@ import com.hexagram2021.girlfriends.GirlfriendsMod;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.Avatar;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -24,27 +25,33 @@ public final class GirlfriendsEntities {
 	public static final DeferredHolder<EntityType<?>, EntityType<MomoEntity>> MOMO =
 			REGISTER.register("momo", () -> EntityType.Builder
 					.of(MomoEntity::new, MobCategory.MISC)
-					.sized(0.6f, 1.8f)
+					.sized(0.6F, 1.8F)
 					.clientTrackingRange(48)
 					.updateInterval(3)
+					.eyeHeight(1.62F)
+					.vehicleAttachment(Avatar.DEFAULT_VEHICLE_ATTACHMENT)
 					.build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(GirlfriendsMod.MODID, "momo"))));
 
 	/** 渔溪实体类型喵~ */
 	public static final DeferredHolder<EntityType<?>, EntityType<YuxiEntity>> YUXI =
 			REGISTER.register("yuxi", () -> EntityType.Builder
 					.of(YuxiEntity::new, MobCategory.MISC)
-					.sized(0.6f, 1.8f)
+					.sized(0.6F, 1.8F)
 					.clientTrackingRange(48)
 					.updateInterval(3)
+					.eyeHeight(1.62F)
+					.vehicleAttachment(Avatar.DEFAULT_VEHICLE_ATTACHMENT)
 					.build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(GirlfriendsMod.MODID, "yuxi"))));
 
 	/** 梅疏实体类型喵~ */
 	public static final DeferredHolder<EntityType<?>, EntityType<MeishuEntity>> MEISHU =
 			REGISTER.register("meishu", () -> EntityType.Builder
 					.of(MeishuEntity::new, MobCategory.MISC)
-					.sized(0.6f, 1.8f)
+					.sized(0.6F, 1.8F)
 					.clientTrackingRange(48)
 					.updateInterval(3)
+					.eyeHeight(1.62F)
+					.vehicleAttachment(Avatar.DEFAULT_VEHICLE_ATTACHMENT)
 					.build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(GirlfriendsMod.MODID, "meishu"))));
 
 	/** 渔溪钓竿浮标实体类型喵~ */
@@ -61,18 +68,22 @@ public final class GirlfriendsEntities {
 	public static final DeferredHolder<EntityType<?>, EntityType<WanyingEntity>> WANYING =
 			REGISTER.register("wanying", () -> EntityType.Builder
 					.of(WanyingEntity::new, MobCategory.MISC)
-					.sized(0.6f, 1.8f)
+					.sized(0.6F, 1.62F)
 					.clientTrackingRange(48)
 					.updateInterval(3)
+					.eyeHeight(1.46F)
+					.vehicleAttachment(Avatar.DEFAULT_VEHICLE_ATTACHMENT)
 					.build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(GirlfriendsMod.MODID, "wanying"))));
 
 	/** 幽若实体类型喵~ */
 	public static final DeferredHolder<EntityType<?>, EntityType<YouruoEntity>> YOURUO =
 			REGISTER.register("youruo", () -> EntityType.Builder
 					.of(YouruoEntity::new, MobCategory.MISC)
-					.sized(0.6f, 1.8f)
+					.sized(0.6F, 1.8F)
 					.clientTrackingRange(48)
 					.updateInterval(3)
+					.eyeHeight(1.62F)
+					.vehicleAttachment(Avatar.DEFAULT_VEHICLE_ATTACHMENT)
 					.build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(GirlfriendsMod.MODID, "youruo"))));
 
 	private GirlfriendsEntities() {

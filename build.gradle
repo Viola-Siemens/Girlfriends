@@ -136,6 +136,15 @@ publishing {
     }
 }
 
+tasks.register('sourceJar', Jar) {
+    archiveClassifier.set('sources')
+    from sourceSets.main.allJava
+}
+
+artifacts {
+    archives sourceJar
+}
+
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
